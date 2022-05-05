@@ -6,6 +6,11 @@ import 'package:request_live_riverpods/repositories/custom_exception.dart';
 import 'package:request_live_riverpods/models/request_model.dart';
 import 'package:request_live_riverpods/repositories/request_repository.dart';
 
+/*
+ This class is used to manage the state of individual requests for the
+ requests_detail_screen to allow isPlayed to be toggled in a stateless
+ hook consumer widget.
+ */
 final requestExceptionProvider = StateProvider<CustomException?>((_) => null);
 
 final requestStateControllerProvider = StateNotifierProvider.family<
@@ -27,6 +32,8 @@ class RequestStateController extends StateNotifier<AsyncValue<Request>> {
     final userController = _read(userControllerProvider);
     final userControllerNotifier = _read(userControllerProvider.notifier);
     userControllerNotifier.retrieveUserInfo();
+
+    // Only load request if user is an entertainer!
     userController.whenData((userData) {
       if (_userId != null && userData.isEntertainer) {
         retrieveRequestInfo(

@@ -6,7 +6,7 @@ import 'package:request_live_riverpods/screens/requests/request_detail_screen.da
 
 class RequestCard extends StatefulWidget {
   final String requestId;
-  final snap;
+  final dynamic snap;
 
   const RequestCard({
     Key? key,
@@ -19,7 +19,6 @@ class RequestCard extends StatefulWidget {
 }
 
 class _RequestCardState extends State<RequestCard> {
-  // late String userImageUrl = widget.snap['photoUrl'].toString();
   late Request request = Request(
     id: widget.requestId,
     artist: widget.snap["artist"],
@@ -32,16 +31,6 @@ class _RequestCardState extends State<RequestCard> {
     played: widget.snap["played"],
     timestamp: widget.snap["timestamp"],
   );
-  // late DateTime requestDateTime = (widget.snap['timestamp']).toDate();
-  // late String stockPhotoUrl = 'request-live-4864a.appspot.com/user.png';
-  // late String stockPhotoUrl = 'https://i.stack.imgur.com/l60Hf.png';
-  // int commentLen = 0;
-  // bool isLikeAnimating = false;
-
-  @override
-  void initState() {
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -77,14 +66,6 @@ class _RequestCardState extends State<RequestCard> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       // mainAxisSize: MainAxisSize.min,
                       children: [
-                        // RequestRow(
-                        //   username: widget.snap['requester_username'].toString(),
-                        //   artist: widget.snap['artist'].toString(),
-                        //   title: widget.snap['title'].toString(),
-                        //   notes: widget.snap['notes'].toString(),
-                        //   time: Conversions.convertTimeStamp(
-                        //       widget.snap['timestamp']),
-                        // ),
                         RequestRowOld(
                             section: 'User:   ',
                             details:
@@ -100,10 +81,7 @@ class _RequestCardState extends State<RequestCard> {
                             details: widget.snap['notes'].toString()),
                         RequestRowOld(
                             section: 'Time:  ',
-                            details: widget.snap['timestamp']
-                            // Conversions.convertTimeStamp(
-                            //     widget.snap['timestamp']),
-                            ),
+                            details: widget.snap['timestamp']),
                       ],
                     ),
                   ),
@@ -113,9 +91,7 @@ class _RequestCardState extends State<RequestCard> {
           ),
         ),
       ),
-      // Navigate to entertainer's page!
       onTap: () {
-        // TODO Navigate to request detail page
         Navigator.pushNamed(
           context,
           Routes.requestDetail,
@@ -178,173 +154,173 @@ class RequestRowOld extends StatelessWidget {
   }
 }
 
-class RequestRow extends StatelessWidget {
-  final String username;
-  final String artist;
-  final String title;
-  final String notes;
-  final String time;
+// class RequestRow extends StatelessWidget {
+//   final String username;
+//   final String artist;
+//   final String title;
+//   final String notes;
+//   final String time;
 
-  const RequestRow({
-    Key? key,
-    required this.username,
-    required this.artist,
-    required this.title,
-    required this.notes,
-    required this.time,
-  }) : super(key: key);
+//   const RequestRow({
+//     Key? key,
+//     required this.username,
+//     required this.artist,
+//     required this.title,
+//     required this.notes,
+//     required this.time,
+//   }) : super(key: key);
 
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.start,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: const [
-            Flexible(
-              fit: FlexFit.loose,
-              child: Padding(
-                padding: EdgeInsets.all(8.0),
-                child: Text(
-                  'User: ',
-                  style: TextStyle(
-                    fontSize: 12,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
-                  ),
-                ),
-              ),
-            ),
-            Flexible(
-              fit: FlexFit.loose,
-              child: Padding(
-                padding: EdgeInsets.all(8.0),
-                child: Text(
-                  'Artist: ',
-                  style: TextStyle(
-                    fontSize: 12,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
-                  ),
-                ),
-              ),
-            ),
-            Flexible(
-              fit: FlexFit.loose,
-              child: Padding(
-                padding: EdgeInsets.all(8.0),
-                child: Text(
-                  'Title: ',
-                  style: TextStyle(
-                    fontSize: 12,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
-                  ),
-                ),
-              ),
-            ),
-            Flexible(
-              fit: FlexFit.loose,
-              child: Padding(
-                padding: EdgeInsets.all(8.0),
-                child: Text(
-                  'Notes: ',
-                  style: TextStyle(
-                    fontSize: 12,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
-                  ),
-                ),
-              ),
-            ),
-            Flexible(
-              fit: FlexFit.loose,
-              child: Padding(
-                padding: EdgeInsets.all(8.0),
-                child: Text(
-                  'Time: ',
-                  style: TextStyle(
-                    fontSize: 12,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
-                  ),
-                ),
-              ),
-            ),
-          ],
-        ),
-        Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Flexible(
-              fit: FlexFit.loose,
-              child: Padding(
-                padding: const EdgeInsets.only(right: 2),
-                child: Text(
-                  username,
-                  overflow: TextOverflow.ellipsis,
-                  maxLines: 1,
-                  style: const TextStyle(fontSize: 12, color: Colors.white),
-                ),
-              ),
-            ),
-            Flexible(
-              fit: FlexFit.loose,
-              child: Padding(
-                padding: const EdgeInsets.only(right: 2),
-                child: Text(
-                  artist,
-                  overflow: TextOverflow.ellipsis,
-                  maxLines: 1,
-                  style: const TextStyle(fontSize: 12, color: Colors.white),
-                ),
-              ),
-            ),
-            Flexible(
-              fit: FlexFit.loose,
-              child: Padding(
-                padding: const EdgeInsets.only(right: 2),
-                child: Text(
-                  title,
-                  overflow: TextOverflow.ellipsis,
-                  maxLines: 1,
-                  style: const TextStyle(fontSize: 12, color: Colors.white),
-                ),
-              ),
-            ),
-            Flexible(
-              fit: FlexFit.loose,
-              child: Padding(
-                padding: const EdgeInsets.only(right: 2),
-                child: Text(
-                  notes,
-                  overflow: TextOverflow.ellipsis,
-                  maxLines: 1,
-                  style: const TextStyle(fontSize: 12, color: Colors.white),
-                ),
-              ),
-            ),
-            Flexible(
-              fit: FlexFit.loose,
-              child: Padding(
-                padding: const EdgeInsets.only(right: 2),
-                child: Text(
-                  time,
-                  overflow: TextOverflow.ellipsis,
-                  maxLines: 1,
-                  style: const TextStyle(fontSize: 12, color: Colors.white),
-                ),
-              ),
-            ),
-          ],
-        ),
-      ],
-    );
-  }
-}
+//   @override
+//   Widget build(BuildContext context) {
+//     return Row(
+//       mainAxisAlignment: MainAxisAlignment.start,
+//       crossAxisAlignment: CrossAxisAlignment.start,
+//       mainAxisSize: MainAxisSize.min,
+//       children: [
+//         Column(
+//           mainAxisAlignment: MainAxisAlignment.start,
+//           mainAxisSize: MainAxisSize.min,
+//           crossAxisAlignment: CrossAxisAlignment.start,
+//           children: const [
+//             Flexible(
+//               fit: FlexFit.loose,
+//               child: Padding(
+//                 padding: EdgeInsets.all(8.0),
+//                 child: Text(
+//                   'User: ',
+//                   style: TextStyle(
+//                     fontSize: 12,
+//                     fontWeight: FontWeight.bold,
+//                     color: Colors.white,
+//                   ),
+//                 ),
+//               ),
+//             ),
+//             Flexible(
+//               fit: FlexFit.loose,
+//               child: Padding(
+//                 padding: EdgeInsets.all(8.0),
+//                 child: Text(
+//                   'Artist: ',
+//                   style: TextStyle(
+//                     fontSize: 12,
+//                     fontWeight: FontWeight.bold,
+//                     color: Colors.white,
+//                   ),
+//                 ),
+//               ),
+//             ),
+//             Flexible(
+//               fit: FlexFit.loose,
+//               child: Padding(
+//                 padding: EdgeInsets.all(8.0),
+//                 child: Text(
+//                   'Title: ',
+//                   style: TextStyle(
+//                     fontSize: 12,
+//                     fontWeight: FontWeight.bold,
+//                     color: Colors.white,
+//                   ),
+//                 ),
+//               ),
+//             ),
+//             Flexible(
+//               fit: FlexFit.loose,
+//               child: Padding(
+//                 padding: EdgeInsets.all(8.0),
+//                 child: Text(
+//                   'Notes: ',
+//                   style: TextStyle(
+//                     fontSize: 12,
+//                     fontWeight: FontWeight.bold,
+//                     color: Colors.white,
+//                   ),
+//                 ),
+//               ),
+//             ),
+//             Flexible(
+//               fit: FlexFit.loose,
+//               child: Padding(
+//                 padding: EdgeInsets.all(8.0),
+//                 child: Text(
+//                   'Time: ',
+//                   style: TextStyle(
+//                     fontSize: 12,
+//                     fontWeight: FontWeight.bold,
+//                     color: Colors.white,
+//                   ),
+//                 ),
+//               ),
+//             ),
+//           ],
+//         ),
+//         Column(
+//           mainAxisAlignment: MainAxisAlignment.start,
+//           crossAxisAlignment: CrossAxisAlignment.start,
+//           children: [
+//             Flexible(
+//               fit: FlexFit.loose,
+//               child: Padding(
+//                 padding: const EdgeInsets.only(right: 2),
+//                 child: Text(
+//                   username,
+//                   overflow: TextOverflow.ellipsis,
+//                   maxLines: 1,
+//                   style: const TextStyle(fontSize: 12, color: Colors.white),
+//                 ),
+//               ),
+//             ),
+//             Flexible(
+//               fit: FlexFit.loose,
+//               child: Padding(
+//                 padding: const EdgeInsets.only(right: 2),
+//                 child: Text(
+//                   artist,
+//                   overflow: TextOverflow.ellipsis,
+//                   maxLines: 1,
+//                   style: const TextStyle(fontSize: 12, color: Colors.white),
+//                 ),
+//               ),
+//             ),
+//             Flexible(
+//               fit: FlexFit.loose,
+//               child: Padding(
+//                 padding: const EdgeInsets.only(right: 2),
+//                 child: Text(
+//                   title,
+//                   overflow: TextOverflow.ellipsis,
+//                   maxLines: 1,
+//                   style: const TextStyle(fontSize: 12, color: Colors.white),
+//                 ),
+//               ),
+//             ),
+//             Flexible(
+//               fit: FlexFit.loose,
+//               child: Padding(
+//                 padding: const EdgeInsets.only(right: 2),
+//                 child: Text(
+//                   notes,
+//                   overflow: TextOverflow.ellipsis,
+//                   maxLines: 1,
+//                   style: const TextStyle(fontSize: 12, color: Colors.white),
+//                 ),
+//               ),
+//             ),
+//             Flexible(
+//               fit: FlexFit.loose,
+//               child: Padding(
+//                 padding: const EdgeInsets.only(right: 2),
+//                 child: Text(
+//                   time,
+//                   overflow: TextOverflow.ellipsis,
+//                   maxLines: 1,
+//                   style: const TextStyle(fontSize: 12, color: Colors.white),
+//                 ),
+//               ),
+//             ),
+//           ],
+//         ),
+//       ],
+//     );
+//   }
+// }

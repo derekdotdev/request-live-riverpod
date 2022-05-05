@@ -3,11 +3,10 @@ import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:request_live_riverpods/controllers/auth_controller.dart';
 import 'package:request_live_riverpods/controllers/user_controller.dart';
+import 'package:request_live_riverpods/routes.dart';
 import 'package:request_live_riverpods/screens/requests/requests_screen.dart';
 
-// import '../requests/requests_screen.dart';
 // import '../search/search_screen.dart';
-import '../../routes.dart';
 // import '../../providers/auth_provider.dart';
 
 class AppDrawer extends HookConsumerWidget {
@@ -38,8 +37,8 @@ class AppDrawer extends HookConsumerWidget {
                 leading: const Icon(Icons.home),
                 title: const Text('Main'),
                 onTap: () {
-                  Navigator.of(context).pop();
-                  Navigator.of(context).pushReplacementNamed(Routes.welcome);
+                  // Navigator.of(context).pop();
+                  Navigator.of(context).pushNamed(Routes.welcome);
                 },
               ),
               const Divider(),

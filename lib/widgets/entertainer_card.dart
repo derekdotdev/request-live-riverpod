@@ -21,59 +21,61 @@ class EntertainerCard extends HookConsumerWidget {
         ? Container()
         : snap['isEntertainer'] == false
             ? Container()
-            : GestureDetector(
-                key: ValueKey(snap['uid']),
-                child: Container(
-                  margin: const EdgeInsets.all(8),
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Row(
-                      children: [
-                        CircleAvatar(
-                          radius: 32,
-                          backgroundImage: NetworkImage(
-                            snap['photoUrl'],
-                          ),
-                        ),
-                        const SizedBox(
-                          width: 16,
-                        ),
-                        Column(
+            : snap['isLive'] == false
+                ? Container()
+                : GestureDetector(
+                    key: ValueKey(snap['uid']),
+                    child: Container(
+                      margin: const EdgeInsets.all(8),
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Row(
                           children: [
-                            Text(
-                              snap['username'].toString(),
-                              style: const TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.white,
+                            CircleAvatar(
+                              radius: 32,
+                              backgroundImage: NetworkImage(
+                                snap['photoUrl'],
                               ),
                             ),
-                            const Text(
-                              'Location',
-                              style: TextStyle(
-                                fontSize: 12,
-                                color: Colors.white,
-                              ),
+                            const SizedBox(
+                              width: 16,
+                            ),
+                            Column(
+                              children: [
+                                Text(
+                                  snap['username'].toString(),
+                                  style: const TextStyle(
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                                const Text(
+                                  'Location',
+                                  style: TextStyle(
+                                    fontSize: 12,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                              ],
                             ),
                           ],
                         ),
-                      ],
+                      ),
                     ),
-                  ),
-                ),
-                // Navigate to entertainer's page!
-                onTap: () {
-                  // TODO Navigate to entertainer's page!
-                  Navigator.pushNamed(
-                    context,
-                    Routes.entertainer,
-                    arguments: EntertainerScreenArgs(
-                      // TODO figure this out!
-                      snap['id'].toString(),
-                      snap['username'].toString(),
-                    ),
+                    // Navigate to entertainer's page!
+                    onTap: () {
+                      // TODO Navigate to entertainer's page!
+                      Navigator.pushNamed(
+                        context,
+                        Routes.entertainer,
+                        arguments: EntertainerScreenArgs(
+                          // TODO figure this out!
+                          snap['id'].toString(),
+                          snap['username'].toString(),
+                        ),
+                      );
+                    },
                   );
-                },
-              );
   }
 }

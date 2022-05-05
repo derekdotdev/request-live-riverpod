@@ -34,8 +34,6 @@ class WelcomeScreen extends StatelessWidget {
   }
 }
 
-// sftlho to create statefulhookconsumerwidget
-
 class WelcomeScreenHook extends HookConsumerWidget {
   const WelcomeScreenHook({Key? key}) : super(key: key);
 
@@ -74,7 +72,7 @@ class WelcomeScreenHook extends HookConsumerWidget {
                 );
               } else {
                 return const Text(
-                  'Whyyy',
+                  'Looks like there aren\'t any entertainers nearby... Please try again later!',
                   style: TextStyle(
                     color: Colors.white,
                   ),
