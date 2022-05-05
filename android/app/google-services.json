@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "127499814071",
+    "project_id": "request-live-riverpods",
+    "storage_bucket": "request-live-riverpods.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:127499814071:android:2e43f3d6df63c18beb7932",
+        "android_client_info": {
+          "package_name": "com.derekdileo.request_live_riverpods"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "127499814071-9im259sl2qfu460lq8jnejvtasbgps0j.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCE862dnRmHNl7AE5g0BU79izXePK9rsf8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "127499814071-9im259sl2qfu460lq8jnejvtasbgps0j.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "127499814071-htmd06oot8un9vrom7uk04ociod4v3rq.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.derekdileo.requestLiveRiverpods"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
