@@ -139,8 +139,8 @@ class ProfileScreen extends HookConsumerWidget {
                       padding: const EdgeInsets.only(
                         top: 1,
                       ),
-                      child: const Text(
-                        'Insert userData.bio here!',
+                      child: Text(
+                        userData.bio ?? 'Edit your profile to add a bio!',
                       ),
                     ),
                   ],

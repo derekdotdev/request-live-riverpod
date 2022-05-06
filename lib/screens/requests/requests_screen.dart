@@ -123,7 +123,7 @@ class RequestsScreenHook extends HookConsumerWidget {
       backgroundColor: Colors.black,
       appBar: AppBar(
         backgroundColor: Colors.indigo,
-        centerTitle: false,
+        centerTitle: true,
         title: const Text(
           'Your Requests!',
           style: TextStyle(
@@ -139,14 +139,30 @@ class RequestsScreenHook extends HookConsumerWidget {
         ),
         error: (error, stacktrace) => Text('Error: $error'),
         data: (userData) {
-          var isLive = userData.isLive;
+          var _isLive = userData.isLive;
 
           return SingleChildScrollView(
+            // 2
             physics: const BouncingScrollPhysics(),
             child: Column(
               children: [
+                Padding(
+                  padding: const EdgeInsets.only(top: 8.0),
+                  child: Text(
+                      _isLive ? 'You\'re Live!' : 'Flip Switch To Go Live!',
+                      style: const TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w500,
+                        color: Colors.white,
+                      )),
+                ),
                 Switch.adaptive(
-                  value: isLive,
+                  value: _isLive,
+                  activeColor: Colors.indigo,
+                  thumbColor: MaterialStateProperty.all(
+                      Theme.of(context).colorScheme.onPrimary),
+                  inactiveThumbColor: Colors.white,
+                  inactiveTrackColor: Colors.red,
                   onChanged: (value) async {
                     await updateLiveStatus(user: userData);
                   },
@@ -173,6 +189,7 @@ class RequestsScreenHook extends HookConsumerWidget {
 
                         if (snapshot.hasData) {
                           return SingleChildScrollView(
+                            // 1
                             child: SizedBox(
                               width: double.infinity,
                               child: ListView.builder(
