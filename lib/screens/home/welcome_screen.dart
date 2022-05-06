@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -52,11 +54,11 @@ class WelcomeScreenHook extends HookConsumerWidget {
             stream: entertainerStreamData,
             builder: (BuildContext context,
                 AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return const Center(
-                  child: CircularProgressIndicator(color: Colors.yellow),
-                );
-              }
+              // if (snapshot.connectionState == ConnectionState.waiting) {
+              //   return const Center(
+              //     child: CircularProgressIndicator(color: Colors.yellow),
+              //   );
+              // }
               if (snapshot.hasData) {
                 return ListView.builder(
                   itemCount: snapshot.data?.docs.length,

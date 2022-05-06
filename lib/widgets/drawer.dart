@@ -4,7 +4,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:request_live_riverpods/controllers/auth_controller.dart';
 import 'package:request_live_riverpods/controllers/user_controller.dart';
 import 'package:request_live_riverpods/routes.dart';
-import 'package:request_live_riverpods/screens/requests/requests_screen.dart';
+import 'package:request_live_riverpods/screens/screens.dart';
 
 // import '../search/search_screen.dart';
 // import '../../providers/auth_provider.dart';
@@ -29,25 +29,30 @@ class AppDrawer extends HookConsumerWidget {
           return Column(
             children: [
               AppBar(
-                title: const Text('Options'),
+                title: Text(
+                  userData.username,
+                  textAlign: TextAlign.center,
+                ),
                 automaticallyImplyLeading: false,
               ),
-              const Divider(),
-              ListTile(
-                leading: const Icon(Icons.home),
-                title: const Text('Main'),
-                onTap: () {
-                  // Navigator.of(context).pop();
-                  Navigator.of(context).pushNamed(Routes.welcome);
-                },
-              ),
-              const Divider(),
+              // const Divider(),
+              // ListTile(
+              //   leading: const Icon(Icons.home),
+              //   title: const Text('Main'),
+              //   onTap: () {
+              //     // Navigator.of(context).pop();
+              //     Navigator.of(context)
+              //         .restorablePushReplacementNamed(Routes.welcome);
+              //   },
+              // ),
+              // const Divider(),
               // TODO if(in app purchases (purchased) token) show 'my requests'
               userData.isEntertainer
                   ? ListTile(
                       leading: const Icon(Icons.list),
                       title: const Text('My Requests'),
                       onTap: () {
+                        Navigator.of(context).pop();
                         Navigator.pushNamed(
                           context,
                           Routes.requests,
@@ -59,6 +64,24 @@ class AppDrawer extends HookConsumerWidget {
                       },
                     )
                   : Container(),
+              const Divider(),
+              const Divider(),
+              ListTile(
+                leading: const Icon(Icons.account_circle_outlined),
+                title: const Text('Profile'),
+                onTap: () {
+                  // Navigator.of(context).pop();
+                  Navigator.of(context).pop();
+                  Navigator.pushNamed(
+                    context,
+                    Routes.profile,
+                    arguments: ProfileScreenArgs(
+                      userData.id,
+                      userData.username,
+                    ),
+                  );
+                },
+              ),
               const Divider(),
               ListTile(
                 leading: const Icon(Icons.exit_to_app),

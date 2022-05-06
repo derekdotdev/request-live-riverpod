@@ -1,2 +1,10 @@
 export 'package:request_live_riverpods/screens/auth/register_screen.dart';
 export 'package:request_live_riverpods/screens/auth/sign_in_screen.dart';
+export 'package:request_live_riverpods/screens/entertainer/entertainer_screen.dart';
+export 'package:request_live_riverpods/screens/home/welcome_screen.dart';
+export 'package:request_live_riverpods/screens/profile/profile_screen.dart';
+export 'package:request_live_riverpods/screens/profile/profile_screen_args.dart';
+export 'package:request_live_riverpods/screens/requests/requests_screen.dart';
+export 'package:request_live_riverpods/screens/requests/request_detail_screen.dart';
+export 'package:request_live_riverpods/screens/search/search_screen.dart';
+export 'package:request_live_riverpods/screens/unknown/unknown_route_screen.dart';

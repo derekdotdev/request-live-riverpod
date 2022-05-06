@@ -3,8 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:request_live_riverpods/controllers/auth_controller.dart';
 import 'package:request_live_riverpods/routes.dart';
-import 'package:request_live_riverpods/screens/home/welcome_screen.dart';
-import 'package:request_live_riverpods/screens/auth/sign_in_screen.dart';
+import 'package:request_live_riverpods/screens/screens.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -33,6 +32,25 @@ class MyApp extends StatelessWidget {
         ),
         home: const HomeScreen(),
         routes: Routes.routes,
+        // onGenerateRoute: (settings) {
+        //   if (settings.name == ProfileScreen) {
+        //     final args = settings.arguments as ProfileScreenArgs;
+        //     return MaterialPageRoute(
+        //       builder: (context) {
+        //         return ProfileScreen(
+        //           args.userId,
+        //           args.username,
+        //         );
+        //       },
+        //     );
+        //   }
+        //   return null;
+        // },
+        onUnknownRoute: (settings) {
+          return MaterialPageRoute(
+            builder: (context) => const UnknownRouteScreen(),
+          );
+        },
       ),
     );
   }
@@ -41,12 +59,29 @@ class MyApp extends StatelessWidget {
 class HomeScreen extends HookConsumerWidget {
   const HomeScreen({Key? key}) : super(key: key);
 
+  void navigate(BuildContext ctx, bool isEnt) {
+    if (isEnt) {
+      const Navigator();
+    } else {}
+  }
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final authControllerState = ref.watch(authControllerProvider);
+    // final userController = ref.watch(userControllerProvider);
 
     return authControllerState?.uid == null
         ? const SignInScreen()
         : const WelcomeScreen();
   }
 }
+
+
+// userController.when(
+//         loading: () => const Center(
+//               child: CircularProgressIndicator(color: Colors.green),
+//             ),
+//         error: (error, stacktrace) => Text('Error: $error'),
+//         data: (userData) => userData.isEntertainer
+//             ? const RequestsScreen()
+//             : const WelcomeScreen());

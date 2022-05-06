@@ -1,29 +1,28 @@
 import 'package:flutter/material.dart';
-import 'package:request_live_riverpods/screens/auth/register_screen.dart';
-import 'package:request_live_riverpods/screens/auth/sign_in_screen.dart';
-import 'package:request_live_riverpods/screens/home/welcome_screen.dart';
-import 'package:request_live_riverpods/screens/entertainer/entertainer_screen.dart';
-import 'package:request_live_riverpods/screens/requests/request_detail_screen.dart';
-import 'package:request_live_riverpods/screens/requests/requests_screen.dart';
+import 'package:request_live_riverpods/screens/screens.dart';
 
 class Routes {
   Routes._(); //this is to prevent anyone from instantiating this object
 
-  static const String splash = '/splash';
-  static const String login = '/login';
-  static const String register = '/register';
   static const String entertainer = '/entertainer';
-  static const String welcome = '/welcome';
-  static const String requests = '/requests';
+  static const String login = '/login';
+  static const String profile = '/profile';
+  static const String register = '/register';
   static const String requestDetail = '/request-detail';
+  static const String requests = '/requests';
+  static const String splash = '/splash';
+  static const String unknown = '/unknown';
+  static const String welcome = '/welcome';
 
   static final routes = <String, WidgetBuilder>{
-    // splash: (BuildContext context) => const SplashScreen(),
+    entertainer: (BuildContext context) => const EntertainerScreen(),
     login: (BuildContext context) => const SignInScreen(),
+    profile: (BuildContext context) => const ProfileScreen('', ''),
     register: (BuildContext context) => const RegisterScreen(),
-    welcome: (BuildContext context) => const WelcomeScreen(),
-    requests: (BuildContext context) => const RequestsScreen(),
     requestDetail: (BuildContext context) => RequestDetailScreen(),
-    entertainer: (BuildContext context) => EntertainerScreen(),
+    requests: (BuildContext context) => const RequestsScreen(),
+    unknown: (BuildContext context) => const UnknownRouteScreen(),
+    // splash: (BuildContext context) => const SplashScreen(),
+    welcome: (BuildContext context) => const WelcomeScreen(),
   };
 }

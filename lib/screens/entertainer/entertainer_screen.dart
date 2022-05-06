@@ -1,13 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+
 import 'package:request_live_riverpods/controllers/new_request_controller.dart';
 import 'package:request_live_riverpods/screens/entertainer/entertainer_bio.dart';
 import 'package:request_live_riverpods/screens/entertainer/new_request_form.dart';
-
-// import 'package:provider/provider.dart';
-
-// import '../../resources/firestore_database.dart';
-// import '../../providers/auth_provider.dart';
+import 'package:request_live_riverpods/widgets/scaffold_snackbar.dart';
 
 class EntertainerScreenArgs {
   final String entertainerUid;
@@ -17,7 +14,8 @@ class EntertainerScreenArgs {
 
 class EntertainerScreen extends HookConsumerWidget {
   final _isLoading = false;
-  var userData = {};
+
+  const EntertainerScreen({Key? key}) : super(key: key);
 
   Future<void> _sendRequest({
     required WidgetRef ref,
@@ -39,36 +37,13 @@ class EntertainerScreen extends HookConsumerWidget {
             requesterUsername: requesterUsername,
             requesterPhotoUrl: requesterPhotoUrl,
           );
-      ScaffoldMessenger.of(ctx).showSnackBar(
-        const SnackBar(
-          content: Text(
-            'Your request has been sent!',
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 16,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          backgroundColor: Colors.green,
-        ),
-      );
+      showCustomSnackbar(
+          ctx: ctx, message: 'Your request has been sent!', success: true);
     } catch (e) {
-      ScaffoldMessenger.of(ctx).showSnackBar(
-        SnackBar(
-          content: Text(
-            'Something went wrong: ' + e.toString(),
-            textAlign: TextAlign.center,
-            style: const TextStyle(
-              color: Colors.white,
-              fontSize: 16,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          backgroundColor: Theme.of(ctx).errorColor,
-        ),
-      );
-      print(e);
+      showCustomSnackbar(
+          ctx: ctx,
+          message: 'Something went wrong. Please try again. $e',
+          success: false);
       return;
     }
   }
@@ -83,40 +58,23 @@ class EntertainerScreen extends HookConsumerWidget {
         title: Text('${args.entertainerUserName}\'s Page'),
       ),
       // drawer: AppDrawer(),
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          const EntertainerBio(),
-          NewRequestForm(
-            args.entertainerUid.toString(),
-            _isLoading,
-            _sendRequest,
+      body: Container(
+        alignment: Alignment.center,
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              const EntertainerBio(),
+              NewRequestForm(
+                args.entertainerUid.toString(),
+                _isLoading,
+                _sendRequest,
+              ),
+            ],
           ),
-        ],
+        ),
       ),
     );
   }
 }
-
-// class EntertainerScreenHook extends HookConsumerWidget {
-//   const EntertainerScreenHook({
-//     Key? key,
-//     required String entertainerUid,
-//     required String entertainerUsername,
-//   }) : super(key: key);
-
-  
-
-//   @override
-//   Widget build(BuildContext context, WidgetRef ref) {
-//     final _artistController = useTextEditingController();
-//     final _titleController = useTextEditingController();
-//     final _notesController = useTextEditingController();
-
-//     final userProvider = ref.watch(userControllerProvider);
-//     final newRequestProvider = ref.read(newRequestControllerProvider);
-
-//     return;
-//   }
-// }

@@ -14,6 +14,7 @@ abstract class BaseEntertainerRepository {
 
 final entertainerRepositoryStreamProvider =
     StreamProvider<Stream<QuerySnapshot<Map<String, dynamic>>>>((ref) async* {
+  ref.onDispose(() {});
   yield EntertainerRepository(ref.read).retrieveEntertainersStream();
 });
 
@@ -42,49 +43,9 @@ class EntertainerRepository implements BaseEntertainerRepository {
           .collection('users')
           .where('isEntertainer', isEqualTo: true)
           .snapshots();
-      // .snapshots() as Stream<QuerySnapshot<Map<String, dynamic>>>;
       return snaps;
     } on FirebaseException catch (e) {
       throw CustomException(message: e.message);
     }
   }
 }
-
-// final entertainerListProvider =
-//     FutureProvider.autoDispose<List<User>>((ref) async {
-//   return await EntertainerRepository(ref.read).retrieveEntertainersList();
-// });
-
-// final entertainerRepositoryProvider =
-//     Provider<EntertainerRepository>((ref) => EntertainerRepository(ref.read));
-
-
-
-// final entertainerRepositoryStreamProvider =
-//     StreamProvider<AsyncValue<QuerySnapshot<Map<String, dynamic>>>>(
-//         (ref) async* {
-//   // Debug print
-//   print('entertainerRepositoryStreamProvider.entry');
-
-//   // Open the connection
-//   final channel = ref
-//       .read(firebaseFirestoreProvider)
-//       .usersRef()
-//       .where('is_entertainer', isEqualTo: true)
-//       .snapshots() as AsyncValue<QuerySnapshot<Map<String, dynamic>>>;
-
-//   yield channel;
-
-//   // Debug print
-//   print('entertainerRepositoryStreamProvider.afterChannel');
-
-//   // yield channel as AsyncValue<Stream<QuerySnapshot<Object?>>>;
-
-//   // Debug print
-//   print('entertainerRepositoryStreamProvider.afterChannelYield');
-//   // await for (final user in channel) {
-//   //   yield user.docs.map((doc) => User.fromDocument(doc)).toList();
-//   // }
-
-//   // EntertainerRepository(ref.read);
-// });
