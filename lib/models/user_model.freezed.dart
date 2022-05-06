@@ -25,6 +25,8 @@ mixin _$User {
   String get username => throw _privateConstructorUsedError;
   String? get displayName => throw _privateConstructorUsedError;
   String? get phoneNumber => throw _privateConstructorUsedError;
+  String? get bio => throw _privateConstructorUsedError;
+  String? get website => throw _privateConstructorUsedError;
   String get photoUrl => throw _privateConstructorUsedError;
   bool get isEntertainer => throw _privateConstructorUsedError;
   bool get isLive => throw _privateConstructorUsedError;
@@ -44,6 +46,8 @@ abstract class $UserCopyWith<$Res> {
       String username,
       String? displayName,
       String? phoneNumber,
+      String? bio,
+      String? website,
       String photoUrl,
       bool isEntertainer,
       bool isLive});
@@ -64,6 +68,8 @@ class _$UserCopyWithImpl<$Res> implements $UserCopyWith<$Res> {
     Object? username = freezed,
     Object? displayName = freezed,
     Object? phoneNumber = freezed,
+    Object? bio = freezed,
+    Object? website = freezed,
     Object? photoUrl = freezed,
     Object? isEntertainer = freezed,
     Object? isLive = freezed,
@@ -88,6 +94,14 @@ class _$UserCopyWithImpl<$Res> implements $UserCopyWith<$Res> {
       phoneNumber: phoneNumber == freezed
           ? _value.phoneNumber
           : phoneNumber // ignore: cast_nullable_to_non_nullable
+              as String?,
+      bio: bio == freezed
+          ? _value.bio
+          : bio // ignore: cast_nullable_to_non_nullable
+              as String?,
+      website: website == freezed
+          ? _value.website
+          : website // ignore: cast_nullable_to_non_nullable
               as String?,
       photoUrl: photoUrl == freezed
           ? _value.photoUrl
@@ -116,6 +130,8 @@ abstract class _$UserCopyWith<$Res> implements $UserCopyWith<$Res> {
       String username,
       String? displayName,
       String? phoneNumber,
+      String? bio,
+      String? website,
       String photoUrl,
       bool isEntertainer,
       bool isLive});
@@ -137,6 +153,8 @@ class __$UserCopyWithImpl<$Res> extends _$UserCopyWithImpl<$Res>
     Object? username = freezed,
     Object? displayName = freezed,
     Object? phoneNumber = freezed,
+    Object? bio = freezed,
+    Object? website = freezed,
     Object? photoUrl = freezed,
     Object? isEntertainer = freezed,
     Object? isLive = freezed,
@@ -161,6 +179,14 @@ class __$UserCopyWithImpl<$Res> extends _$UserCopyWithImpl<$Res>
       phoneNumber: phoneNumber == freezed
           ? _value.phoneNumber
           : phoneNumber // ignore: cast_nullable_to_non_nullable
+              as String?,
+      bio: bio == freezed
+          ? _value.bio
+          : bio // ignore: cast_nullable_to_non_nullable
+              as String?,
+      website: website == freezed
+          ? _value.website
+          : website // ignore: cast_nullable_to_non_nullable
               as String?,
       photoUrl: photoUrl == freezed
           ? _value.photoUrl
@@ -187,6 +213,8 @@ class _$_User extends _User {
       required this.username,
       this.displayName,
       this.phoneNumber,
+      this.bio,
+      this.website,
       required this.photoUrl,
       required this.isEntertainer,
       this.isLive = false})
@@ -205,6 +233,10 @@ class _$_User extends _User {
   @override
   final String? phoneNumber;
   @override
+  final String? bio;
+  @override
+  final String? website;
+  @override
   final String photoUrl;
   @override
   final bool isEntertainer;
@@ -214,7 +246,7 @@ class _$_User extends _User {
 
   @override
   String toString() {
-    return 'User(id: $id, email: $email, username: $username, displayName: $displayName, phoneNumber: $phoneNumber, photoUrl: $photoUrl, isEntertainer: $isEntertainer, isLive: $isLive)';
+    return 'User(id: $id, email: $email, username: $username, displayName: $displayName, phoneNumber: $phoneNumber, bio: $bio, website: $website, photoUrl: $photoUrl, isEntertainer: $isEntertainer, isLive: $isLive)';
   }
 
   @override
@@ -229,6 +261,8 @@ class _$_User extends _User {
                 .equals(other.displayName, displayName) &&
             const DeepCollectionEquality()
                 .equals(other.phoneNumber, phoneNumber) &&
+            const DeepCollectionEquality().equals(other.bio, bio) &&
+            const DeepCollectionEquality().equals(other.website, website) &&
             const DeepCollectionEquality().equals(other.photoUrl, photoUrl) &&
             const DeepCollectionEquality()
                 .equals(other.isEntertainer, isEntertainer) &&
@@ -244,6 +278,8 @@ class _$_User extends _User {
       const DeepCollectionEquality().hash(username),
       const DeepCollectionEquality().hash(displayName),
       const DeepCollectionEquality().hash(phoneNumber),
+      const DeepCollectionEquality().hash(bio),
+      const DeepCollectionEquality().hash(website),
       const DeepCollectionEquality().hash(photoUrl),
       const DeepCollectionEquality().hash(isEntertainer),
       const DeepCollectionEquality().hash(isLive));
@@ -266,6 +302,8 @@ abstract class _User extends User {
       required final String username,
       final String? displayName,
       final String? phoneNumber,
+      final String? bio,
+      final String? website,
       required final String photoUrl,
       required final bool isEntertainer,
       final bool isLive}) = _$_User;
@@ -283,6 +321,10 @@ abstract class _User extends User {
   String? get displayName => throw _privateConstructorUsedError;
   @override
   String? get phoneNumber => throw _privateConstructorUsedError;
+  @override
+  String? get bio => throw _privateConstructorUsedError;
+  @override
+  String? get website => throw _privateConstructorUsedError;
   @override
   String get photoUrl => throw _privateConstructorUsedError;
   @override

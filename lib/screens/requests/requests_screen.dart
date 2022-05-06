@@ -102,7 +102,7 @@ class RequestsScreenHook extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final userControlProvider = ref.watch(userControllerProvider.notifier);
+    final userControllerNotifier = ref.watch(userControllerProvider.notifier);
     final user = ref.watch(userControllerProvider);
     final Map<String, String> userMap = {};
 
@@ -113,137 +113,129 @@ class RequestsScreenHook extends HookConsumerWidget {
         ref.watch(requestListControllerProvider.notifier);
 
     Future<bool> updateLiveStatus({required User user}) async {
-      return await userControlProvider.updateUserLiveStatus(user: user);
+      return await userControllerNotifier.updateUserLiveStatus(user: user);
     }
 
     return Scaffold(
-      backgroundColor: Colors.black,
-      appBar: AppBar(
-        backgroundColor: Colors.indigo,
-        centerTitle: false,
-        title: const Text(
-          'Your Requests!',
-          style: TextStyle(
-            color: Colors.white,
-            fontSize: 14,
-            fontWeight: FontWeight.bold,
+        backgroundColor: Colors.black,
+        appBar: AppBar(
+          backgroundColor: Colors.indigo,
+          centerTitle: false,
+          title: const Text(
+            'Your Requests!',
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 14,
+              fontWeight: FontWeight.bold,
+            ),
           ),
         ),
-      ),
-      body: user.when(
-        loading: () => const CircularProgressIndicator(
-          color: Colors.white,
-        ),
-        error: (error, stacktrace) => Text('Error: $error'),
-        data: (userData) {
-          var isLive = userData.isLive;
-          return LayoutBuilder(
-            builder: (context, BoxConstraints viewportConstraints) {
+        body: SingleChildScrollView(
+          child: user.when(
+            loading: () => const CircularProgressIndicator(
+              color: Colors.white,
+            ),
+            error: (error, stacktrace) => Text('Error: $error'),
+            data: (userData) {
+              var isLive = userData.isLive;
+
               return SingleChildScrollView(
-                child: ConstrainedBox(
-                  constraints: BoxConstraints(
-                    minHeight: viewportConstraints.maxHeight,
-                  ),
-                  child: Column(
-                    children: [
-                      Switch.adaptive(
-                        value: isLive,
-                        onChanged: (value) async {
-                          await updateLiveStatus(user: userData);
-                        },
-                      ),
-                      requestsStream.when(
-                        loading: (() => const CircularProgressIndicator(
-                              color: Colors.white,
-                            )),
-                        error: (error, stacktrace) => Text('Error: $error'),
-                        data: (requestsStreamData) {
-                          return StreamBuilder(
-                            stream: requestsStreamData,
-                            builder: (BuildContext context,
-                                AsyncSnapshot<
-                                        QuerySnapshot<Map<String, dynamic>>>
-                                    snapshot) {
-                              if (snapshot.connectionState ==
-                                  ConnectionState.waiting) {
-                                return const Center(
-                                  child: CircularProgressIndicator(
-                                    color: Colors.yellow,
-                                  ),
-                                );
-                              }
-                              if (snapshot.hasData) {
-                                return SizedBox(
-                                  width: double.infinity,
-                                  child: ListView.builder(
-                                    itemCount: snapshot.data?.docs.length,
-                                    reverse: true,
-                                    shrinkWrap: true,
-                                    itemBuilder: (ctx, index) => Container(
-                                      margin: const EdgeInsets.symmetric(
-                                          horizontal: 0, vertical: 0),
-                                      child: Dismissible(
-                                        key: ValueKey<int>(index),
-                                        direction: DismissDirection.endToStart,
-                                        background: Container(
-                                          color: Colors.red,
-                                          child: Column(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.center,
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.end,
-                                              children: const [
-                                                Padding(
-                                                  padding: EdgeInsets.only(
-                                                      right: 16.0),
-                                                  child: Icon(
-                                                    Icons.delete,
-                                                    color: Colors.white,
-                                                    textDirection:
-                                                        TextDirection.rtl,
-                                                  ),
+                child: Column(
+                  children: [
+                    Switch.adaptive(
+                      value: isLive,
+                      onChanged: (value) async {
+                        await updateLiveStatus(user: userData);
+                      },
+                    ),
+                    requestsStream.when(
+                      loading: (() => const CircularProgressIndicator(
+                            color: Colors.white,
+                          )),
+                      error: (error, stacktrace) => Text('Error: $error'),
+                      data: (requestsStreamData) {
+                        return StreamBuilder(
+                          stream: requestsStreamData,
+                          builder: (BuildContext context,
+                              AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>>
+                                  snapshot) {
+                            if (snapshot.connectionState ==
+                                ConnectionState.waiting) {
+                              return const Center(
+                                child: CircularProgressIndicator(
+                                  color: Colors.yellow,
+                                ),
+                              );
+                            }
+                            if (snapshot.hasData) {
+                              return SizedBox(
+                                width: double.infinity,
+                                child: ListView.builder(
+                                  itemCount: snapshot.data?.docs.length,
+                                  reverse: true,
+                                  shrinkWrap: true,
+                                  itemBuilder: (ctx, index) => Container(
+                                    margin: const EdgeInsets.symmetric(
+                                        horizontal: 0, vertical: 0),
+                                    child: Dismissible(
+                                      key: UniqueKey(),
+                                      direction: DismissDirection.endToStart,
+                                      background: Container(
+                                        color: Colors.red,
+                                        child: Column(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.end,
+                                            children: const [
+                                              Padding(
+                                                padding: EdgeInsets.only(
+                                                    right: 16.0),
+                                                child: Icon(
+                                                  Icons.delete,
+                                                  color: Colors.white,
+                                                  textDirection:
+                                                      TextDirection.rtl,
                                                 ),
-                                              ]),
-                                        ),
-                                        onDismissed:
-                                            (DismissDirection direction) async {
-                                          requestListController.deleteRequest(
-                                              requestId: snapshot
-                                                  .data!.docs[index].id);
-                                        },
-                                        confirmDismiss:
-                                            (DismissDirection direction) =>
-                                                _showConfirmationDialog(
-                                                    context, 'delete'),
-                                        child: RequestCard(
-                                            requestId:
-                                                snapshot.data!.docs[index].id,
-                                            snap: snapshot.data!.docs[index]
-                                                .data()),
+                                              ),
+                                            ]),
                                       ),
+                                      onDismissed:
+                                          (DismissDirection direction) async {
+                                        requestListController.deleteRequest(
+                                            requestId:
+                                                snapshot.data!.docs[index].id);
+                                      },
+                                      confirmDismiss:
+                                          (DismissDirection direction) =>
+                                              _showConfirmationDialog(
+                                                  context, 'delete'),
+                                      child: RequestCard(
+                                          requestId:
+                                              snapshot.data!.docs[index].id,
+                                          snap: snapshot.data!.docs[index]
+                                              .data()),
                                     ),
                                   ),
-                                );
-                              } else {
-                                return const Text(
-                                  'Whyyy',
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                  ),
-                                );
-                              }
-                            },
-                          );
-                        },
-                      ),
-                    ],
-                  ),
+                                ),
+                              );
+                            } else {
+                              return const Text(
+                                'Whyyy',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                ),
+                              );
+                            }
+                          },
+                        );
+                      },
+                    ),
+                  ],
                 ),
               );
             },
-          );
-        },
-      ),
-    );
+          ),
+        ));
   }
 }

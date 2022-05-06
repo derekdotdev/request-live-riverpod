@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:request_live_riverpods/controllers/auth_controller.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:request_live_riverpods/models/username_model.dart';
@@ -54,6 +56,41 @@ class UserController extends StateNotifier<AsyncValue<User>> {
       _read(userExceptionProvider.notifier).state = e;
       print(e);
       return false;
+    }
+  }
+
+  Future<void> updateUserProfile(
+      {required User user,
+      required String bio,
+      required String website}) async {
+    try {
+      final userWithUpdatedProfile = user.copyWith(bio: bio, website: website);
+
+      await _read(userRepositoryProvider).updateUserProfile(localUser: user);
+
+      if (mounted) {
+        state = AsyncValue.data(userWithUpdatedProfile);
+      }
+    } on CustomException catch (e) {
+      _read(userExceptionProvider.notifier).state = e;
+      print(e);
+    }
+  }
+
+  Future<void> updateUserImage(
+      {required User user, required Uint8List image}) async {
+    try {
+      final userWithUpdatedPhoto = await _read(userRepositoryProvider)
+          .updateUserPhoto(
+              localUser: user, image: image, childName: 'profilePics');
+
+      if (mounted) {
+        state = AsyncValue.data(userWithUpdatedPhoto);
+      }
+    } on CustomException catch (e) {
+      _read(userExceptionProvider.notifier).state = e;
+      print('Error uploading new profile image!');
+      print(e);
     }
   }
 

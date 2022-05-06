@@ -1,4 +1,6 @@
-import 'package:firebase_core/firebase_core.dart';
+import 'dart:typed_data';
+
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import 'package:request_live_riverpods/extensions/firebase_firestore_extension.dart';
@@ -47,6 +49,44 @@ class UserRepository implements BaseUserRepository {
           .usersDocRef(localUser.id)
           .update(updatedStatus.toDocument());
       return newStatus;
+    } on FirebaseException catch (e) {
+      throw CustomException(message: e.message);
+    }
+  }
+
+  Future<void> updateUserProfile({required local_user.User localUser}) async {
+    try {
+      await _read(firebaseFirestoreProvider)
+          .usersDocRef(localUser.id)
+          .update(localUser.toDocument());
+    } on FirebaseException catch (e) {
+      throw CustomException(message: e.message);
+    }
+  }
+
+  Future<local_user.User> updateUserPhoto(
+      {required local_user.User localUser,
+      required Uint8List image,
+      required String childName}) async {
+    try {
+      final Reference storageRef = _read(firebaseStorageProvider)
+          .ref()
+          .child(childName)
+          .child(localUser.id);
+
+      final UploadTask uploadTask = storageRef.putData(image);
+
+      final TaskSnapshot snapshot = await uploadTask;
+
+      final String newPhotoUrl = await snapshot.ref.getDownloadURL();
+
+      final newUser = localUser.copyWith(photoUrl: newPhotoUrl);
+
+      await _read(firebaseFirestoreProvider)
+          .usersDocRef(newUser.id)
+          .update(newUser.toDocument());
+
+      return newUser;
     } on FirebaseException catch (e) {
       throw CustomException(message: e.message);
     }

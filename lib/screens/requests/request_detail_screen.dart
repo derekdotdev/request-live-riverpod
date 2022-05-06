@@ -3,6 +3,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:request_live_riverpods/constants/constants.dart';
 import 'package:request_live_riverpods/controllers/request_state_controller.dart';
 import 'package:request_live_riverpods/models/request_model.dart';
+import 'package:request_live_riverpods/resources/conversions.dart';
 
 class RequestDetailScreenArgs {
   final Request request;
@@ -125,7 +126,8 @@ class RequestDetailScreen extends HookConsumerWidget {
                               padding: const EdgeInsets.all(16.0),
                               child: RequestRowOld(
                                 section: 'Time: ',
-                                details: args.request.timestamp,
+                                details: Conversions.convertTimeStamp(
+                                    args.request.timestamp),
                                 maxLines: 1,
                               ),
                             ),

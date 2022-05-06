@@ -81,7 +81,7 @@ class _RequestCardState extends State<RequestCard> {
                             details: widget.snap['notes'].toString()),
                         RequestRowOld(
                             section: 'Time:  ',
-                            details: widget.snap['timestamp']),
+                            details: widget.snap['timestamp'].toString()),
                       ],
                     ),
                   ),

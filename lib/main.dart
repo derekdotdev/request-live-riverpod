@@ -32,20 +32,6 @@ class MyApp extends StatelessWidget {
         ),
         home: const HomeScreen(),
         routes: Routes.routes,
-        // onGenerateRoute: (settings) {
-        //   if (settings.name == ProfileScreen) {
-        //     final args = settings.arguments as ProfileScreenArgs;
-        //     return MaterialPageRoute(
-        //       builder: (context) {
-        //         return ProfileScreen(
-        //           args.userId,
-        //           args.username,
-        //         );
-        //       },
-        //     );
-        //   }
-        //   return null;
-        // },
         onUnknownRoute: (settings) {
           return MaterialPageRoute(
             builder: (context) => const UnknownRouteScreen(),

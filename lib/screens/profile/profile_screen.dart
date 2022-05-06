@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:request_live_riverpods/controllers/auth_controller.dart';
 import 'package:request_live_riverpods/controllers/user_controller.dart';
+import 'package:request_live_riverpods/routes.dart';
 import 'package:request_live_riverpods/screens/screens.dart';
 import 'package:request_live_riverpods/widgets/follow_button.dart';
 
@@ -72,6 +73,32 @@ class ProfileScreen extends HookConsumerWidget {
                                 children: [
                                   args.userId == userData.id
                                       ? FollowButton(
+                                          text: 'Edit Profile',
+                                          backgroundColor: Colors.white,
+                                          textColor: Colors.black,
+                                          borderColor: Colors.grey,
+                                          function: () async {
+                                            // Navigator.of(context)
+                                            //     .pushNamed(Routes.editProfile);
+                                            Navigator.pushNamed(
+                                              context,
+                                              Routes.editProfile,
+                                              arguments: EditProfileScreenArgs(
+                                                userData.id,
+                                                userData.username,
+                                              ),
+                                            );
+                                          },
+                                        )
+                                      : Container(),
+                                ],
+                              ),
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceEvenly,
+                                children: [
+                                  args.userId == userData.id
+                                      ? FollowButton(
                                           text: 'Sign Out',
                                           backgroundColor: Colors.white,
                                           textColor: Colors.black,
@@ -89,7 +116,7 @@ class ProfileScreen extends HookConsumerWidget {
                                         )
                                       : Container(),
                                 ],
-                              ),
+                              )
                             ],
                           ),
                         ),

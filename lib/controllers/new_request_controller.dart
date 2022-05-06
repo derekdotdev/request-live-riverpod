@@ -1,11 +1,9 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:request_live_riverpods/controllers/auth_controller.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import 'package:request_live_riverpods/repositories/custom_exception.dart';
 import 'package:request_live_riverpods/repositories/request_repository.dart';
 import 'package:request_live_riverpods/models/request_model.dart';
-import 'package:request_live_riverpods/resources/conversions.dart';
 
 final newRequestExceptionProvider =
     StateProvider<CustomException?>((_) => null);
@@ -40,7 +38,7 @@ class NewRequestController extends StateNotifier<AsyncValue<Request>> {
         requesterUsername: requesterUsername,
         requesterPhotoUrl: requesterPhotoUrl,
         entertainerId: entertainerId,
-        timestamp: Conversions.convertTimeStamp(Timestamp.now()),
+        timestamp: DateTime.now(),
       );
 
       final requestId = await _read(requestRepositoryProvider).createRequest(

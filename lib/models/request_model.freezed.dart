@@ -29,7 +29,8 @@ mixin _$Request {
   String get requesterPhotoUrl => throw _privateConstructorUsedError;
   String get entertainerId => throw _privateConstructorUsedError;
   bool get played => throw _privateConstructorUsedError;
-  String get timestamp => throw _privateConstructorUsedError;
+  @TimestampConverter()
+  DateTime get timestamp => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -50,7 +51,7 @@ abstract class $RequestCopyWith<$Res> {
       String requesterPhotoUrl,
       String entertainerId,
       bool played,
-      String timestamp});
+      @TimestampConverter() DateTime timestamp});
 }
 
 /// @nodoc
@@ -114,7 +115,7 @@ class _$RequestCopyWithImpl<$Res> implements $RequestCopyWith<$Res> {
       timestamp: timestamp == freezed
           ? _value.timestamp
           : timestamp // ignore: cast_nullable_to_non_nullable
-              as String,
+              as DateTime,
     ));
   }
 }
@@ -134,7 +135,7 @@ abstract class _$RequestCopyWith<$Res> implements $RequestCopyWith<$Res> {
       String requesterPhotoUrl,
       String entertainerId,
       bool played,
-      String timestamp});
+      @TimestampConverter() DateTime timestamp});
 }
 
 /// @nodoc
@@ -199,7 +200,7 @@ class __$RequestCopyWithImpl<$Res> extends _$RequestCopyWithImpl<$Res>
       timestamp: timestamp == freezed
           ? _value.timestamp
           : timestamp // ignore: cast_nullable_to_non_nullable
-              as String,
+              as DateTime,
     ));
   }
 }
@@ -217,7 +218,7 @@ class _$_Request extends _Request {
       required this.requesterPhotoUrl,
       required this.entertainerId,
       this.played = false,
-      required this.timestamp})
+      @TimestampConverter() required this.timestamp})
       : super._();
 
   factory _$_Request.fromJson(Map<String, dynamic> json) =>
@@ -243,7 +244,8 @@ class _$_Request extends _Request {
   @JsonKey()
   final bool played;
   @override
-  final String timestamp;
+  @TimestampConverter()
+  final DateTime timestamp;
 
   @override
   String toString() {
@@ -308,7 +310,7 @@ abstract class _Request extends Request {
       required final String requesterPhotoUrl,
       required final String entertainerId,
       final bool played,
-      required final String timestamp}) = _$_Request;
+      @TimestampConverter() required final DateTime timestamp}) = _$_Request;
   const _Request._() : super._();
 
   factory _Request.fromJson(Map<String, dynamic> json) = _$_Request.fromJson;
@@ -332,7 +334,8 @@ abstract class _Request extends Request {
   @override
   bool get played => throw _privateConstructorUsedError;
   @override
-  String get timestamp => throw _privateConstructorUsedError;
+  @TimestampConverter()
+  DateTime get timestamp => throw _privateConstructorUsedError;
   @override
   @JsonKey(ignore: true)
   _$RequestCopyWith<_Request> get copyWith =>

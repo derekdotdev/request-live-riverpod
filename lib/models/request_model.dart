@@ -1,7 +1,20 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'request_model.freezed.dart';
 part 'request_model.g.dart';
+
+class TimestampConverter implements JsonConverter<DateTime, Timestamp> {
+  const TimestampConverter();
+
+  @override
+  DateTime fromJson(Timestamp timestamp) {
+    return timestamp.toDate();
+  }
+
+  @override
+  Timestamp toJson(DateTime date) => Timestamp.fromDate(date);
+}
 
 @freezed
 abstract class Request implements _$Request {
@@ -17,10 +30,11 @@ abstract class Request implements _$Request {
     required String requesterPhotoUrl,
     required String entertainerId,
     @Default(false) bool played,
-    required String timestamp,
+    @TimestampConverter() required DateTime timestamp,
+    // @TimestampConverter() required DateTime timestamp,
   }) = _Request;
 
-  factory Request.empty() => const Request(
+  factory Request.empty() => Request(
         artist: '',
         title: '',
         notes: '',
@@ -28,7 +42,7 @@ abstract class Request implements _$Request {
         requesterUsername: '',
         requesterPhotoUrl: '',
         entertainerId: '',
-        timestamp: '',
+        timestamp: DateTime.now(),
       );
 
   factory Request.fromJson(Map<String, dynamic> json) =>

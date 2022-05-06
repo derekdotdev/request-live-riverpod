@@ -1,13 +1,11 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intl/intl.dart';
 
 class Conversions {
-  static convertTimeStamp(Timestamp timestamp) {
+  static convertTimeStamp(DateTime timestamp) {
     if (timestamp.toString().isEmpty) {
       return;
     }
-    String convertedDate =
-        DateFormat.yMMMd().add_jm().format(timestamp.toDate());
+    String convertedDate = DateFormat.yMMMd().add_jm().format(timestamp);
     return convertedDate;
   }
 }

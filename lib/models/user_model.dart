@@ -17,6 +17,8 @@ abstract class User implements _$User {
     required String username,
     String? displayName,
     String? phoneNumber,
+    String? bio,
+    String? website,
     required String photoUrl,
     required bool isEntertainer,
     @Default(false) bool isLive,

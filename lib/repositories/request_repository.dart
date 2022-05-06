@@ -105,6 +105,7 @@ class RequestRepository implements BaseRequestRepository {
           .collection('entertainers')
           .doc(entertainerId)
           .collection('requests')
+          .orderBy('timestamp')
           .snapshots();
       return snaps;
     } on FirebaseException catch (e) {
