@@ -4,6 +4,8 @@ import 'package:request_live_riverpods/constants/constants.dart';
 import 'package:request_live_riverpods/controllers/request_state_controller.dart';
 import 'package:request_live_riverpods/models/request_model.dart';
 import 'package:request_live_riverpods/resources/conversions.dart';
+import 'package:request_live_riverpods/routes.dart';
+import 'package:request_live_riverpods/screens/screens.dart';
 
 class RequestDetailScreenArgs {
   final Request request;
@@ -63,7 +65,16 @@ class RequestDetailScreen extends HookConsumerWidget {
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
                       GestureDetector(
-                        onTap: () {},
+                        onTap: () {
+                          Navigator.pushNamed(
+                            context,
+                            Routes.profile,
+                            arguments: ProfileScreenArgs(
+                              args.request.requesterId,
+                              args.request.requesterUsername,
+                            ),
+                          );
+                        },
                         child: Card(
                           margin: const EdgeInsets.only(top: 16),
                           elevation: 4,
