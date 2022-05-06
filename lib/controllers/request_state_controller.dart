@@ -33,6 +33,7 @@ class RequestStateController extends StateNotifier<AsyncValue<Request>> {
     final userControllerNotifier = _read(userControllerProvider.notifier);
     userControllerNotifier.retrieveUserInfo();
 
+    print('RequestStateController before whenData');
     // Only load request if user is an entertainer!
     userController.whenData((userData) {
       if (_userId != null && userData.isEntertainer) {

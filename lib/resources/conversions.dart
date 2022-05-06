@@ -1,7 +1,7 @@
 import 'package:intl/intl.dart';
 
 class Conversions {
-  static convertTimeStamp(DateTime timestamp) {
+  static convertTimestamp(DateTime timestamp) {
     if (timestamp.toString().isEmpty) {
       return;
     }

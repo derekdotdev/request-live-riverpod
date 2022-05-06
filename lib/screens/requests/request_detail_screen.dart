@@ -11,11 +11,15 @@ class RequestDetailScreenArgs {
 }
 
 class RequestDetailScreen extends HookConsumerWidget {
+  const RequestDetailScreen({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     // final width = MediaQuery.of(context).size.width;
     final args =
         ModalRoute.of(context)!.settings.arguments as RequestDetailScreenArgs;
+    print('Request Detail Screen > args.request.id: ');
+    print(args.request.id);
 
     final requestStateController =
         ref.watch(requestStateControllerProvider(args.request.id!).notifier);
@@ -58,32 +62,35 @@ class RequestDetailScreen extends HookConsumerWidget {
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
-                      Card(
-                        margin: const EdgeInsets.only(top: 16),
-                        elevation: 4,
-                        color: kCardBackgroundColor,
-                        child: Column(
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.all(16.0),
-                              child: CircleAvatar(
-                                radius: 48,
-                                backgroundImage: NetworkImage(
-                                  args.request.requesterPhotoUrl,
+                      GestureDetector(
+                        onTap: () {},
+                        child: Card(
+                          margin: const EdgeInsets.only(top: 16),
+                          elevation: 4,
+                          color: kCardBackgroundColor,
+                          child: Column(
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.all(16.0),
+                                child: CircleAvatar(
+                                  radius: 48,
+                                  backgroundImage: NetworkImage(
+                                    args.request.requesterPhotoUrl,
+                                  ),
                                 ),
                               ),
-                            ),
-                            const SizedBox(
-                              height: 8,
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.only(bottom: 16.0),
-                              child: Text(
-                                args.request.requesterUsername,
-                                style: kRequestDetailStyle,
+                              const SizedBox(
+                                height: 8,
                               ),
-                            ),
-                          ],
+                              Padding(
+                                padding: const EdgeInsets.only(bottom: 16.0),
+                                child: Text(
+                                  args.request.requesterUsername,
+                                  style: kRequestDetailStyle,
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                       const SizedBox(
@@ -126,7 +133,7 @@ class RequestDetailScreen extends HookConsumerWidget {
                               padding: const EdgeInsets.all(16.0),
                               child: RequestRowOld(
                                 section: 'Time: ',
-                                details: Conversions.convertTimeStamp(
+                                details: Conversions.convertTimestamp(
                                     args.request.timestamp),
                                 maxLines: 1,
                               ),
@@ -142,14 +149,16 @@ class RequestDetailScreen extends HookConsumerWidget {
                         color: kCardBackgroundColor,
                         child: Column(
                           children: [
-                            const Padding(
-                              padding: EdgeInsets.only(
+                            Padding(
+                              padding: const EdgeInsets.only(
                                 top: 16,
                                 left: 16,
                                 right: 16,
                               ),
                               child: Text(
-                                'Did you play it??',
+                                _isPlayed
+                                    ? 'You played it!'
+                                    : 'Did you play it??',
                                 style: kRequestDetailStyle,
                               ),
                             ),
@@ -158,7 +167,7 @@ class RequestDetailScreen extends HookConsumerWidget {
                                   const EdgeInsets.symmetric(horizontal: 16.0),
                               child: Switch.adaptive(
                                 value: _isPlayed,
-                                activeColor: Colors.orangeAccent,
+                                activeColor: Colors.indigo,
                                 onChanged: (value) {
                                   updatePlayedStatus(request: requestData);
                                 },

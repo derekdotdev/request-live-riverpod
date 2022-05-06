@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:request_live_riverpods/models/models.dart';
+import 'package:request_live_riverpods/resources/conversions.dart';
 import 'package:request_live_riverpods/routes.dart';
 import 'package:request_live_riverpods/screens/requests/request_detail_screen.dart';
 
@@ -29,7 +30,7 @@ class _RequestCardState extends State<RequestCard> {
     requesterPhotoUrl: widget.snap['requesterPhotoUrl'],
     entertainerId: widget.snap["entertainerId"],
     played: widget.snap["played"],
-    timestamp: widget.snap["timestamp"],
+    timestamp: widget.snap["timestamp"].toDate(),
   );
 
   @override
@@ -81,7 +82,8 @@ class _RequestCardState extends State<RequestCard> {
                             details: widget.snap['notes'].toString()),
                         RequestRowOld(
                             section: 'Time:  ',
-                            details: widget.snap['timestamp'].toString()),
+                            details: Conversions.convertTimestamp(
+                                widget.snap['timestamp'].toDate())),
                       ],
                     ),
                   ),

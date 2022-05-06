@@ -44,13 +44,15 @@ class WelcomeScreenHook extends HookConsumerWidget {
     AsyncValue<Stream<QuerySnapshot<Map<String, dynamic>>>> entertainersStream =
         ref.watch(entertainerRepositoryStreamProvider);
 
-    return entertainersStream.when(
-      loading: () => const CircularProgressIndicator(
-        color: Colors.white,
-      ),
-      error: (error, stacktrace) => Text('Error: $error'),
-      data: (entertainerStreamData) {
-        return StreamBuilder(
+    return SingleChildScrollView(
+      physics: const BouncingScrollPhysics(),
+      child: entertainersStream.when(
+        loading: () => const CircularProgressIndicator(
+          color: Colors.white,
+        ),
+        error: (error, stacktrace) => Text('Error: $error'),
+        data: (entertainerStreamData) {
+          return StreamBuilder(
             stream: entertainerStreamData,
             builder: (BuildContext context,
                 AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
@@ -62,6 +64,9 @@ class WelcomeScreenHook extends HookConsumerWidget {
               if (snapshot.hasData) {
                 return ListView.builder(
                   itemCount: snapshot.data?.docs.length,
+                  physics: const NeverScrollableScrollPhysics(),
+                  reverse: true,
+                  shrinkWrap: true,
                   itemBuilder: (ctx, index) => Container(
                     margin:
                         const EdgeInsets.symmetric(horizontal: 0, vertical: 0),
@@ -73,15 +78,21 @@ class WelcomeScreenHook extends HookConsumerWidget {
                   ),
                 );
               } else {
-                return const Text(
-                  'Looks like there aren\'t any entertainers nearby... Please try again later!',
-                  style: TextStyle(
-                    color: Colors.white,
+                return const Center(
+                  child: Text(
+                    'Looks like there aren\'t any entertainers nearby...\nPlease try again later!',
+                    softWrap: true,
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      color: Colors.white,
+                    ),
                   ),
                 );
               }
-            });
-      },
+            },
+          );
+        },
+      ),
     );
   }
 }

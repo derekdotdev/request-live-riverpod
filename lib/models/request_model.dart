@@ -16,6 +16,18 @@ class TimestampConverter implements JsonConverter<DateTime, Timestamp> {
   Timestamp toJson(DateTime date) => Timestamp.fromDate(date);
 }
 
+class TimestampNullableConverter
+    implements JsonConverter<DateTime?, Timestamp?> {
+  const TimestampNullableConverter();
+
+  @override
+  DateTime? fromJson(Timestamp? json) => json?.toDate();
+
+  @override
+  Timestamp? toJson(DateTime? object) =>
+      object == null ? null : Timestamp.fromDate(object);
+}
+
 @freezed
 abstract class Request implements _$Request {
   const Request._();
@@ -52,7 +64,7 @@ abstract class Request implements _$Request {
   factory Request.fromDocument(doc) {
     final data = doc.data()!;
     return Request.fromJson(data)
-        .copyWith(id: doc.id, timestamp: doc['timestamp']);
+        .copyWith(id: doc.id, timestamp: doc['timestamp'].toDate());
   }
 
   Map<String, dynamic> toDocument() => toJson()..remove('id');
