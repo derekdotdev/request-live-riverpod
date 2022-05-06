@@ -23,10 +23,10 @@ class ProfileScreen extends HookConsumerWidget {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.indigo,
-        centerTitle: false,
-        title: const Text(
-          'Profile',
-          style: TextStyle(
+        centerTitle: true,
+        title: Text(
+          args.username.toUpperCase(),
+          style: const TextStyle(
             color: Colors.white,
             fontSize: 14,
             fontWeight: FontWeight.bold,
