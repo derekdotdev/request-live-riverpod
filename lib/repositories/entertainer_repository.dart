@@ -12,8 +12,17 @@ abstract class BaseEntertainerRepository {
   Stream<QuerySnapshot<Map<String, dynamic>>> retrieveEntertainersStream();
   Stream<QuerySnapshot<Map<String, dynamic>>> retrieveEntertainersSearchStream(
       String username);
+  Future<QuerySnapshot<Map<String, dynamic>>> retrieveEntertainersSearchFuture(
+      String username);
 }
 
+final entertainerRepositorySearchFutureProvider =
+    FutureProvider.family<Future<QuerySnapshot<Map<String, dynamic>>>, String>(
+        (ref, username) async {
+  ref.onDispose(() {});
+  return EntertainerRepository(ref.read)
+      .retrieveEntertainersSearchFuture(username);
+});
 final entertainerRepositorySearchProvider =
     StreamProvider.family<Stream<QuerySnapshot<Map<String, dynamic>>>, String>(
         (ref, username) async* {
@@ -69,6 +78,20 @@ class EntertainerRepository implements BaseEntertainerRepository {
           .where('username', isGreaterThanOrEqualTo: username)
           .snapshots();
       return snaps;
+    } on FirebaseException catch (e) {
+      throw CustomException(message: e.message);
+    }
+  }
+
+  @override
+  Future<QuerySnapshot<Map<String, dynamic>>> retrieveEntertainersSearchFuture(
+      String username) async {
+    try {
+      return await _read(firebaseFirestoreProvider)
+          .collection('users')
+          .where('isEntertainer', isEqualTo: true)
+          .where('username', isGreaterThanOrEqualTo: username)
+          .get();
     } on FirebaseException catch (e) {
       throw CustomException(message: e.message);
     }

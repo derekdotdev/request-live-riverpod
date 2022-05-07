@@ -49,49 +49,54 @@ class WelcomeScreenHook extends HookConsumerWidget {
         data: (entertainerStreamData) {
           return SingleChildScrollView(
             physics: const BouncingScrollPhysics(),
-            child: StreamBuilder(
-              stream: entertainerStreamData,
-              builder: (BuildContext context,
-                  AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const Center(
-                    child: CircularProgressIndicator(color: Colors.yellow),
-                  );
-                }
-                if (snapshot.hasData) {
-                  return SingleChildScrollView(
-                    child: SizedBox(
-                      width: double.infinity,
-                      child: ListView.builder(
-                        itemCount: snapshot.data?.docs.length,
-                        physics: const NeverScrollableScrollPhysics(),
-                        reverse: true,
-                        shrinkWrap: true,
-                        itemBuilder: (ctx, index) => Container(
-                          margin: const EdgeInsets.symmetric(
-                              horizontal: 0, vertical: 0),
-                          child: EntertainerCard(
-                            snap: snapshot.hasData
-                                ? snapshot.data!.docs[index].data()
-                                : {},
+            child: Column(
+              children: [
+                StreamBuilder(
+                  stream: entertainerStreamData,
+                  builder: (BuildContext context,
+                      AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>>
+                          snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return const Center(
+                        child: CircularProgressIndicator(color: Colors.yellow),
+                      );
+                    }
+                    if (snapshot.hasData) {
+                      return SingleChildScrollView(
+                        child: SizedBox(
+                          width: double.infinity,
+                          child: ListView.builder(
+                            itemCount: snapshot.data?.docs.length,
+                            physics: const NeverScrollableScrollPhysics(),
+                            reverse: true,
+                            shrinkWrap: true,
+                            itemBuilder: (ctx, index) => Container(
+                              margin: const EdgeInsets.symmetric(
+                                  horizontal: 0, vertical: 0),
+                              child: EntertainerCard(
+                                snap: snapshot.hasData
+                                    ? snapshot.data!.docs[index].data()
+                                    : {},
+                              ),
+                            ),
                           ),
                         ),
-                      ),
-                    ),
-                  );
-                } else {
-                  return const Center(
-                    child: Text(
-                      'Looks like there aren\'t any entertainers nearby...\nPlease try again later!',
-                      softWrap: true,
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        color: Colors.white,
-                      ),
-                    ),
-                  );
-                }
-              },
+                      );
+                    } else {
+                      return const Center(
+                        child: Text(
+                          'Looks like there aren\'t any entertainers nearby...\nPlease try again later!',
+                          softWrap: true,
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            color: Colors.white,
+                          ),
+                        ),
+                      );
+                    }
+                  },
+                ),
+              ],
             ),
           );
         },

@@ -104,7 +104,6 @@ class RequestsScreenHook extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final userControllerNotifier = ref.watch(userControllerProvider.notifier);
     final user = ref.watch(userControllerProvider);
-    final Map<String, String> userMap = {};
 
     AsyncValue<Stream<QuerySnapshot<Map<String, dynamic>>>> requestsStream =
         ref.watch(requestStreamControllerProvider);
@@ -204,22 +203,22 @@ class RequestsScreenHook extends HookConsumerWidget {
                                     background: Container(
                                       color: Colors.red,
                                       child: Column(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.end,
-                                          children: const [
-                                            Padding(
-                                              padding:
-                                                  EdgeInsets.only(right: 16.0),
-                                              child: Icon(
-                                                Icons.delete,
-                                                color: Colors.white,
-                                                textDirection:
-                                                    TextDirection.rtl,
-                                              ),
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.end,
+                                        children: const [
+                                          Padding(
+                                            padding:
+                                                EdgeInsets.only(right: 16.0),
+                                            child: Icon(
+                                              Icons.delete,
+                                              color: Colors.white,
+                                              textDirection: TextDirection.rtl,
                                             ),
-                                          ]),
+                                          ),
+                                        ],
+                                      ),
                                     ),
                                     onDismissed:
                                         (DismissDirection direction) async {
