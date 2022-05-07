@@ -3,7 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:request_live_riverpods/controllers/auth_controller.dart';
 import 'package:request_live_riverpods/controllers/user_controller.dart';
+import 'package:request_live_riverpods/controllers/user_request_list_controller.dart';
+import 'package:request_live_riverpods/controllers/user_request_stream_controller.dart';
 import 'package:request_live_riverpods/routes.dart';
+import 'package:request_live_riverpods/screens/requests/user_request_card.dart';
 import 'package:request_live_riverpods/screens/screens.dart';
 import 'package:request_live_riverpods/widgets/follow_button.dart';
 
@@ -147,42 +150,7 @@ class ProfileScreen extends HookConsumerWidget {
                 ),
               ),
               const Divider(),
-              FutureBuilder(
-                future: FirebaseFirestore.instance
-                    .collection('posts')
-                    .where('uid', isEqualTo: userData.id)
-                    .get(),
-                builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return const Center(
-                      child: CircularProgressIndicator(),
-                    );
-                  }
-
-                  return GridView.builder(
-                    shrinkWrap: true,
-                    itemCount: (snapshot.data! as dynamic).docs.length,
-                    gridDelegate:
-                        const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 3,
-                      crossAxisSpacing: 5,
-                      mainAxisSpacing: 1.5,
-                      childAspectRatio: 1,
-                    ),
-                    itemBuilder: (context, index) {
-                      DocumentSnapshot snap =
-                          (snapshot.data! as dynamic).docs[index];
-
-                      return Container(
-                        child: Image(
-                          image: NetworkImage(snap['postUrl']),
-                          fit: BoxFit.cover,
-                        ),
-                      );
-                    },
-                  );
-                },
-              )
+              const ProfileScreenRequestsHook(),
             ],
           );
         },
@@ -214,6 +182,144 @@ class ProfileScreen extends HookConsumerWidget {
           ),
         ),
       ],
+    );
+  }
+}
+
+class ProfileScreenRequestsHook extends HookConsumerWidget {
+  const ProfileScreenRequestsHook({Key? key}) : super(key: key);
+
+  Future<bool?> _showConfirmationDialog(BuildContext context, String action) {
+    return showDialog<bool>(
+      context: context,
+      barrierDismissible: true,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Are you sure you want to $action this request?'),
+          actions: [
+            TextButton.icon(
+              label: const Text('Yes'),
+              icon: const Icon(Icons.check),
+              onPressed: () {
+                Navigator.pop(context, true);
+              },
+            ),
+            TextButton.icon(
+              label: const Text('No'),
+              icon: const Icon(Icons.cancel),
+              onPressed: () {
+                Navigator.pop(context, false);
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    AsyncValue<Stream<QuerySnapshot<Map<String, dynamic>>>> userRequestsStream =
+        ref.watch(userRequestStreamControllerProvider);
+
+    final requestListController =
+        ref.watch(userRequestListControllerProvider.notifier);
+
+    return SingleChildScrollView(
+      physics: const BouncingScrollPhysics(),
+      child: Column(
+        children: [
+          const Center(
+            child: Text(
+              'Requests',
+              style: TextStyle(
+                color: Colors.black,
+                fontWeight: FontWeight.bold,
+                fontSize: 16,
+              ),
+            ),
+          ),
+          userRequestsStream.when(
+              loading: () =>
+                  const CircularProgressIndicator(color: Colors.indigo),
+              error: (error, stacktrace) =>
+                  Center(child: Text('Error: $error')),
+              data: (requestsStreamData) {
+                return StreamBuilder(
+                  stream: requestsStreamData,
+                  builder: (BuildContext context,
+                      AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>>
+                          snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return const Center(
+                        child: CircularProgressIndicator(
+                          color: Colors.yellow,
+                        ),
+                      );
+                    }
+
+                    if (snapshot.hasData) {
+                      return SingleChildScrollView(
+                        // 1
+                        child: SizedBox(
+                          width: double.infinity,
+                          child: ListView.builder(
+                            itemCount: snapshot.data?.docs.length,
+                            // controller: scrollController,
+                            physics: const NeverScrollableScrollPhysics(),
+                            reverse: true,
+                            shrinkWrap: true,
+                            itemBuilder: (ctx, index) => Container(
+                              margin: const EdgeInsets.symmetric(
+                                  horizontal: 0, vertical: 0),
+                              child: Dismissible(
+                                key: UniqueKey(),
+                                direction: DismissDirection.endToStart,
+                                background: Container(
+                                  color: Colors.red,
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    crossAxisAlignment: CrossAxisAlignment.end,
+                                    children: const [
+                                      Padding(
+                                        padding: EdgeInsets.only(right: 16.0),
+                                        child: Icon(
+                                          Icons.delete,
+                                          color: Colors.white,
+                                          textDirection: TextDirection.rtl,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                onDismissed:
+                                    (DismissDirection direction) async {
+                                  requestListController.deleteRequest(
+                                      requestId: snapshot.data!.docs[index].id);
+                                },
+                                confirmDismiss: (DismissDirection direction) =>
+                                    _showConfirmationDialog(context, 'delete'),
+                                child: UserRequestCard(
+                                    requestId: snapshot.data!.docs[index].id,
+                                    snap: snapshot.data!.docs[index].data()),
+                              ),
+                            ),
+                          ),
+                        ),
+                      );
+                    } else {
+                      return const Text(
+                        'Whyyy',
+                        style: TextStyle(
+                          color: Colors.white,
+                        ),
+                      );
+                    }
+                  },
+                );
+              })
+        ],
+      ),
     );
   }
 }

@@ -9,19 +9,31 @@ import 'package:request_live_riverpods/extensions/firebase_firestore_extension.d
 
 abstract class BaseRequestRepository {
   Future<List<Request>> retrieveRequests({required String entertainerId});
+
+  Future<List<Request>> retrieveUserRequests({required String userId});
+
   Future<Request> retrieveRequest(
       {required String entertainerId, required String requestId});
-  Stream<QuerySnapshot<Map<String, dynamic>>> requestsSnapshotStream(
-      {required String entertainerId});
-  Future<String> createRequest({
-    required String entertainerId,
-    required Request request,
-  });
+
+  Future<String> createRequest(
+      {required String entertainerId, required Request request});
+
   Future<String> createUserRequest({required Request request});
+
   Future<void> updateRequestPlayed(
       {required String entertainerId, required Request request});
+
   Future<void> deleteRequest(
       {required String entertainerId, required String requestId});
+
+  Future<void> deleteUserRequest(
+      {required String userId, required String requestId});
+
+  Stream<QuerySnapshot<Map<String, dynamic>>> requestsSnapshotStream(
+      {required String entertainerId});
+
+  Stream<QuerySnapshot<Map<String, dynamic>>> userRequestsSnapshotStream(
+      {required String userId});
 }
 
 final requestRepositoryProvider =
@@ -71,6 +83,17 @@ class RequestRepository implements BaseRequestRepository {
   }
 
   @override
+  Future<List<Request>> retrieveUserRequests({required String userId}) async {
+    try {
+      final snap =
+          await _read(firebaseFirestoreProvider).usersRequestRef(userId).get();
+      return snap.docs.map((doc) => Request.fromDocument(doc)).toList();
+    } on FirebaseException catch (e) {
+      throw CustomException(message: e.message);
+    }
+  }
+
+  @override
   Future<Request> retrieveRequest(
       {required String entertainerId, required String requestId}) async {
     try {
@@ -111,12 +134,41 @@ class RequestRepository implements BaseRequestRepository {
   }
 
   @override
+  Future<void> deleteUserRequest(
+      {required String userId, required String requestId}) async {
+    try {
+      await _read(firebaseFirestoreProvider)
+          .usersRequestRef(userId)
+          .doc(requestId)
+          .delete();
+    } on FirebaseException catch (e) {
+      throw CustomException(message: e.message);
+    }
+  }
+
+  @override
   Stream<QuerySnapshot<Map<String, dynamic>>> requestsSnapshotStream(
       {required String entertainerId}) {
     try {
       final snaps = _read(firebaseFirestoreProvider)
           .collection('entertainers')
           .doc(entertainerId)
+          .collection('requests')
+          .orderBy('timestamp')
+          .snapshots();
+      return snaps;
+    } on FirebaseException catch (e) {
+      throw CustomException(message: e.message);
+    }
+  }
+
+  @override
+  Stream<QuerySnapshot<Map<String, dynamic>>> userRequestsSnapshotStream(
+      {required String userId}) {
+    try {
+      final snaps = _read(firebaseFirestoreProvider)
+          .collection('users')
+          .doc(userId)
           .collection('requests')
           .orderBy('timestamp')
           .snapshots();
