@@ -30,7 +30,6 @@ class _SearchScreenHookState extends ConsumerState<SearchScreenHook> {
 
   @override
   Widget build(BuildContext context) {
-    final width = MediaQuery.of(context).size.width;
     final searchController = useTextEditingController();
 
     AsyncValue<Future<QuerySnapshot<Map<String, dynamic>>>>
@@ -63,7 +62,6 @@ class _SearchScreenHookState extends ConsumerState<SearchScreenHook> {
                     if (searchController.text.trim().isNotEmpty) {
                       setState(() {
                         isShowUsers = true;
-                        print('isShowUsers: $isShowUsers');
                       });
                     }
                   },

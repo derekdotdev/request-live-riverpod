@@ -24,6 +24,7 @@ class EntertainerScreen extends HookConsumerWidget {
     required String title,
     required String notes,
     required String entertainerId,
+    required String entertainerUsername,
     required String requesterId,
     required String requesterUsername,
     required String requesterPhotoUrl,
@@ -34,6 +35,7 @@ class EntertainerScreen extends HookConsumerWidget {
             title: title,
             notes: notes,
             entertainerId: entertainerId,
+            entertainerUsername: entertainerUsername,
             requesterUsername: requesterUsername,
             requesterPhotoUrl: requesterPhotoUrl,
           );
@@ -68,6 +70,7 @@ class EntertainerScreen extends HookConsumerWidget {
               const EntertainerBio(),
               NewRequestForm(
                 args.entertainerUid.toString(),
+                args.entertainerUserName.toString(),
                 _isLoading,
                 _sendRequest,
               ),

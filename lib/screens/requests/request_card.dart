@@ -29,6 +29,7 @@ class _RequestCardState extends State<RequestCard> {
     requesterUsername: widget.snap['requesterUsername'],
     requesterPhotoUrl: widget.snap['requesterPhotoUrl'],
     entertainerId: widget.snap["entertainerId"],
+    entertainerUsername: widget.snap["entertainerUsername"],
     played: widget.snap["played"],
     timestamp: widget.snap["timestamp"].toDate(),
   );

@@ -4,11 +4,13 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:request_live_riverpods/controllers/user_controller.dart';
 
 class NewRequestForm extends HookConsumerWidget {
-  NewRequestForm(this.entertainerId, this.isLoading, this.submitRequestFn,
+  NewRequestForm(this.entertainerId, this.entertainerUsername, this.isLoading,
+      this.submitRequestFn,
       {Key? key})
       : super(key: key);
 
   final String entertainerId;
+  final String entertainerUsername;
   final bool isLoading;
   final Future<void> Function(
       {required WidgetRef ref,
@@ -17,6 +19,7 @@ class NewRequestForm extends HookConsumerWidget {
       required String title,
       required String notes,
       required String entertainerId,
+      required String entertainerUsername,
       required String requesterId,
       required String requesterUsername,
       required String requesterPhotoUrl}) submitRequestFn;
@@ -48,6 +51,8 @@ class NewRequestForm extends HookConsumerWidget {
         title: requestMap['title'] ?? 'requestFormError',
         notes: requestMap['notes'] ?? 'requestFormError',
         entertainerId: requestMap['entertainerId'] ?? 'requestFormError',
+        entertainerUsername:
+            requestMap['entertainerUsername'] ?? 'requestFormError',
         requesterId: requestMap['requesterId'] ?? 'requestFormError',
         requesterUsername:
             requestMap['requesterUsername'] ?? 'requestFormError',
@@ -92,6 +97,8 @@ class NewRequestForm extends HookConsumerWidget {
                             requestMap['requesterUsername'] = user.username;
                             requestMap['requesterPhotoUrl'] = user.photoUrl;
                             requestMap['entertainerId'] = entertainerId;
+                            requestMap['entertainerUsername'] =
+                                entertainerUsername;
                             return const SizedBox();
                           });
                     },

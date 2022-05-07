@@ -15,6 +15,7 @@ _$_Request _$$_RequestFromJson(Map<String, dynamic> json) => _$_Request(
       requesterUsername: json['requesterUsername'] as String,
       requesterPhotoUrl: json['requesterPhotoUrl'] as String,
       entertainerId: json['entertainerId'] as String,
+      entertainerUsername: json['entertainerUsername'] as String,
       played: json['played'] as bool? ?? false,
       timestamp:
           const TimestampConverter().fromJson(json['timestamp'] as Timestamp),
@@ -30,6 +31,7 @@ Map<String, dynamic> _$$_RequestToJson(_$_Request instance) =>
       'requesterUsername': instance.requesterUsername,
       'requesterPhotoUrl': instance.requesterPhotoUrl,
       'entertainerId': instance.entertainerId,
+      'entertainerUsername': instance.entertainerUsername,
       'played': instance.played,
       'timestamp': const TimestampConverter().toJson(instance.timestamp),
     };

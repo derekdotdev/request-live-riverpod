@@ -26,6 +26,7 @@ class NewRequestController extends StateNotifier<AsyncValue<Request>> {
     required String title,
     required String notes,
     required String entertainerId,
+    required String entertainerUsername,
     required String requesterUsername,
     required String requesterPhotoUrl,
   }) async {
@@ -38,18 +39,18 @@ class NewRequestController extends StateNotifier<AsyncValue<Request>> {
         requesterUsername: requesterUsername,
         requesterPhotoUrl: requesterPhotoUrl,
         entertainerId: entertainerId,
+        entertainerUsername: entertainerUsername,
         timestamp: DateTime.now(),
       );
 
-      final requestId = await _read(requestRepositoryProvider).createRequest(
+      await _read(requestRepositoryProvider).createRequest(
         entertainerId: entertainerId,
         request: request,
       );
-
-      // state.whenData((requests) => state =
-      //     AsyncValue.data(requests..add(request.copyWith(id: requestId))));
+      await _read(requestRepositoryProvider).createUserRequest(
+        request: request,
+      );
     } on CustomException catch (e) {
-      // print(e.message);
       _read(newRequestExceptionProvider.notifier).state = e;
     }
   }

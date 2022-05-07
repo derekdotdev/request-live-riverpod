@@ -17,6 +17,7 @@ abstract class BaseRequestRepository {
     required String entertainerId,
     required Request request,
   });
+  Future<String> createUserRequest({required Request request});
   Future<void> updateRequestPlayed(
       {required String entertainerId, required Request request});
   Future<void> deleteRequest(
@@ -37,6 +38,18 @@ class RequestRepository implements BaseRequestRepository {
     try {
       final docRef = await _read(firebaseFirestoreProvider)
           .entertainersRequestRef(entertainerId)
+          .add(request.toDocument());
+      return docRef.id;
+    } on FirebaseException catch (e) {
+      throw CustomException(message: e.message);
+    }
+  }
+
+  @override
+  Future<String> createUserRequest({required Request request}) async {
+    try {
+      final docRef = await _read(firebaseFirestoreProvider)
+          .usersRequestRef(request.requesterId)
           .add(request.toDocument());
       return docRef.id;
     } on FirebaseException catch (e) {

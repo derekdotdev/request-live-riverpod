@@ -28,6 +28,7 @@ mixin _$Request {
   String get requesterUsername => throw _privateConstructorUsedError;
   String get requesterPhotoUrl => throw _privateConstructorUsedError;
   String get entertainerId => throw _privateConstructorUsedError;
+  String get entertainerUsername => throw _privateConstructorUsedError;
   bool get played => throw _privateConstructorUsedError;
   @TimestampConverter()
   DateTime get timestamp => throw _privateConstructorUsedError;
@@ -50,6 +51,7 @@ abstract class $RequestCopyWith<$Res> {
       String requesterUsername,
       String requesterPhotoUrl,
       String entertainerId,
+      String entertainerUsername,
       bool played,
       @TimestampConverter() DateTime timestamp});
 }
@@ -72,6 +74,7 @@ class _$RequestCopyWithImpl<$Res> implements $RequestCopyWith<$Res> {
     Object? requesterUsername = freezed,
     Object? requesterPhotoUrl = freezed,
     Object? entertainerId = freezed,
+    Object? entertainerUsername = freezed,
     Object? played = freezed,
     Object? timestamp = freezed,
   }) {
@@ -108,6 +111,10 @@ class _$RequestCopyWithImpl<$Res> implements $RequestCopyWith<$Res> {
           ? _value.entertainerId
           : entertainerId // ignore: cast_nullable_to_non_nullable
               as String,
+      entertainerUsername: entertainerUsername == freezed
+          ? _value.entertainerUsername
+          : entertainerUsername // ignore: cast_nullable_to_non_nullable
+              as String,
       played: played == freezed
           ? _value.played
           : played // ignore: cast_nullable_to_non_nullable
@@ -134,6 +141,7 @@ abstract class _$RequestCopyWith<$Res> implements $RequestCopyWith<$Res> {
       String requesterUsername,
       String requesterPhotoUrl,
       String entertainerId,
+      String entertainerUsername,
       bool played,
       @TimestampConverter() DateTime timestamp});
 }
@@ -157,6 +165,7 @@ class __$RequestCopyWithImpl<$Res> extends _$RequestCopyWithImpl<$Res>
     Object? requesterUsername = freezed,
     Object? requesterPhotoUrl = freezed,
     Object? entertainerId = freezed,
+    Object? entertainerUsername = freezed,
     Object? played = freezed,
     Object? timestamp = freezed,
   }) {
@@ -193,6 +202,10 @@ class __$RequestCopyWithImpl<$Res> extends _$RequestCopyWithImpl<$Res>
           ? _value.entertainerId
           : entertainerId // ignore: cast_nullable_to_non_nullable
               as String,
+      entertainerUsername: entertainerUsername == freezed
+          ? _value.entertainerUsername
+          : entertainerUsername // ignore: cast_nullable_to_non_nullable
+              as String,
       played: played == freezed
           ? _value.played
           : played // ignore: cast_nullable_to_non_nullable
@@ -217,6 +230,7 @@ class _$_Request extends _Request {
       required this.requesterUsername,
       required this.requesterPhotoUrl,
       required this.entertainerId,
+      required this.entertainerUsername,
       this.played = false,
       @TimestampConverter() required this.timestamp})
       : super._();
@@ -241,6 +255,8 @@ class _$_Request extends _Request {
   @override
   final String entertainerId;
   @override
+  final String entertainerUsername;
+  @override
   @JsonKey()
   final bool played;
   @override
@@ -249,7 +265,7 @@ class _$_Request extends _Request {
 
   @override
   String toString() {
-    return 'Request(id: $id, artist: $artist, title: $title, notes: $notes, requesterId: $requesterId, requesterUsername: $requesterUsername, requesterPhotoUrl: $requesterPhotoUrl, entertainerId: $entertainerId, played: $played, timestamp: $timestamp)';
+    return 'Request(id: $id, artist: $artist, title: $title, notes: $notes, requesterId: $requesterId, requesterUsername: $requesterUsername, requesterPhotoUrl: $requesterPhotoUrl, entertainerId: $entertainerId, entertainerUsername: $entertainerUsername, played: $played, timestamp: $timestamp)';
   }
 
   @override
@@ -269,6 +285,8 @@ class _$_Request extends _Request {
                 .equals(other.requesterPhotoUrl, requesterPhotoUrl) &&
             const DeepCollectionEquality()
                 .equals(other.entertainerId, entertainerId) &&
+            const DeepCollectionEquality()
+                .equals(other.entertainerUsername, entertainerUsername) &&
             const DeepCollectionEquality().equals(other.played, played) &&
             const DeepCollectionEquality().equals(other.timestamp, timestamp));
   }
@@ -285,6 +303,7 @@ class _$_Request extends _Request {
       const DeepCollectionEquality().hash(requesterUsername),
       const DeepCollectionEquality().hash(requesterPhotoUrl),
       const DeepCollectionEquality().hash(entertainerId),
+      const DeepCollectionEquality().hash(entertainerUsername),
       const DeepCollectionEquality().hash(played),
       const DeepCollectionEquality().hash(timestamp));
 
@@ -309,6 +328,7 @@ abstract class _Request extends Request {
       required final String requesterUsername,
       required final String requesterPhotoUrl,
       required final String entertainerId,
+      required final String entertainerUsername,
       final bool played,
       @TimestampConverter() required final DateTime timestamp}) = _$_Request;
   const _Request._() : super._();
@@ -331,6 +351,8 @@ abstract class _Request extends Request {
   String get requesterPhotoUrl => throw _privateConstructorUsedError;
   @override
   String get entertainerId => throw _privateConstructorUsedError;
+  @override
+  String get entertainerUsername => throw _privateConstructorUsedError;
   @override
   bool get played => throw _privateConstructorUsedError;
   @override

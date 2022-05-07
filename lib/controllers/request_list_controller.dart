@@ -33,6 +33,7 @@ class RequestListController extends StateNotifier<AsyncValue<List<Request>>> {
     required String requesterId,
     required String requesterUsername,
     required String requesterPhotoUrl,
+    required String entertainerUsername,
   }) async {
     try {
       final request = Request(
@@ -43,6 +44,7 @@ class RequestListController extends StateNotifier<AsyncValue<List<Request>>> {
         requesterUsername: requesterUsername,
         requesterPhotoUrl: requesterPhotoUrl,
         entertainerId: _entertainerId!,
+        entertainerUsername: entertainerUsername,
         timestamp: DateTime.now(),
       );
       final requestId = await _read(requestRepositoryProvider).createRequest(

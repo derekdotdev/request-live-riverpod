@@ -41,6 +41,7 @@ abstract class Request implements _$Request {
     required String requesterUsername,
     required String requesterPhotoUrl,
     required String entertainerId,
+    required String entertainerUsername,
     @Default(false) bool played,
     @TimestampConverter() required DateTime timestamp,
     // @TimestampConverter() required DateTime timestamp,
@@ -54,6 +55,7 @@ abstract class Request implements _$Request {
         requesterUsername: '',
         requesterPhotoUrl: '',
         entertainerId: '',
+        entertainerUsername: '',
         timestamp: DateTime.now(),
       );
 
