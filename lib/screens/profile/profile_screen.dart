@@ -150,7 +150,13 @@ class ProfileScreen extends HookConsumerWidget {
                 ),
               ),
               const Divider(),
-              const ProfileScreenRequestsHook(),
+              // If requester and this is their page, show requests they have made
+              (args.userId == userData.id)
+                  ? const ProfileScreenRequestsHook()
+                  : const SizedBox(
+                      height: 0,
+                      width: 0,
+                    ),
             ],
           );
         },
@@ -231,7 +237,7 @@ class ProfileScreenRequestsHook extends HookConsumerWidget {
         children: [
           const Center(
             child: Text(
-              'Requests',
+              'Your Sent Requests',
               style: TextStyle(
                 color: Colors.black,
                 fontWeight: FontWeight.bold,
