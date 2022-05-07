@@ -70,8 +70,8 @@ class RequestDetailScreen extends HookConsumerWidget {
                             context,
                             Routes.profile,
                             arguments: ProfileScreenArgs(
-                              args.request.requesterId,
-                              args.request.requesterUsername,
+                              userId: args.request.requesterId,
+                              username: args.request.requesterUsername,
                             ),
                           );
                         },

@@ -1,6 +1,6 @@
-import 'package:request_live_riverpods/controllers/auth_controller.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
+import 'package:request_live_riverpods/controllers/auth_controller.dart';
 import 'package:request_live_riverpods/repositories/custom_exception.dart';
 import 'package:request_live_riverpods/repositories/request_repository.dart';
 import 'package:request_live_riverpods/models/request_model.dart';
@@ -9,17 +9,18 @@ final userRequestListExceptionProvider =
     StateProvider<CustomException?>((_) => null);
 
 final userRequestListControllerProvider =
-    StateNotifierProvider<RequestListController, AsyncValue<List<Request>>>(
+    StateNotifierProvider<UserRequestListController, AsyncValue<List<Request>>>(
         (ref) {
   final user = ref.watch(authControllerProvider);
-  return RequestListController(ref.read, user?.uid);
+  return UserRequestListController(ref.read, user?.uid);
 });
 
-class RequestListController extends StateNotifier<AsyncValue<List<Request>>> {
+class UserRequestListController
+    extends StateNotifier<AsyncValue<List<Request>>> {
   final Reader _read;
   final String? _userId;
 
-  RequestListController(this._read, this._userId)
+  UserRequestListController(this._read, this._userId)
       : super(const AsyncValue.loading()) {
     if (_userId != null) {
       retrieveRequests();

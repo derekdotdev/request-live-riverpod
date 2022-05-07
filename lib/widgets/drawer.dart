@@ -6,9 +6,6 @@ import 'package:request_live_riverpods/controllers/user_controller.dart';
 import 'package:request_live_riverpods/routes.dart';
 import 'package:request_live_riverpods/screens/screens.dart';
 
-// import '../search/search_screen.dart';
-// import '../../providers/auth_provider.dart';
-
 class AppDrawer extends HookConsumerWidget {
   const AppDrawer({Key? key}) : super(key: key);
 
@@ -58,13 +55,16 @@ class AppDrawer extends HookConsumerWidget {
                           context,
                           Routes.requests,
                           arguments: RequestsScreenArgs(
-                            // TODO figure this out!
-                            userData.id, userData.username,
+                            userData.id,
+                            userData.username,
                           ),
                         );
                       },
                     )
-                  : Container(),
+                  : const SizedBox(
+                      height: 0,
+                      width: 0,
+                    ),
               const Divider(),
               const Divider(),
               ListTile(
@@ -88,8 +88,8 @@ class AppDrawer extends HookConsumerWidget {
                     context,
                     Routes.profile,
                     arguments: ProfileScreenArgs(
-                      userData.id,
-                      userData.username,
+                      userId: userData.id,
+                      username: userData.username,
                     ),
                   );
                 },

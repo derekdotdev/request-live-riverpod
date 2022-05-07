@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-
-import 'package:request_live_riverpods/controllers/new_request_controller.dart';
-import 'package:request_live_riverpods/screens/entertainer/entertainer_bio.dart';
+import 'package:request_live_riverpods/controllers/controllers.dart';
 import 'package:request_live_riverpods/screens/entertainer/new_request_form.dart';
-import 'package:request_live_riverpods/widgets/scaffold_snackbar.dart';
+
+import 'package:request_live_riverpods/screens/screens.dart';
+import 'package:request_live_riverpods/widgets/widgets.dart';
 
 class EntertainerScreenArgs {
-  final String entertainerUid;
-  final String entertainerUserName;
-  EntertainerScreenArgs(this.entertainerUid, this.entertainerUserName);
+  final String entertainerId;
+  final String entertainerUsername;
+  EntertainerScreenArgs(this.entertainerId, this.entertainerUsername);
 }
 
 class EntertainerScreen extends HookConsumerWidget {
@@ -55,29 +55,212 @@ class EntertainerScreen extends HookConsumerWidget {
     final args =
         ModalRoute.of(context)!.settings.arguments as EntertainerScreenArgs;
 
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('${args.entertainerUserName}\'s Page'),
-      ),
-      // drawer: AppDrawer(),
-      body: Container(
-        alignment: Alignment.center,
-        child: SingleChildScrollView(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              const EntertainerBio(),
-              NewRequestForm(
-                args.entertainerUid.toString(),
-                args.entertainerUserName.toString(),
-                _isLoading,
-                _sendRequest,
-              ),
-            ],
-          ),
+    final authControllerNotifier = ref.watch(authControllerProvider.notifier);
+    final user = ref.watch(userControllerProvider);
+    final entertainer =
+        ref.watch(entertainerControllerProvider(args.entertainerId));
+
+    return entertainer.when(
+      loading: () => const Center(
+        child: CircularProgressIndicator(
+          color: Colors.green,
         ),
       ),
+      error: (error, stacktrace) => Text('Error: $error'),
+      data: (entertainerData) {
+        return Scaffold(
+          appBar: AppBar(
+            title: Text(
+              entertainerData.username.toUpperCase(),
+              style: const TextStyle(
+                color: Colors.white,
+                fontSize: 14,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+          body: user.when(
+            loading: () => const Center(
+                child: CircularProgressIndicator(color: Colors.indigo)),
+            error: (error, stacktrace) => Text('Error: $error'),
+            data: (userData) {
+              return ListView(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(16),
+                    child: Column(
+                      children: [
+                        Row(
+                          children: [
+                            CircleAvatar(
+                              backgroundColor: Colors.grey,
+                              backgroundImage: NetworkImage(
+                                entertainerData.photoUrl,
+                              ),
+                              radius: 40,
+                            ),
+                            Expanded(
+                              flex: 1,
+                              child: Column(
+                                children: [
+                                  Row(
+                                    mainAxisSize: MainAxisSize.max,
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceEvenly,
+                                    children: [
+                                      // TODO figure this out!
+                                      buildStatColumn(0, "posts"),
+                                      buildStatColumn(0, "followers"),
+                                      buildStatColumn(0, "following"),
+                                    ],
+                                  ),
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceEvenly,
+                                    children: [
+                                      args.entertainerId != userData.id
+                                          ? FollowButton(
+                                              text: 'Follow',
+                                              backgroundColor: Colors.white,
+                                              textColor: Colors.black,
+                                              borderColor: Colors.grey,
+                                              function: () async {
+                                                // TODO implement 'follow' functionality
+                                              },
+                                            )
+                                          : Container(),
+                                    ],
+                                  ),
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceEvenly,
+                                    children: [
+                                      args.entertainerId == userData.id
+                                          ? FollowButton(
+                                              text: 'Sign Out',
+                                              backgroundColor: Colors.white,
+                                              textColor: Colors.black,
+                                              borderColor: Colors.grey,
+                                              function: () async {
+                                                authControllerNotifier
+                                                    .signOut();
+                                                Navigator.of(context)
+                                                    .pushReplacement(
+                                                  MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        const SignInScreen(),
+                                                  ),
+                                                );
+                                              },
+                                            )
+                                          : Container(),
+                                    ],
+                                  )
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                        // Padding
+                        Container(
+                          alignment: Alignment.centerLeft,
+                          padding: const EdgeInsets.only(
+                            top: 15,
+                          ),
+                          child: Text(
+                            entertainerData.username,
+                            style: const TextStyle(
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                        Container(
+                          alignment: Alignment.centerLeft,
+                          padding: const EdgeInsets.only(
+                            top: 1,
+                          ),
+                          child: Text(
+                            entertainerData.bio ??
+                                '${entertainerData.username} has not uploaded a bio yet...',
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const Divider(),
+                  Center(
+                    child: Text(
+                      'Send a request to ${args.entertainerUsername}!',
+                      style: const TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ),
+                  const Divider(),
+                  NewRequestForm(
+                    args.entertainerId.toString(),
+                    args.entertainerUsername.toString(),
+                    _isLoading,
+                    _sendRequest,
+                  ),
+                ],
+              );
+            },
+          ),
+        );
+      },
+    );
+  }
+
+  Column buildStatColumn(int num, String label) {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Text(
+          num.toString(),
+          style: const TextStyle(
+            fontSize: 18,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        Container(
+          margin: const EdgeInsets.only(top: 4),
+          child: Text(
+            label,
+            style: const TextStyle(
+              fontSize: 15,
+              fontWeight: FontWeight.w400,
+              color: Colors.grey,
+            ),
+          ),
+        ),
+      ],
     );
   }
 }
+
+
+//         }),
+//       Container(
+//         alignment = Alignment.center,
+//         child = SingleChildScrollView(
+//           child: Column(
+//             mainAxisAlignment: MainAxisAlignment.center,
+//             crossAxisAlignment: CrossAxisAlignment.center,
+//             children: [
+//               const EntertainerBio(),
+//               NewRequestForm(
+//                 args.entertainerId.toString(),
+//                 args.entertainerUsername.toString(),
+//                 _isLoading,
+//                 _sendRequest,
+//               ),
+//             ],
+//           ),
+//         ),
+//       ),
+//     );
+//   }
+// }

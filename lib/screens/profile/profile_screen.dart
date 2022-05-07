@@ -21,8 +21,8 @@ class ProfileScreen extends HookConsumerWidget {
         ModalRoute.of(context)!.settings.arguments as ProfileScreenArgs;
 
     final authControllerNotifier = ref.watch(authControllerProvider.notifier);
-    // final userControllerNotifier = ref.watch(userControllerProvider.notifier);
     final user = ref.watch(userControllerProvider);
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.indigo,
@@ -151,12 +151,7 @@ class ProfileScreen extends HookConsumerWidget {
               ),
               const Divider(),
               // If requester and this is their page, show requests they have made
-              (args.userId == userData.id)
-                  ? const ProfileScreenRequestsHook()
-                  : const SizedBox(
-                      height: 0,
-                      width: 0,
-                    ),
+              if (args.userId == userData.id) const ProfileScreenRequestsHook(),
             ],
           );
         },
@@ -228,7 +223,7 @@ class ProfileScreenRequestsHook extends HookConsumerWidget {
     AsyncValue<Stream<QuerySnapshot<Map<String, dynamic>>>> userRequestsStream =
         ref.watch(userRequestStreamControllerProvider);
 
-    final requestListController =
+    final userRequestListController =
         ref.watch(userRequestListControllerProvider.notifier);
 
     return SingleChildScrollView(
@@ -300,7 +295,7 @@ class ProfileScreenRequestsHook extends HookConsumerWidget {
                                 ),
                                 onDismissed:
                                     (DismissDirection direction) async {
-                                  requestListController.deleteRequest(
+                                  userRequestListController.deleteRequest(
                                       requestId: snapshot.data!.docs[index].id);
                                 },
                                 confirmDismiss: (DismissDirection direction) =>

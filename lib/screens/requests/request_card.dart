@@ -69,10 +69,6 @@ class _RequestCardState extends State<RequestCard> {
                       // mainAxisSize: MainAxisSize.min,
                       children: [
                         RequestRowOld(
-                            section: 'User:   ',
-                            details:
-                                widget.snap['requesterUsername'].toString()),
-                        RequestRowOld(
                             section: 'Artist: ',
                             details: widget.snap['artist'].toString()),
                         RequestRowOld(
@@ -85,6 +81,10 @@ class _RequestCardState extends State<RequestCard> {
                             section: 'Time:  ',
                             details: Conversions.convertTimestamp(
                                 widget.snap['timestamp'].toDate())),
+                        RequestRowOld(
+                            section: 'From:   ',
+                            details:
+                                widget.snap['requesterUsername'].toString()),
                       ],
                     ),
                   ),
