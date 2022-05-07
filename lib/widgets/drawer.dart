@@ -47,6 +47,7 @@ class AppDrawer extends HookConsumerWidget {
               // ),
               // const Divider(),
               // TODO if(in app purchases (purchased) token) show 'my requests'
+              const Divider(),
               userData.isEntertainer
                   ? ListTile(
                       leading: const Icon(Icons.list),
@@ -67,6 +68,17 @@ class AppDrawer extends HookConsumerWidget {
               const Divider(),
               const Divider(),
               ListTile(
+                leading: const Icon(Icons.search),
+                title: const Text('Search'),
+                onTap: () {
+                  // Navigator.of(context).pop();
+                  Navigator.of(context).pop();
+                  Navigator.of(context).pushNamed(Routes.search);
+                },
+              ),
+              const Divider(),
+              const Divider(),
+              ListTile(
                 leading: const Icon(Icons.account_circle_outlined),
                 title: const Text('Profile'),
                 onTap: () {
@@ -83,6 +95,7 @@ class AppDrawer extends HookConsumerWidget {
                 },
               ),
               const Divider(),
+              const Divider(),
               ListTile(
                 leading: const Icon(Icons.exit_to_app),
                 title: const Text('Logout'),
@@ -91,6 +104,8 @@ class AppDrawer extends HookConsumerWidget {
                   _confirmSignOut(context, ref);
                 },
               ),
+              const Divider(),
+              // const Divider(),
             ],
           );
         },

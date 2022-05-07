@@ -10,7 +10,17 @@ import 'package:request_live_riverpods/extensions/firebase_firestore_extension.d
 abstract class BaseEntertainerRepository {
   Future<List<User>> retrieveEntertainersList();
   Stream<QuerySnapshot<Map<String, dynamic>>> retrieveEntertainersStream();
+  Stream<QuerySnapshot<Map<String, dynamic>>> retrieveEntertainersSearchStream(
+      String username);
 }
+
+final entertainerRepositorySearchProvider =
+    StreamProvider.family<Stream<QuerySnapshot<Map<String, dynamic>>>, String>(
+        (ref, username) async* {
+  ref.onDispose(() {});
+  yield EntertainerRepository(ref.read)
+      .retrieveEntertainersSearchStream(username);
+});
 
 final entertainerRepositoryStreamProvider =
     StreamProvider<Stream<QuerySnapshot<Map<String, dynamic>>>>((ref) async* {
@@ -42,6 +52,21 @@ class EntertainerRepository implements BaseEntertainerRepository {
       final snaps = _read(firebaseFirestoreProvider)
           .collection('users')
           .where('isEntertainer', isEqualTo: true)
+          .snapshots();
+      return snaps;
+    } on FirebaseException catch (e) {
+      throw CustomException(message: e.message);
+    }
+  }
+
+  @override
+  Stream<QuerySnapshot<Map<String, dynamic>>> retrieveEntertainersSearchStream(
+      String username) {
+    try {
+      final snaps = _read(firebaseFirestoreProvider)
+          .collection('users')
+          .where('isEntertainer', isEqualTo: true)
+          .where('username', isGreaterThanOrEqualTo: username)
           .snapshots();
       return snaps;
     } on FirebaseException catch (e) {

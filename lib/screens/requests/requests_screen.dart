@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:request_live_riverpods/controllers/request_list_controller.dart';
 import 'package:request_live_riverpods/controllers/request_stream_controller.dart';
@@ -116,8 +115,6 @@ class RequestsScreenHook extends HookConsumerWidget {
     Future<bool> updateLiveStatus({required User user}) async {
       return await userControllerNotifier.updateUserLiveStatus(user: user);
     }
-
-    final scrollController = useScrollController();
 
     return Scaffold(
       backgroundColor: Colors.black,
