@@ -1,4 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:request_live_riverpods/models/models.dart';
 
 part 'user_model.freezed.dart';
 part 'user_model.g.dart';
@@ -21,15 +22,20 @@ abstract class User implements _$User {
     String? website,
     required String photoUrl,
     required bool isEntertainer,
+    required UserLocation location,
+    bool? podcastMode,
     @Default(false) bool isLive,
   }) = _User;
 
-  factory User.empty() => const User(
-      id: 'null',
-      email: 'null',
-      username: 'null',
-      photoUrl: 'null',
-      isEntertainer: false);
+  factory User.empty() => User(
+        id: 'null',
+        email: 'null',
+        username: 'null',
+        photoUrl: 'null',
+        isEntertainer: false,
+        podcastMode: false,
+        location: UserLocation.empty(),
+      );
 
   factory User.fromJson(Map<String, dynamic> json) => _$UserFromJson(json);
 
@@ -38,6 +44,7 @@ abstract class User implements _$User {
     final data = doc.data()!;
     return User.fromJson(data).copyWith(id: doc.id);
   }
+  // location: UserLocation.fromDocument(doc.dalocation)
 
   Map<String, dynamic> toDocument() => toJson();
 }

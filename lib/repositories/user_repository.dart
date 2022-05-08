@@ -8,6 +8,7 @@ import 'package:request_live_riverpods/general_providers.dart';
 import 'package:request_live_riverpods/models/user_model.dart' as local_user;
 import 'package:request_live_riverpods/repositories/custom_exception.dart';
 
+//TODO Consolidate functions in UserRepo and update BaseUserRepo functions accordingly
 abstract class BaseUserRepository {
   Future<void> createUser({
     required String userId,

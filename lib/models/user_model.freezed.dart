@@ -29,6 +29,8 @@ mixin _$User {
   String? get website => throw _privateConstructorUsedError;
   String get photoUrl => throw _privateConstructorUsedError;
   bool get isEntertainer => throw _privateConstructorUsedError;
+  UserLocation get location => throw _privateConstructorUsedError;
+  bool? get podcastMode => throw _privateConstructorUsedError;
   bool get isLive => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -50,7 +52,11 @@ abstract class $UserCopyWith<$Res> {
       String? website,
       String photoUrl,
       bool isEntertainer,
+      UserLocation location,
+      bool? podcastMode,
       bool isLive});
+
+  $UserLocationCopyWith<$Res> get location;
 }
 
 /// @nodoc
@@ -72,6 +78,8 @@ class _$UserCopyWithImpl<$Res> implements $UserCopyWith<$Res> {
     Object? website = freezed,
     Object? photoUrl = freezed,
     Object? isEntertainer = freezed,
+    Object? location = freezed,
+    Object? podcastMode = freezed,
     Object? isLive = freezed,
   }) {
     return _then(_value.copyWith(
@@ -111,11 +119,26 @@ class _$UserCopyWithImpl<$Res> implements $UserCopyWith<$Res> {
           ? _value.isEntertainer
           : isEntertainer // ignore: cast_nullable_to_non_nullable
               as bool,
+      location: location == freezed
+          ? _value.location
+          : location // ignore: cast_nullable_to_non_nullable
+              as UserLocation,
+      podcastMode: podcastMode == freezed
+          ? _value.podcastMode
+          : podcastMode // ignore: cast_nullable_to_non_nullable
+              as bool?,
       isLive: isLive == freezed
           ? _value.isLive
           : isLive // ignore: cast_nullable_to_non_nullable
               as bool,
     ));
+  }
+
+  @override
+  $UserLocationCopyWith<$Res> get location {
+    return $UserLocationCopyWith<$Res>(_value.location, (value) {
+      return _then(_value.copyWith(location: value));
+    });
   }
 }
 
@@ -134,7 +157,12 @@ abstract class _$UserCopyWith<$Res> implements $UserCopyWith<$Res> {
       String? website,
       String photoUrl,
       bool isEntertainer,
+      UserLocation location,
+      bool? podcastMode,
       bool isLive});
+
+  @override
+  $UserLocationCopyWith<$Res> get location;
 }
 
 /// @nodoc
@@ -157,6 +185,8 @@ class __$UserCopyWithImpl<$Res> extends _$UserCopyWithImpl<$Res>
     Object? website = freezed,
     Object? photoUrl = freezed,
     Object? isEntertainer = freezed,
+    Object? location = freezed,
+    Object? podcastMode = freezed,
     Object? isLive = freezed,
   }) {
     return _then(_User(
@@ -196,6 +226,14 @@ class __$UserCopyWithImpl<$Res> extends _$UserCopyWithImpl<$Res>
           ? _value.isEntertainer
           : isEntertainer // ignore: cast_nullable_to_non_nullable
               as bool,
+      location: location == freezed
+          ? _value.location
+          : location // ignore: cast_nullable_to_non_nullable
+              as UserLocation,
+      podcastMode: podcastMode == freezed
+          ? _value.podcastMode
+          : podcastMode // ignore: cast_nullable_to_non_nullable
+              as bool?,
       isLive: isLive == freezed
           ? _value.isLive
           : isLive // ignore: cast_nullable_to_non_nullable
@@ -217,6 +255,8 @@ class _$_User extends _User {
       this.website,
       required this.photoUrl,
       required this.isEntertainer,
+      required this.location,
+      this.podcastMode,
       this.isLive = false})
       : super._();
 
@@ -241,12 +281,16 @@ class _$_User extends _User {
   @override
   final bool isEntertainer;
   @override
+  final UserLocation location;
+  @override
+  final bool? podcastMode;
+  @override
   @JsonKey()
   final bool isLive;
 
   @override
   String toString() {
-    return 'User(id: $id, email: $email, username: $username, displayName: $displayName, phoneNumber: $phoneNumber, bio: $bio, website: $website, photoUrl: $photoUrl, isEntertainer: $isEntertainer, isLive: $isLive)';
+    return 'User(id: $id, email: $email, username: $username, displayName: $displayName, phoneNumber: $phoneNumber, bio: $bio, website: $website, photoUrl: $photoUrl, isEntertainer: $isEntertainer, location: $location, podcastMode: $podcastMode, isLive: $isLive)';
   }
 
   @override
@@ -266,6 +310,9 @@ class _$_User extends _User {
             const DeepCollectionEquality().equals(other.photoUrl, photoUrl) &&
             const DeepCollectionEquality()
                 .equals(other.isEntertainer, isEntertainer) &&
+            const DeepCollectionEquality().equals(other.location, location) &&
+            const DeepCollectionEquality()
+                .equals(other.podcastMode, podcastMode) &&
             const DeepCollectionEquality().equals(other.isLive, isLive));
   }
 
@@ -282,6 +329,8 @@ class _$_User extends _User {
       const DeepCollectionEquality().hash(website),
       const DeepCollectionEquality().hash(photoUrl),
       const DeepCollectionEquality().hash(isEntertainer),
+      const DeepCollectionEquality().hash(location),
+      const DeepCollectionEquality().hash(podcastMode),
       const DeepCollectionEquality().hash(isLive));
 
   @JsonKey(ignore: true)
@@ -306,6 +355,8 @@ abstract class _User extends User {
       final String? website,
       required final String photoUrl,
       required final bool isEntertainer,
+      required final UserLocation location,
+      final bool? podcastMode,
       final bool isLive}) = _$_User;
   const _User._() : super._();
 
@@ -329,6 +380,10 @@ abstract class _User extends User {
   String get photoUrl => throw _privateConstructorUsedError;
   @override
   bool get isEntertainer => throw _privateConstructorUsedError;
+  @override
+  UserLocation get location => throw _privateConstructorUsedError;
+  @override
+  bool? get podcastMode => throw _privateConstructorUsedError;
   @override
   bool get isLive => throw _privateConstructorUsedError;
   @override

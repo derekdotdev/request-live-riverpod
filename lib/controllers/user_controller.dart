@@ -2,10 +2,9 @@ import 'dart:typed_data';
 
 import 'package:request_live_riverpods/controllers/auth_controller.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:request_live_riverpods/models/username_model.dart';
+import 'package:request_live_riverpods/models/models.dart';
 
 import 'package:request_live_riverpods/repositories/custom_exception.dart';
-import 'package:request_live_riverpods/models/user_model.dart';
 import 'package:request_live_riverpods/repositories/user_repository.dart';
 import 'package:request_live_riverpods/repositories/username_repository.dart';
 
@@ -40,22 +39,55 @@ class UserController extends StateNotifier<AsyncValue<User>> {
     }
   }
 
-  Future<bool> updateUserLiveStatus({required User user}) async {
+  Future<void> updateUserLiveStatus({required User user}) async {
     try {
-      final updatedStatus = await _read(userRepositoryProvider)
-          .updateUserLiveStatus(localUser: user);
+      final updatedUser = user.copyWith(isLive: !user.isLive);
 
-      final updatedUser = user.copyWith(isLive: updatedStatus);
+      await _read(userRepositoryProvider)
+          .updateUserProfile(localUser: updatedUser);
 
       if (mounted) {
         state = AsyncValue.data(updatedUser);
       }
-
-      return updatedStatus;
     } on CustomException catch (e) {
       _read(userExceptionProvider.notifier).state = e;
       print(e);
-      return false;
+    }
+  }
+
+  Future<void> updateUserLiveMode(
+      {required User user, required UserLocation location}) async {
+    try {
+      final updatedUser =
+          user.copyWith(isLive: !user.isLive, location: location);
+
+      await _read(userRepositoryProvider)
+          .updateUserProfile(localUser: updatedUser);
+
+      if (mounted) {
+        state = AsyncValue.data(updatedUser);
+      }
+    } on CustomException catch (e) {
+      _read(userExceptionProvider.notifier).state = e;
+      print(e);
+    }
+  }
+
+  Future<void> updateUserPodcastMode() async {}
+
+  Future<void> updateUserLocation(
+      {required User user, required UserLocation location}) async {
+    try {
+      final userWithUpdatedLocation = user.copyWith(location: location);
+
+      await _read(userRepositoryProvider).updateUserProfile(localUser: user);
+
+      if (mounted) {
+        state = AsyncValue.data(userWithUpdatedLocation);
+      }
+    } on CustomException catch (e) {
+      _read(userExceptionProvider.notifier).state = e;
+      print(e);
     }
   }
 
@@ -107,6 +139,7 @@ class UserController extends StateNotifier<AsyncValue<User>> {
         username: username,
         photoUrl: 'https://i.stack.imgur.com/l60Hf.png',
         isEntertainer: isEntertainer,
+        location: UserLocation.empty(),
       );
 
       // Persist newUser to firestore repo users/userId/

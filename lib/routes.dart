@@ -6,6 +6,8 @@ class Routes {
 
   static const String entertainer = '/entertainer';
   static const String editProfile = '/edit-profile';
+  static const String goLiveVenue = '/go-live-venue';
+  static const String goLivePodcast = '/go-live-podcast';
   static const String login = '/login';
   static const String profile = '/profile';
   static const String register = '/register';
@@ -19,6 +21,8 @@ class Routes {
   static final routes = <String, WidgetBuilder>{
     entertainer: (BuildContext context) => const EntertainerScreen(),
     login: (BuildContext context) => const SignInScreen(),
+    goLiveVenue: (BuildContext context) => const GoLiveVenueScreen('', ''),
+    // goLivePodcast: (BuildContext context) => const GoLivePodcastScreen('', ''),
     editProfile: (BuildContext context) => const EditProfileScreen('', ''),
     profile: (BuildContext context) => const ProfileScreen('', ''),
     register: (BuildContext context) => const RegisterScreen(),

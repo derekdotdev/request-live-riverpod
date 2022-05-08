@@ -6,7 +6,9 @@ import 'package:request_live_riverpods/controllers/request_list_controller.dart'
 import 'package:request_live_riverpods/controllers/request_stream_controller.dart';
 import 'package:request_live_riverpods/controllers/user_controller.dart';
 import 'package:request_live_riverpods/models/models.dart';
+import 'package:request_live_riverpods/routes.dart';
 import 'package:request_live_riverpods/screens/requests/request_card.dart';
+import 'package:request_live_riverpods/screens/screens.dart';
 
 class RequestsScreenArgs {
   final String entertainerUid;
@@ -111,8 +113,42 @@ class RequestsScreenHook extends HookConsumerWidget {
     final requestListController =
         ref.watch(requestListControllerProvider.notifier);
 
-    Future<bool> updateLiveStatus({required User user}) async {
-      return await userControllerNotifier.updateUserLiveStatus(user: user);
+    Future<void> updateLiveStatus({required User user}) async {
+      await userControllerNotifier.updateUserLiveStatus(user: user);
+    }
+
+    Future<void> updateUserLocation(
+        {required User user, required UserLocation location}) async {
+      await userControllerNotifier.updateUserLocation(
+          user: user, location: location);
+    }
+
+    Future<void> _goLiveVenueMode(User userData) async {
+      // await updateLiveStatus(user: userData);
+
+      final UserLocation userLocation = await Navigator.pushNamed(
+        context,
+        Routes.goLiveVenue,
+        arguments: GoLiveScreenArgs(
+            entertainerId: userData.id, entertainerUsername: userData.username),
+      ) as UserLocation;
+
+      await userControllerNotifier.updateUserLiveMode(
+          user: userData, location: userLocation);
+    }
+
+    Future<void> _goLivePodcastMode(User userData) async {
+      // await updateLiveStatus(user: userData);
+
+      final UserLocation userLocation = await Navigator.pushNamed(
+        context,
+        Routes.goLiveVenue,
+        arguments: GoLiveScreenArgs(
+            entertainerId: userData.id, entertainerUsername: userData.username),
+      ) as UserLocation;
+
+      await userControllerNotifier.updateUserLiveMode(
+          user: userData, location: userLocation);
     }
 
     return Scaffold(
@@ -121,7 +157,7 @@ class RequestsScreenHook extends HookConsumerWidget {
         backgroundColor: Colors.indigo,
         centerTitle: true,
         title: const Text(
-          'Your Requests!',
+          'Your Requests',
           style: TextStyle(
             color: Colors.white,
             fontSize: 14,
@@ -138,19 +174,19 @@ class RequestsScreenHook extends HookConsumerWidget {
           var _isLive = userData.isLive;
 
           return SingleChildScrollView(
-            // 2
             physics: const BouncingScrollPhysics(),
             child: Column(
               children: [
                 Padding(
                   padding: const EdgeInsets.only(top: 8.0),
                   child: Text(
-                      _isLive ? 'You\'re Live!' : 'Flip Switch To Go Live!',
-                      style: const TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w500,
-                        color: Colors.white,
-                      )),
+                    _isLive ? 'You\'re Live!' : 'Toggle Switch To Go Live!',
+                    style: const TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w500,
+                      color: Colors.white,
+                    ),
+                  ),
                 ),
                 Switch.adaptive(
                   value: _isLive,
@@ -162,6 +198,46 @@ class RequestsScreenHook extends HookConsumerWidget {
                   onChanged: (value) async {
                     await updateLiveStatus(user: userData);
                   },
+                ),
+                TextButton.icon(
+                    onPressed: () async {
+                      await _goLiveVenueMode(userData);
+                    },
+                    icon: const Icon(Icons.speaker),
+                    label: Text(_isLive ? 'Go Offline' : 'Go Live!')),
+                SizedBox(
+                  width: double.infinity,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      // Current Location
+                      TextButton.icon(
+                        onPressed: () async {
+                          Navigator.pushNamed(
+                            context,
+                            Routes.goLiveVenue,
+                            arguments: GoLiveScreenArgs(
+                                entertainerId: userData.id,
+                                entertainerUsername: userData.username),
+                          );
+                        },
+                        icon: const Icon(Icons.location_on),
+                        label: const Text(
+                          'Venue Mode',
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                      // Select Location
+                      TextButton.icon(
+                        onPressed: () {},
+                        icon: const Icon(Icons.radio),
+                        label: const Text(
+                          'Podcast Mode',
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
                 requestsStream.when(
                   loading: (() => const CircularProgressIndicator(
@@ -190,7 +266,6 @@ class RequestsScreenHook extends HookConsumerWidget {
                               width: double.infinity,
                               child: ListView.builder(
                                 itemCount: snapshot.data?.docs.length,
-                                // controller: scrollController,
                                 physics: const NeverScrollableScrollPhysics(),
                                 reverse: true,
                                 shrinkWrap: true,

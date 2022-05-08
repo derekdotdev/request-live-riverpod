@@ -50,8 +50,8 @@
 		<key>NSMicrophoneUsageDescription</key>
 		<string>Microphone Usage</string>
 		<key>NSLocationWhenInUseUsageDescription</key>
-		<string>Location When In Use</string>
-		<key>UIBackgroundModes</key>
-		<string>location</string>
+		<string>Help us connect you with nearby users to start sending / receiving requests!</string>
+		<!-- <key>UIBackgroundModes</key>
+		<string>location</string> -->
 	</dict>
 </plist>

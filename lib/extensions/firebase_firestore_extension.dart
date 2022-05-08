@@ -11,4 +11,7 @@ extension FirebaseFirestoreX on FirebaseFirestore {
 
   DocumentReference usersDocRef(String userId) =>
       collection('users').doc(userId);
+
+  DocumentReference usersLocationDocRef(String userId) =>
+      collection('users').doc(userId).collection('location').doc(userId);
 }

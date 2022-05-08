@@ -164,10 +164,11 @@ class RegisterScreenHook extends HookConsumerWidget {
                       await ref
                           .read(userControllerProvider.notifier)
                           .createNewUser(
-                              userId: userId,
-                              email: email,
-                              username: username,
-                              isEntertainer: true);
+                            userId: userId,
+                            email: email,
+                            username: username,
+                            isEntertainer: true,
+                          );
                     }
 
                     if (userId == 'null') {
