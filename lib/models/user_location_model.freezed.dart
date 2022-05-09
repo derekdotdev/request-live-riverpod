@@ -21,14 +21,15 @@ UserLocation _$UserLocationFromJson(Map<String, dynamic> json) {
 /// @nodoc
 mixin _$UserLocation {
   String? get id => throw _privateConstructorUsedError;
-  String? get venueName =>
+  String get venueName =>
       throw _privateConstructorUsedError; // ignore: non_constant_identifier_names
-  double? get street_number => throw _privateConstructorUsedError;
-  String? get address => throw _privateConstructorUsedError;
-  String? get city => throw _privateConstructorUsedError;
-  String? get postalCode => throw _privateConstructorUsedError;
-  String? get state => throw _privateConstructorUsedError;
-  String? get country => throw _privateConstructorUsedError;
+  double get street_number => throw _privateConstructorUsedError;
+  String get address => throw _privateConstructorUsedError;
+  String get city => throw _privateConstructorUsedError;
+  String get postalCode => throw _privateConstructorUsedError;
+  String get state => throw _privateConstructorUsedError;
+  String get country => throw _privateConstructorUsedError;
+  String? get webAddress => throw _privateConstructorUsedError;
   @JsonKey(nullable: true)
   double get latitude => throw _privateConstructorUsedError;
   @JsonKey(nullable: true)
@@ -47,13 +48,14 @@ abstract class $UserLocationCopyWith<$Res> {
       _$UserLocationCopyWithImpl<$Res>;
   $Res call(
       {String? id,
-      String? venueName,
-      double? street_number,
-      String? address,
-      String? city,
-      String? postalCode,
-      String? state,
-      String? country,
+      String venueName,
+      double street_number,
+      String address,
+      String city,
+      String postalCode,
+      String state,
+      String country,
+      String? webAddress,
       @JsonKey(nullable: true) double latitude,
       @JsonKey(nullable: true) double longitude});
 }
@@ -76,6 +78,7 @@ class _$UserLocationCopyWithImpl<$Res> implements $UserLocationCopyWith<$Res> {
     Object? postalCode = freezed,
     Object? state = freezed,
     Object? country = freezed,
+    Object? webAddress = freezed,
     Object? latitude = freezed,
     Object? longitude = freezed,
   }) {
@@ -87,30 +90,34 @@ class _$UserLocationCopyWithImpl<$Res> implements $UserLocationCopyWith<$Res> {
       venueName: venueName == freezed
           ? _value.venueName
           : venueName // ignore: cast_nullable_to_non_nullable
-              as String?,
+              as String,
       street_number: street_number == freezed
           ? _value.street_number
           : street_number // ignore: cast_nullable_to_non_nullable
-              as double?,
+              as double,
       address: address == freezed
           ? _value.address
           : address // ignore: cast_nullable_to_non_nullable
-              as String?,
+              as String,
       city: city == freezed
           ? _value.city
           : city // ignore: cast_nullable_to_non_nullable
-              as String?,
+              as String,
       postalCode: postalCode == freezed
           ? _value.postalCode
           : postalCode // ignore: cast_nullable_to_non_nullable
-              as String?,
+              as String,
       state: state == freezed
           ? _value.state
           : state // ignore: cast_nullable_to_non_nullable
-              as String?,
+              as String,
       country: country == freezed
           ? _value.country
           : country // ignore: cast_nullable_to_non_nullable
+              as String,
+      webAddress: webAddress == freezed
+          ? _value.webAddress
+          : webAddress // ignore: cast_nullable_to_non_nullable
               as String?,
       latitude: latitude == freezed
           ? _value.latitude
@@ -133,13 +140,14 @@ abstract class _$UserLocationCopyWith<$Res>
   @override
   $Res call(
       {String? id,
-      String? venueName,
-      double? street_number,
-      String? address,
-      String? city,
-      String? postalCode,
-      String? state,
-      String? country,
+      String venueName,
+      double street_number,
+      String address,
+      String city,
+      String postalCode,
+      String state,
+      String country,
+      String? webAddress,
       @JsonKey(nullable: true) double latitude,
       @JsonKey(nullable: true) double longitude});
 }
@@ -164,6 +172,7 @@ class __$UserLocationCopyWithImpl<$Res> extends _$UserLocationCopyWithImpl<$Res>
     Object? postalCode = freezed,
     Object? state = freezed,
     Object? country = freezed,
+    Object? webAddress = freezed,
     Object? latitude = freezed,
     Object? longitude = freezed,
   }) {
@@ -175,30 +184,34 @@ class __$UserLocationCopyWithImpl<$Res> extends _$UserLocationCopyWithImpl<$Res>
       venueName: venueName == freezed
           ? _value.venueName
           : venueName // ignore: cast_nullable_to_non_nullable
-              as String?,
+              as String,
       street_number: street_number == freezed
           ? _value.street_number
           : street_number // ignore: cast_nullable_to_non_nullable
-              as double?,
+              as double,
       address: address == freezed
           ? _value.address
           : address // ignore: cast_nullable_to_non_nullable
-              as String?,
+              as String,
       city: city == freezed
           ? _value.city
           : city // ignore: cast_nullable_to_non_nullable
-              as String?,
+              as String,
       postalCode: postalCode == freezed
           ? _value.postalCode
           : postalCode // ignore: cast_nullable_to_non_nullable
-              as String?,
+              as String,
       state: state == freezed
           ? _value.state
           : state // ignore: cast_nullable_to_non_nullable
-              as String?,
+              as String,
       country: country == freezed
           ? _value.country
           : country // ignore: cast_nullable_to_non_nullable
+              as String,
+      webAddress: webAddress == freezed
+          ? _value.webAddress
+          : webAddress // ignore: cast_nullable_to_non_nullable
               as String?,
       latitude: latitude == freezed
           ? _value.latitude
@@ -217,13 +230,14 @@ class __$UserLocationCopyWithImpl<$Res> extends _$UserLocationCopyWithImpl<$Res>
 class _$_UserLocation extends _UserLocation {
   const _$_UserLocation(
       {this.id,
-      this.venueName,
-      this.street_number,
-      this.address,
-      this.city,
-      this.postalCode,
-      this.state,
-      this.country,
+      required this.venueName,
+      required this.street_number,
+      required this.address,
+      required this.city,
+      required this.postalCode,
+      required this.state,
+      required this.country,
+      this.webAddress,
       @JsonKey(nullable: true) required this.latitude,
       @JsonKey(nullable: true) required this.longitude})
       : super._();
@@ -234,20 +248,22 @@ class _$_UserLocation extends _UserLocation {
   @override
   final String? id;
   @override
-  final String? venueName;
+  final String venueName;
 // ignore: non_constant_identifier_names
   @override
-  final double? street_number;
+  final double street_number;
   @override
-  final String? address;
+  final String address;
   @override
-  final String? city;
+  final String city;
   @override
-  final String? postalCode;
+  final String postalCode;
   @override
-  final String? state;
+  final String state;
   @override
-  final String? country;
+  final String country;
+  @override
+  final String? webAddress;
   @override
   @JsonKey(nullable: true)
   final double latitude;
@@ -257,7 +273,7 @@ class _$_UserLocation extends _UserLocation {
 
   @override
   String toString() {
-    return 'UserLocation(id: $id, venueName: $venueName, street_number: $street_number, address: $address, city: $city, postalCode: $postalCode, state: $state, country: $country, latitude: $latitude, longitude: $longitude)';
+    return 'UserLocation(id: $id, venueName: $venueName, street_number: $street_number, address: $address, city: $city, postalCode: $postalCode, state: $state, country: $country, webAddress: $webAddress, latitude: $latitude, longitude: $longitude)';
   }
 
   @override
@@ -275,6 +291,8 @@ class _$_UserLocation extends _UserLocation {
                 .equals(other.postalCode, postalCode) &&
             const DeepCollectionEquality().equals(other.state, state) &&
             const DeepCollectionEquality().equals(other.country, country) &&
+            const DeepCollectionEquality()
+                .equals(other.webAddress, webAddress) &&
             const DeepCollectionEquality().equals(other.latitude, latitude) &&
             const DeepCollectionEquality().equals(other.longitude, longitude));
   }
@@ -291,6 +309,7 @@ class _$_UserLocation extends _UserLocation {
       const DeepCollectionEquality().hash(postalCode),
       const DeepCollectionEquality().hash(state),
       const DeepCollectionEquality().hash(country),
+      const DeepCollectionEquality().hash(webAddress),
       const DeepCollectionEquality().hash(latitude),
       const DeepCollectionEquality().hash(longitude));
 
@@ -308,13 +327,14 @@ class _$_UserLocation extends _UserLocation {
 abstract class _UserLocation extends UserLocation {
   const factory _UserLocation(
           {final String? id,
-          final String? venueName,
-          final double? street_number,
-          final String? address,
-          final String? city,
-          final String? postalCode,
-          final String? state,
-          final String? country,
+          required final String venueName,
+          required final double street_number,
+          required final String address,
+          required final String city,
+          required final String postalCode,
+          required final String state,
+          required final String country,
+          final String? webAddress,
           @JsonKey(nullable: true) required final double latitude,
           @JsonKey(nullable: true) required final double longitude}) =
       _$_UserLocation;
@@ -326,19 +346,21 @@ abstract class _UserLocation extends UserLocation {
   @override
   String? get id => throw _privateConstructorUsedError;
   @override
-  String? get venueName => throw _privateConstructorUsedError;
+  String get venueName => throw _privateConstructorUsedError;
   @override // ignore: non_constant_identifier_names
-  double? get street_number => throw _privateConstructorUsedError;
+  double get street_number => throw _privateConstructorUsedError;
   @override
-  String? get address => throw _privateConstructorUsedError;
+  String get address => throw _privateConstructorUsedError;
   @override
-  String? get city => throw _privateConstructorUsedError;
+  String get city => throw _privateConstructorUsedError;
   @override
-  String? get postalCode => throw _privateConstructorUsedError;
+  String get postalCode => throw _privateConstructorUsedError;
   @override
-  String? get state => throw _privateConstructorUsedError;
+  String get state => throw _privateConstructorUsedError;
   @override
-  String? get country => throw _privateConstructorUsedError;
+  String get country => throw _privateConstructorUsedError;
+  @override
+  String? get webAddress => throw _privateConstructorUsedError;
   @override
   @JsonKey(nullable: true)
   double get latitude => throw _privateConstructorUsedError;

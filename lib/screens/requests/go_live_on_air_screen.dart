@@ -7,10 +7,9 @@ import 'package:geocoder2/geocoder2.dart';
 import 'package:request_live_riverpods/controllers/controllers.dart';
 import 'package:request_live_riverpods/models/models.dart';
 import 'package:request_live_riverpods/routes.dart';
+import 'package:request_live_riverpods/screens/screens.dart';
 import 'package:request_live_riverpods/widgets/scaffold_snackbar.dart';
 
-// TODO make this much simpler. Just require link to podcast or radio station info
-// Entertainer page will say 'xyz is live at <String>' regardless of live mode!
 class GoLiveOnAirScreen extends StatefulHookConsumerWidget {
   final String entertainerId;
   final String entertainerUsername;
@@ -24,94 +23,88 @@ class GoLiveOnAirScreen extends StatefulHookConsumerWidget {
 }
 
 class _GoLiveOnAirScreenState extends ConsumerState<GoLiveOnAirScreen> {
-  String _previewImageUrl = '';
+  final _podcastTitleFormKey = GlobalKey<FormState>();
+  final _webAddressFormKey = GlobalKey<FormState>();
   Location location = Location();
+  // ignore: prefer_final_fields
+  bool _useAddress = false;
 
   Future<void> _getCurrentUserLocationFromCoordinates(
       {required String venueName}) async {
-    var _serviceEnabled = await location.serviceEnabled();
+    try {
+      // Check location services enabled. Request if necessary
+      var _serviceEnabled = await location.serviceEnabled();
 
-    if (!_serviceEnabled) {
-      _serviceEnabled = await location.requestService();
       if (!_serviceEnabled) {
-        return;
+        _serviceEnabled = await location.requestService();
+        if (!_serviceEnabled) {
+          return;
+        }
       }
-    }
 
-    PermissionStatus _permissionGranted = await location.hasPermission();
+      // Verify requested location permissions. Request if necessary
+      PermissionStatus _permissionGranted = await location.hasPermission();
 
-    if (_permissionGranted == PermissionStatus.denied) {
-      _permissionGranted = await location.requestPermission();
-      if (_permissionGranted != PermissionStatus.granted) {
-        return;
+      if (_permissionGranted == PermissionStatus.denied) {
+        _permissionGranted = await location.requestPermission();
+        if (_permissionGranted != PermissionStatus.granted) {
+          return;
+        }
       }
-    }
 
-    final _locData = await location.getLocation();
+      // Geo-locate user (latitude / longitude )
+      final _locData = await location.getLocation();
 
-    if (_locData.latitude != null &&
-        _locData.longitude != null &&
-        venueName.trim() != '') {
-      // GeoData data = await Geocoder2.getDataFromCoordinates(
-      //     latitude: _locData.latitude!,
-      //     longitude: _locData.longitude!,
-      //     googleMapApiKey: GOOGLE_MAP_API_KEY);
+      if (_locData.latitude != null &&
+          _locData.longitude != null &&
+          venueName.trim() != '') {
+        // Geocode lat/long to physical address
+        GeoData data = await Geocoder2.getDataFromCoordinates(
+            latitude: _locData.latitude!,
+            longitude: _locData.longitude!,
+            googleMapApiKey: GOOGLE_MAP_API_KEY);
 
-      // final data = await Geocoder2.getDataFromCoordinates(
-      //     latitude: 40.714224,
-      //     longitude: -73.961452,
-      //     googleMapApiKey: GOOGLE_MAP_API_KEY);
-      // googleMapApiKey: 'AIzaSyCs2cEFujOr5NhF9hFJOA0QxPyB5lafcU2');
+        // Generate map image.. No longer using this, but keeping code handy anyway
+        // final staticMapImageUrl =
+        //     UserLocationController.generateLocationPreviewImageFromCoords(
+        //         latitude: data.latitude, longitude: data.longitude);
 
-      final staticMapImageUrl =
-          UserLocationController.generateLocationPreviewImageFromCoords(
-              latitude: _locData.latitude!, longitude: _locData.longitude!);
-      // final staticMapImageUrl =
-      //     UserLocationController.generateLocationPreviewImageFromCoords(
-      //         latitude: data.latitude, longitude: data.longitude);
+        // setState(() {
+        //   _previewImageUrl = staticMapImageUrl;
+        // });
 
-      // print('staticMapImageUrl created from coordinates!');
-      // print(data.address);
-      // print(data.city);
-      // print(data.state);
-      // print(data.country);
+        // Create userLocation from GeoData (Can this be optimized with a fromMap function?)
+        UserLocation userLocation = UserLocation(
+          venueName: venueName.trim(),
+          street_number: data.street_number,
+          address: data.address,
+          city: data.city,
+          state: data.state,
+          postalCode: data.postalCode,
+          country: data.country,
+          latitude: data.latitude,
+          longitude: data.longitude,
+        );
 
-      setState(() {
-        _previewImageUrl = staticMapImageUrl;
-      });
-
-      // UserLocation userLocation = UserLocation(
-      //   venueName: venueName.trim(),
-      //   street_number: data.street_number,
-      //   address: data.address,
-      //   city: data.city,
-      //   state: data.state,
-      //   postalCode: data.postalCode,
-      //   country: data.country,
-      //   latitude: data.latitude,
-      //   longitude: data.longitude,
-      // );
+        // Pass userLocation back to requests screen
+        if (userLocation.venueName == venueName) {
+          Navigator.of(context).pop(userLocation);
+        }
+      }
+    } catch (e) {
+      const errorMessage =
+          'Unable to locate you at this time. Please check network connection, enable location services or input your current address.\nFormat address like:\n277 Bedford Ave, Brooklyn, NY 11211, USA';
+      showCustomSnackbar(ctx: context, message: errorMessage, success: false);
+      print(e);
     }
   }
 
-  Future<void> _getCurrentUserLocationFromAddress(
-      {required String venueName, required String address}) async {
-    if (address.isNotEmpty) {
+  Future<void> _goLiveOnAirWithTitleAndWebAddress(
+      {required String podcastTitle, required String webAddress}) async {
+    if (podcastTitle.isNotEmpty && webAddress.isNotEmpty) {
       try {
-        GeoData data = await Geocoder2.getDataFromAddress(
-            address: address, googleMapApiKey: GOOGLE_MAP_API_KEY);
+        // Create new UserLocation.copyWith(venue = )
 
-        // TODO see if this works!!
-        UserLocation userLocation = UserLocation.fromDocument(data);
-        userLocation = userLocation.copyWith(venueName: venueName.trim());
-
-        final staticMapImageUrl =
-            UserLocationController.generateLocationPreviewImageFromCoords(
-                latitude: data.latitude, longitude: data.longitude);
-
-        setState(() {
-          _previewImageUrl = staticMapImageUrl;
-        });
       } catch (e) {
         const errorMessage =
             'Unable to locate using current address. Please format like:\n277 Bedford Ave, Brooklyn, NY 11211, USA';
@@ -123,7 +116,9 @@ class _GoLiveOnAirScreenState extends ConsumerState<GoLiveOnAirScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final _venueController = useTextEditingController();
+    final args = ModalRoute.of(context)!.settings.arguments as GoLiveScreenArgs;
+    final _podcastTitleController = useTextEditingController();
+    final _webAddressController = useTextEditingController();
     final user = ref.watch(userControllerProvider);
 
     return Scaffold(
@@ -150,90 +145,109 @@ class _GoLiveOnAirScreenState extends ConsumerState<GoLiveOnAirScreen> {
             print('You\'re not an entertainer! How did you get here?');
             Navigator.of(context).pushReplacementNamed(Routes.welcome);
           }
+
           return Column(
             mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
+            mainAxisSize: MainAxisSize.min,
+            // crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: Container(
-                  height: 170,
-                  width: double.infinity,
-                  alignment: Alignment.center,
-                  decoration: BoxDecoration(
-                      border: Border.all(
-                    width: 1,
-                    color: Colors.grey,
-                  )),
-                  child: _previewImageUrl == ''
-                      ? const Text(
-                          'No location chosen!',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            fontSize: 20,
-                            color: Colors.white,
-                            fontWeight: FontWeight.w500,
+                child: SizedBox(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Form(
+                        key: _podcastTitleFormKey,
+                        child: TextFormField(
+                          controller: _podcastTitleController,
+                          autocorrect: false,
+                          textCapitalization: TextCapitalization.words,
+                          validator: (value) => (value == null || value.isEmpty
+                              ? 'What do you call your show?'
+                              : null),
+                          style: const TextStyle(
+                              color: Colors.white, fontSize: 14),
+                          decoration: const InputDecoration(
+                            hintText: 'Behind The Decks',
+                            hintStyle:
+                                TextStyle(fontSize: 14, color: Colors.grey),
+                            prefixIcon: Icon(
+                              Icons.speaker,
+                              color: Colors.white,
+                            ),
+                            labelText: 'Podcast Title or Station Call Sign',
+                            labelStyle: TextStyle(
+                                color: Colors.white,
+                                fontSize: 14,
+                                fontWeight: FontWeight.w300),
                           ),
-                        )
-                      : Image.network(
-                          _previewImageUrl,
-                          fit: BoxFit.cover,
-                          width: double.infinity,
                         ),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Container(
-                  height: 170,
-                  width: double.infinity,
-                  alignment: Alignment.center,
-                  child: Form(
-                    child: TextFormField(
-                      controller: _venueController,
-                      autocorrect: false,
-                      textCapitalization: TextCapitalization.words,
-                      validator: (value) => (value == null || value.isEmpty
-                          ? 'Venue is required'
-                          : null),
-                      decoration: const InputDecoration(
-                        prefixIcon: Icon(
-                          Icons.speaker,
-                          color: Colors.white,
-                        ),
-                        labelText: 'Venue Name',
-                        labelStyle: TextStyle(
-                            color: Colors.white,
-                            fontSize: 14,
-                            fontWeight: FontWeight.w300),
                       ),
-                    ),
+                      Form(
+                        key: _webAddressFormKey,
+                        child: Column(
+                          children: [
+                            // Address
+                            TextFormField(
+                              controller: _webAddressController,
+                              autocorrect: false,
+                              textCapitalization: TextCapitalization.words,
+                              validator: (value) =>
+                                  (value == null || value.isEmpty
+                                      ? 'Please provide a link to your show!'
+                                      : null),
+                              style: const TextStyle(
+                                  color: Colors.white, fontSize: 14),
+                              decoration: const InputDecoration(
+                                hintText: 'https://www.twitch.tv/grandpoobear',
+                                hintStyle:
+                                    TextStyle(fontSize: 14, color: Colors.grey),
+                                prefixIcon: Icon(
+                                  Icons.speaker,
+                                  color: Colors.white,
+                                ),
+                                labelText: 'Web Address',
+                                labelStyle: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w300),
+                              ),
+                            ),
+                          ],
+                        ),
+                      )
+                    ],
                   ),
                 ),
               ),
               SizedBox(
-                width: double.infinity,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                // width: double.infinity,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    // Current Location
                     TextButton.icon(
                       onPressed: () async {
-                        _getCurrentUserLocationFromCoordinates(
-                            venueName: 'Hooch');
+                        if (_podcastTitleFormKey.currentState!.validate()) {
+                          if (_webAddressFormKey.currentState!.validate()) {
+                            final podcastTitle =
+                                _podcastTitleController.text.trim();
+                            final webAddress =
+                                _webAddressController.text.trim();
+
+                            // TODO set up legit url validation
+                            if (podcastTitle.isNotEmpty &&
+                                webAddress.isNotEmpty) {
+                              _goLiveOnAirWithTitleAndWebAddress(
+                                  podcastTitle: podcastTitle,
+                                  webAddress: webAddress);
+                            }
+                          }
+                        }
                       },
-                      icon: const Icon(Icons.location_on),
+                      icon: const Icon(Icons.cell_tower),
                       label: const Text(
-                        'Venue Mode',
-                        textAlign: TextAlign.center,
-                      ),
-                    ),
-                    // Select Location
-                    TextButton.icon(
-                      onPressed: () {},
-                      icon: const Icon(Icons.radio),
-                      label: const Text(
-                        'Podcast Mode',
+                        'Go Live On The Air!',
                         textAlign: TextAlign.center,
                       ),
                     ),

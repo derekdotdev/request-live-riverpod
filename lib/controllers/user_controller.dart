@@ -39,7 +39,8 @@ class UserController extends StateNotifier<AsyncValue<User>> {
     }
   }
 
-  Future<void> updateUserLiveStatus({required User user}) async {
+  // TODO see if this (and other) methods can be removed...
+  Future<void> updateUser({required User user}) async {
     try {
       final updatedUser = user.copyWith(isLive: !user.isLive);
 
@@ -55,11 +56,29 @@ class UserController extends StateNotifier<AsyncValue<User>> {
     }
   }
 
-  Future<void> updateUserLiveMode(
-      {required User user, required UserLocation location}) async {
+  Future<void> setUserOffline({required User user}) async {
+    try {
+      final updatedUser = user.copyWith(isLive: false);
+
+      await _read(userRepositoryProvider)
+          .updateUserProfile(localUser: updatedUser);
+
+      if (mounted) {
+        state = AsyncValue.data(updatedUser);
+      }
+    } on CustomException catch (e) {
+      _read(userExceptionProvider.notifier).state = e;
+      print(e);
+    }
+  }
+
+  Future<void> setUserLiveAtLocation(
+      {required User user,
+      required UserLocation location,
+      required bool isOnStage}) async {
     try {
       final updatedUser =
-          user.copyWith(isLive: !user.isLive, location: location);
+          user.copyWith(isLive: true, location: location, isOnStage: isOnStage);
 
       await _read(userRepositoryProvider)
           .updateUserProfile(localUser: updatedUser);

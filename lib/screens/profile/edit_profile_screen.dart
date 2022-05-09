@@ -45,6 +45,12 @@ class EditProfileScreen extends HookConsumerWidget {
           user: user, website: website, bio: bio);
     }
 
+    Future<void> _updateIsEntertainer(
+        {required User user, required bool value}) async {
+      final updatedUser = user.copyWith(isEntertainer: value);
+      await userControllerNotifier.updateUser(user: updatedUser);
+    }
+
     return Scaffold(
       appBar: AppBar(),
       body: user.when(
@@ -55,6 +61,7 @@ class EditProfileScreen extends HookConsumerWidget {
         ),
         error: (error, stacktrace) => Text('Error: $error'),
         data: (userData) {
+          var _isEntertainer = userData.isEntertainer;
           // final _usernameController =
           //     useTextEditingController(text: userData.username);
           final _websiteController =
@@ -167,6 +174,33 @@ class EditProfileScreen extends HookConsumerWidget {
                           },
                         )
                       ],
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 8.0),
+                    child: Text(
+                      _isEntertainer ? 'Premium Subscription' : 'Free Account!',
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w500,
+                        color: Colors.blue,
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Switch.adaptive(
+                      value: _isEntertainer,
+                      activeColor: Colors.indigo,
+                      thumbColor: MaterialStateProperty.all(
+                          Theme.of(context).colorScheme.onPrimary),
+                      inactiveThumbColor: Colors.white,
+                      inactiveTrackColor: Colors.red,
+                      onChanged: (value) async {
+                        await _updateIsEntertainer(
+                            user: userData, value: value);
+                      },
                     ),
                   ),
                 ],

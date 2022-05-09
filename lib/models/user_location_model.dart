@@ -18,6 +18,7 @@ abstract class UserLocation implements _$UserLocation {
     required String postalCode,
     required String state,
     required String country,
+    String? webAddress,
     @JsonKey(nullable: true) required double latitude,
     @JsonKey(nullable: true) required double longitude,
   }) = _UserLocation;
@@ -32,6 +33,7 @@ abstract class UserLocation implements _$UserLocation {
         country: '',
         latitude: 51.53394,
         longitude: -0.17769,
+        webAddress: '',
       );
 
   factory UserLocation.fromJson(Map<String, dynamic> json) =>

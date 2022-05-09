@@ -115,7 +115,7 @@ class RequestsScreenHook extends HookConsumerWidget {
         ref.watch(requestListControllerProvider.notifier);
 
     Future<void> updateLiveStatus({required User user}) async {
-      await userControllerNotifier.updateUserLiveStatus(user: user);
+      await userControllerNotifier.updateUser(user: user);
     }
 
     Future<void> updateUserLocation(
@@ -124,7 +124,7 @@ class RequestsScreenHook extends HookConsumerWidget {
           user: user, location: location);
     }
 
-    Future<void> _goLiveVenueMode(User userData) async {
+    Future<void> _goLiveOnStage(User userData) async {
       // await updateLiveStatus(user: userData);
 
       final userLocation = await Navigator.pushNamed(
@@ -134,22 +134,24 @@ class RequestsScreenHook extends HookConsumerWidget {
             entertainerId: userData.id, entertainerUsername: userData.username),
       ) as UserLocation;
 
-      await userControllerNotifier.updateUserLiveMode(
-          user: userData, location: userLocation);
+      if (userLocation.venueName.isNotEmpty) {
+        await userControllerNotifier.setUserLiveAtLocation(
+            user: userData, location: userLocation, isOnStage: true);
+      }
     }
 
-    Future<void> _goLivePodcastMode(User userData) async {
+    Future<void> _goLiveOnAir(User userData) async {
       // await updateLiveStatus(user: userData);
 
       final UserLocation userLocation = await Navigator.pushNamed(
         context,
-        Routes.goLiveOnStage,
+        Routes.goLiveOnAir,
         arguments: GoLiveScreenArgs(
             entertainerId: userData.id, entertainerUsername: userData.username),
       ) as UserLocation;
 
-      await userControllerNotifier.updateUserLiveMode(
-          user: userData, location: userLocation);
+      await userControllerNotifier.setUserLiveAtLocation(
+          user: userData, location: userLocation, isOnStage: false);
     }
 
     return Scaffold(
@@ -207,7 +209,7 @@ class RequestsScreenHook extends HookConsumerWidget {
                 ),
                 TextButton.icon(
                     onPressed: () async {
-                      await _goLiveVenueMode(userData);
+                      await _goLiveOnStage(userData);
                     },
                     icon: const Icon(Icons.speaker),
                     label: Text(_isLive ? 'Go Offline' : 'Go Live!')),
@@ -219,7 +221,7 @@ class RequestsScreenHook extends HookConsumerWidget {
                       // Current Location
                       TextButton.icon(
                         onPressed: () async {
-                          _goLiveVenueMode(userData);
+                          _goLiveOnStage(userData);
                         },
                         icon: const Icon(Icons.location_on),
                         label: const Text(
@@ -229,7 +231,9 @@ class RequestsScreenHook extends HookConsumerWidget {
                       ),
                       // Select Location
                       TextButton.icon(
-                        onPressed: () {},
+                        onPressed: () async {
+                          _goLiveOnAir(userData);
+                        },
                         icon: const Icon(Icons.radio),
                         label: const Text(
                           'Go Live on Air',

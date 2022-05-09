@@ -7,6 +7,7 @@ import 'package:geocoder2/geocoder2.dart';
 import 'package:request_live_riverpods/controllers/controllers.dart';
 import 'package:request_live_riverpods/models/models.dart';
 import 'package:request_live_riverpods/routes.dart';
+import 'package:request_live_riverpods/screens/screens.dart';
 import 'package:request_live_riverpods/widgets/scaffold_snackbar.dart';
 
 class GoLiveOnStageScreen extends StatefulHookConsumerWidget {
@@ -24,10 +25,9 @@ class GoLiveOnStageScreen extends StatefulHookConsumerWidget {
 class _GoLiveOnStageScreenState extends ConsumerState<GoLiveOnStageScreen> {
   final _venueFormKey = GlobalKey<FormState>();
   final _addressFormKey = GlobalKey<FormState>();
-  final String _previewImageUrl = '';
   Location location = Location();
   // ignore: prefer_final_fields
-  bool _useAddress = true;
+  bool _useAddress = false;
 
   Future<void> _getCurrentUserLocationFromCoordinates(
       {required String venueName}) async {
@@ -107,15 +107,6 @@ class _GoLiveOnStageScreenState extends ConsumerState<GoLiveOnStageScreen> {
         GeoData data = await Geocoder2.getDataFromAddress(
             address: address, googleMapApiKey: GOOGLE_MAP_API_KEY);
 
-        print('_getCurrentUserLocationFromAddress: ');
-        print('Venue: $venueName');
-        print('Address: ${data.address}');
-        print('City: ${data.city}');
-        print('State: ${data.state}');
-        print('Zip: ${data.postalCode}');
-        print('Country: ${data.country}');
-        print('Lat: ${data.latitude}');
-        print('Long: ${data.longitude}');
         // Create userLocation from GeoData (Can this be optimized with a fromMap function?)
         UserLocation userLocation = UserLocation(
           venueName: venueName.trim(),
@@ -144,6 +135,7 @@ class _GoLiveOnStageScreenState extends ConsumerState<GoLiveOnStageScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final args = ModalRoute.of(context)!.settings.arguments as GoLiveScreenArgs;
     final _venueController = useTextEditingController();
     final _addressController = useTextEditingController();
     final user = ref.watch(userControllerProvider);
@@ -172,6 +164,7 @@ class _GoLiveOnStageScreenState extends ConsumerState<GoLiveOnStageScreen> {
             print('You\'re not an entertainer! How did you get here?');
             Navigator.of(context).pushReplacementNamed(Routes.welcome);
           }
+
           return Column(
             mainAxisAlignment: MainAxisAlignment.start,
             // crossAxisAlignment: CrossAxisAlignment.stretch,
