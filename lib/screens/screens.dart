@@ -4,8 +4,8 @@ export 'package:request_live_riverpods/screens/entertainer/entertainer_screen.da
 export 'package:request_live_riverpods/screens/home/welcome_screen.dart';
 export 'package:request_live_riverpods/screens/profile/edit_profile_screen.dart';
 export 'package:request_live_riverpods/screens/profile/edit_profile_screen_args.dart';
-export 'package:request_live_riverpods/screens/requests/go_live_venue_screen.dart';
-// export 'package:request_live_riverpods/screens/requests/go_live_podcast_screen.dart';
+export 'package:request_live_riverpods/screens/requests/go_live_on_stage_screen.dart';
+export 'package:request_live_riverpods/screens/requests/go_live_on_air_screen.dart';
 export 'package:request_live_riverpods/screens/requests/go_live_screen_args.dart';
 export 'package:request_live_riverpods/screens/profile/profile_screen.dart';
 export 'package:request_live_riverpods/screens/profile/profile_screen_args.dart';

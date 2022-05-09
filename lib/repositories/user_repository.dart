@@ -84,7 +84,8 @@ class UserRepository implements BaseUserRepository {
       final newUser = localUser.copyWith(photoUrl: newPhotoUrl);
 
       await _read(firebaseFirestoreProvider)
-          .usersDocRef(newUser.id)
+          .collection('users')
+          .doc(newUser.id)
           .update(newUser.toDocument());
 
       return newUser;

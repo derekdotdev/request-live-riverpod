@@ -6,23 +6,24 @@ import 'package:geocoder2/geocoder2.dart';
 
 import 'package:request_live_riverpods/controllers/controllers.dart';
 import 'package:request_live_riverpods/models/models.dart';
+import 'package:request_live_riverpods/routes.dart';
 import 'package:request_live_riverpods/widgets/scaffold_snackbar.dart';
 
 // TODO make this much simpler. Just require link to podcast or radio station info
 // Entertainer page will say 'xyz is live at <String>' regardless of live mode!
-class GoLivePodcastScreen extends StatefulHookConsumerWidget {
+class GoLiveOnAirScreen extends StatefulHookConsumerWidget {
   final String entertainerId;
   final String entertainerUsername;
-  const GoLivePodcastScreen(this.entertainerId, this.entertainerUsername,
+  const GoLiveOnAirScreen(this.entertainerId, this.entertainerUsername,
       {Key? key})
       : super(key: key);
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() =>
-      _GoLivePodcastScreenState();
+      _GoLiveOnAirScreenState();
 }
 
-class _GoLivePodcastScreenState extends ConsumerState<GoLivePodcastScreen> {
+class _GoLiveOnAirScreenState extends ConsumerState<GoLiveOnAirScreen> {
   String _previewImageUrl = '';
   Location location = Location();
 
@@ -145,6 +146,10 @@ class _GoLivePodcastScreenState extends ConsumerState<GoLivePodcastScreen> {
         ),
         error: (error, stacktrace) => Text('Error: $error'),
         data: (userData) {
+          if (!userData.isEntertainer) {
+            print('You\'re not an entertainer! How did you get here?');
+            Navigator.of(context).pushReplacementNamed(Routes.welcome);
+          }
           return Column(
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.stretch,

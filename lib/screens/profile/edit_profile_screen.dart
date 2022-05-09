@@ -23,9 +23,11 @@ class EditProfileScreen extends HookConsumerWidget {
 
     Future<void> _updateUserPhoto({required User user}) async {
       // Instantiate image picker and pick medium-resolution image
-      final ImagePicker _picker = ImagePicker();
-      final imageFile =
-          await _picker.pickImage(source: ImageSource.gallery, maxWidth: 600);
+      // final ImagePicker _picker = ImagePicker();
+      // final imageFile = await _picker.pickImage(source: ImageSource.gallery, maxWidth: 600);
+      // Strategy used with image_picker 0.8.5 (errors)
+      final imageFile = await ImagePicker()
+          .getImage(source: ImageSource.gallery, maxWidth: 600);
 
       // Convert to bytes
       if (imageFile != null) {

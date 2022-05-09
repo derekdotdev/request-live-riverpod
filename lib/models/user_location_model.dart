@@ -10,21 +10,26 @@ abstract class UserLocation implements _$UserLocation {
 
   const factory UserLocation({
     String? id,
-    String? venueName,
+    required String venueName,
     // ignore: non_constant_identifier_names
-    double? street_number,
-    String? address,
-    String? city,
-    String? postalCode,
-    String? state,
-    String? country,
+    required double street_number,
+    required String address,
+    required String city,
+    required String postalCode,
+    required String state,
+    required String country,
     @JsonKey(nullable: true) required double latitude,
     @JsonKey(nullable: true) required double longitude,
   }) = _UserLocation;
 
   factory UserLocation.empty() => const UserLocation(
         venueName: '',
+        street_number: 0,
         address: '',
+        city: '',
+        postalCode: '',
+        state: '',
+        country: '',
         latitude: 51.53394,
         longitude: -0.17769,
       );

@@ -6,21 +6,22 @@ import 'package:geocoder2/geocoder2.dart';
 
 import 'package:request_live_riverpods/controllers/controllers.dart';
 import 'package:request_live_riverpods/models/models.dart';
+import 'package:request_live_riverpods/routes.dart';
 import 'package:request_live_riverpods/widgets/scaffold_snackbar.dart';
 
-class GoLiveVenueScreen extends StatefulHookConsumerWidget {
+class GoLiveOnStageScreen extends StatefulHookConsumerWidget {
   final String entertainerId;
   final String entertainerUsername;
-  const GoLiveVenueScreen(this.entertainerId, this.entertainerUsername,
+  const GoLiveOnStageScreen(this.entertainerId, this.entertainerUsername,
       {Key? key})
       : super(key: key);
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() =>
-      _GoLiveVenueScreenState();
+      _GoLiveOnStageScreenState();
 }
 
-class _GoLiveVenueScreenState extends ConsumerState<GoLiveVenueScreen> {
+class _GoLiveOnStageScreenState extends ConsumerState<GoLiveOnStageScreen> {
   final _venueFormKey = GlobalKey<FormState>();
   final _addressFormKey = GlobalKey<FormState>();
   String _previewImageUrl = '';
@@ -28,6 +29,7 @@ class _GoLiveVenueScreenState extends ConsumerState<GoLiveVenueScreen> {
 
   Future<void> _getCurrentUserLocationFromCoordinates(
       {required String venueName}) async {
+    // Check location services enabled. Request if necessary
     var _serviceEnabled = await location.serviceEnabled();
 
     if (!_serviceEnabled) {
@@ -37,6 +39,7 @@ class _GoLiveVenueScreenState extends ConsumerState<GoLiveVenueScreen> {
       }
     }
 
+    // Verify requested location permissions. Request if necessary
     PermissionStatus _permissionGranted = await location.hasPermission();
 
     if (_permissionGranted == PermissionStatus.denied) {
@@ -46,50 +49,44 @@ class _GoLiveVenueScreenState extends ConsumerState<GoLiveVenueScreen> {
       }
     }
 
+    // Geo-locate user (latitude / longitude )
     final _locData = await location.getLocation();
 
     if (_locData.latitude != null &&
         _locData.longitude != null &&
         venueName.trim() != '') {
-      // GeoData data = await Geocoder2.getDataFromCoordinates(
-      //     latitude: _locData.latitude!,
-      //     longitude: _locData.longitude!,
-      //     googleMapApiKey: GOOGLE_MAP_API_KEY);
+      // Geocode lat/long to physical address
+      GeoData data = await Geocoder2.getDataFromCoordinates(
+          latitude: _locData.latitude!,
+          longitude: _locData.longitude!,
+          googleMapApiKey: GOOGLE_MAP_API_KEY);
 
-      // final data = await Geocoder2.getDataFromCoordinates(
-      //     latitude: 40.714224,
-      //     longitude: -73.961452,
-      //     googleMapApiKey: GOOGLE_MAP_API_KEY);
-      // googleMapApiKey: 'AIzaSyCs2cEFujOr5NhF9hFJOA0QxPyB5lafcU2');
-
-      final staticMapImageUrl =
-          UserLocationController.generateLocationPreviewImageFromCoords(
-              latitude: _locData.latitude!, longitude: _locData.longitude!);
+      // Generate map image.. No longer using this, but keeping code handy anyway
       // final staticMapImageUrl =
       //     UserLocationController.generateLocationPreviewImageFromCoords(
       //         latitude: data.latitude, longitude: data.longitude);
 
-      // print('staticMapImageUrl created from coordinates!');
-      // print(data.address);
-      // print(data.city);
-      // print(data.state);
-      // print(data.country);
+      // setState(() {
+      //   _previewImageUrl = staticMapImageUrl;
+      // });
 
-      setState(() {
-        _previewImageUrl = staticMapImageUrl;
-      });
+      // Create userLocation from GeoData (Can this be optimized with a fromMap function?)
+      UserLocation userLocation = UserLocation(
+        venueName: venueName.trim(),
+        street_number: data.street_number,
+        address: data.address,
+        city: data.city,
+        state: data.state,
+        postalCode: data.postalCode,
+        country: data.country,
+        latitude: data.latitude,
+        longitude: data.longitude,
+      );
 
-      // UserLocation userLocation = UserLocation(
-      //   venueName: venueName.trim(),
-      //   street_number: data.street_number,
-      //   address: data.address,
-      //   city: data.city,
-      //   state: data.state,
-      //   postalCode: data.postalCode,
-      //   country: data.country,
-      //   latitude: data.latitude,
-      //   longitude: data.longitude,
-      // );
+      // Pass userLocation back to requests screen
+      if (userLocation.venueName == venueName) {
+        Navigator.of(context).pop(userLocation);
+      }
     }
   }
 
@@ -145,6 +142,10 @@ class _GoLiveVenueScreenState extends ConsumerState<GoLiveVenueScreen> {
         ),
         error: (error, stacktrace) => Text('Error: $error'),
         data: (userData) {
+          if (!userData.isEntertainer) {
+            print('You\'re not an entertainer! How did you get here?');
+            Navigator.of(context).pushReplacementNamed(Routes.welcome);
+          }
           return Column(
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -184,8 +185,8 @@ class _GoLiveVenueScreenState extends ConsumerState<GoLiveVenueScreen> {
                   width: double.infinity,
                   alignment: Alignment.center,
                   child: Form(
+                    key: _venueFormKey,
                     child: TextFormField(
-                      key: _venueFormKey,
                       controller: _venueController,
                       autocorrect: false,
                       textCapitalization: TextCapitalization.words,

@@ -43,7 +43,10 @@ dependencies:
   intl: ^0.17.0
   json_annotation: ^4.5.0
   json_serializable: ^6.2.0
-  image_picker: ^0.8.5
+  # startd giving Unhandled Exception(multiple_request, Cancelled by second request, null, null)
+  # after running web app and updating gsutil cors file (web view did not display images)
+  # image_picker: ^0.8.5 // started giving Unhandled 
+  image_picker: 0.7.4 
   http: ^0.13.4
   location: ^4.2.0
   geocoder2: ^1.1.0

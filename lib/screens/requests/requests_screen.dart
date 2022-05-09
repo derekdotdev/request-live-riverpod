@@ -127,9 +127,9 @@ class RequestsScreenHook extends HookConsumerWidget {
     Future<void> _goLiveVenueMode(User userData) async {
       // await updateLiveStatus(user: userData);
 
-      final UserLocation userLocation = await Navigator.pushNamed(
+      final userLocation = await Navigator.pushNamed(
         context,
-        Routes.goLiveVenue,
+        Routes.goLiveOnStage,
         arguments: GoLiveScreenArgs(
             entertainerId: userData.id, entertainerUsername: userData.username),
       ) as UserLocation;
@@ -143,7 +143,7 @@ class RequestsScreenHook extends HookConsumerWidget {
 
       final UserLocation userLocation = await Navigator.pushNamed(
         context,
-        Routes.goLiveVenue,
+        Routes.goLiveOnStage,
         arguments: GoLiveScreenArgs(
             entertainerId: userData.id, entertainerUsername: userData.username),
       ) as UserLocation;
@@ -173,6 +173,10 @@ class RequestsScreenHook extends HookConsumerWidget {
         ),
         error: (error, stacktrace) => Text('Error: $error'),
         data: (userData) {
+          if (!userData.isEntertainer) {
+            print('You\'re not an entertainer! How did you get here?');
+            Navigator.of(context).pushReplacementNamed(Routes.welcome);
+          }
           var _isLive = userData.isLive;
 
           return SingleChildScrollView(
@@ -215,17 +219,11 @@ class RequestsScreenHook extends HookConsumerWidget {
                       // Current Location
                       TextButton.icon(
                         onPressed: () async {
-                          Navigator.pushNamed(
-                            context,
-                            Routes.goLiveVenue,
-                            arguments: GoLiveScreenArgs(
-                                entertainerId: userData.id,
-                                entertainerUsername: userData.username),
-                          );
+                          _goLiveVenueMode(userData);
                         },
                         icon: const Icon(Icons.location_on),
                         label: const Text(
-                          'Venue Mode',
+                          'Go Live on Stage',
                           textAlign: TextAlign.center,
                         ),
                       ),
@@ -234,7 +232,7 @@ class RequestsScreenHook extends HookConsumerWidget {
                         onPressed: () {},
                         icon: const Icon(Icons.radio),
                         label: const Text(
-                          'Podcast Mode',
+                          'Go Live on Air',
                           textAlign: TextAlign.center,
                         ),
                       ),
