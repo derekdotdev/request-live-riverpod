@@ -8,21 +8,21 @@ import 'package:request_live_riverpods/controllers/controllers.dart';
 import 'package:request_live_riverpods/models/models.dart';
 import 'package:request_live_riverpods/widgets/scaffold_snackbar.dart';
 
-class GoLiveVenueScreen extends StatefulHookConsumerWidget {
+// TODO make this much simpler. Just require link to podcast or radio station info
+// Entertainer page will say 'xyz is live at <String>' regardless of live mode!
+class GoLivePodcastScreen extends StatefulHookConsumerWidget {
   final String entertainerId;
   final String entertainerUsername;
-  const GoLiveVenueScreen(this.entertainerId, this.entertainerUsername,
+  const GoLivePodcastScreen(this.entertainerId, this.entertainerUsername,
       {Key? key})
       : super(key: key);
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() =>
-      _GoLiveVenueScreenState();
+      _GoLivePodcastScreenState();
 }
 
-class _GoLiveVenueScreenState extends ConsumerState<GoLiveVenueScreen> {
-  final _venueFormKey = GlobalKey<FormState>();
-  final _addressFormKey = GlobalKey<FormState>();
+class _GoLivePodcastScreenState extends ConsumerState<GoLivePodcastScreen> {
   String _previewImageUrl = '';
   Location location = Location();
 
@@ -185,7 +185,6 @@ class _GoLiveVenueScreenState extends ConsumerState<GoLiveVenueScreen> {
                   alignment: Alignment.center,
                   child: Form(
                     child: TextFormField(
-                      key: _venueFormKey,
                       controller: _venueController,
                       autocorrect: false,
                       textCapitalization: TextCapitalization.words,
@@ -209,26 +208,18 @@ class _GoLiveVenueScreenState extends ConsumerState<GoLiveVenueScreen> {
               ),
               SizedBox(
                 width: double.infinity,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
                     // Current Location
                     TextButton.icon(
                       onPressed: () async {
-                        if (_venueFormKey.currentState!.validate()) {
-                          FocusScope.of(context).unfocus();
-
-                          final venueName = _venueController.text.trim();
-
-                          if (venueName.isNotEmpty) {
-                            _getCurrentUserLocationFromCoordinates(
-                                venueName: venueName);
-                          }
-                        }
+                        _getCurrentUserLocationFromCoordinates(
+                            venueName: 'Hooch');
                       },
                       icon: const Icon(Icons.location_on),
                       label: const Text(
-                        'Use Current Location',
+                        'Venue Mode',
                         textAlign: TextAlign.center,
                       ),
                     ),
@@ -237,7 +228,7 @@ class _GoLiveVenueScreenState extends ConsumerState<GoLiveVenueScreen> {
                       onPressed: () {},
                       icon: const Icon(Icons.radio),
                       label: const Text(
-                        'Use Address',
+                        'Podcast Mode',
                         textAlign: TextAlign.center,
                       ),
                     ),
