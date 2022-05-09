@@ -18,12 +18,12 @@ abstract class User implements _$User {
     required String username,
     String? displayName,
     String? phoneNumber,
-    String? bio,
+    required String bio,
     String? website,
     required String photoUrl,
     required bool isEntertainer,
     required UserLocation location,
-    bool? podcastMode,
+    @Default(false) bool isOnStage,
     @Default(false) bool isLive,
   }) = _User;
 
@@ -31,9 +31,10 @@ abstract class User implements _$User {
         id: 'null',
         email: 'null',
         username: 'null',
-        photoUrl: 'null',
+        bio: '',
+        photoUrl: 'https://i.stack.imgur.com/l60Hf.png',
         isEntertainer: false,
-        podcastMode: false,
+        isOnStage: false,
         location: UserLocation.empty(),
       );
 

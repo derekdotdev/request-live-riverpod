@@ -12,12 +12,12 @@ _$_User _$$_UserFromJson(Map<String, dynamic> json) => _$_User(
       username: json['username'] as String,
       displayName: json['displayName'] as String?,
       phoneNumber: json['phoneNumber'] as String?,
-      bio: json['bio'] as String?,
+      bio: json['bio'] as String,
       website: json['website'] as String?,
       photoUrl: json['photoUrl'] as String,
       isEntertainer: json['isEntertainer'] as bool,
       location: UserLocation.fromJson(json['location'] as Map<String, dynamic>),
-      podcastMode: json['podcastMode'] as bool?,
+      isOnStage: json['isOnStage'] as bool? ?? false,
       isLive: json['isLive'] as bool? ?? false,
     );
 
@@ -32,6 +32,6 @@ Map<String, dynamic> _$$_UserToJson(_$_User instance) => <String, dynamic>{
       'photoUrl': instance.photoUrl,
       'isEntertainer': instance.isEntertainer,
       'location': instance.location.toJson(),
-      'podcastMode': instance.podcastMode,
+      'isOnStage': instance.isOnStage,
       'isLive': instance.isLive,
     };

@@ -137,6 +137,7 @@ class UserController extends StateNotifier<AsyncValue<User>> {
         id: userId,
         email: email,
         username: username,
+        bio: '',
         photoUrl: 'https://i.stack.imgur.com/l60Hf.png',
         isEntertainer: isEntertainer,
         location: UserLocation.empty(),

@@ -51,6 +51,7 @@ class _SearchScreenHookState extends ConsumerState<SearchScreenHook> {
                 flex: 4,
                 child: TextFormField(
                   textCapitalization: TextCapitalization.none,
+                  autocorrect: false,
                   controller: searchController,
                   cursorColor: Colors.white,
                   decoration: const InputDecoration(

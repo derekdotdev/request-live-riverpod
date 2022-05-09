@@ -143,7 +143,9 @@ class ProfileScreen extends HookConsumerWidget {
                         top: 1,
                       ),
                       child: Text(
-                        userData.bio ?? 'Edit your profile to add a bio!',
+                        userData.bio == ''
+                            ? 'Edit your profile to add a bio!'
+                            : userData.bio,
                       ),
                     ),
                   ],

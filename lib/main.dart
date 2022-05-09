@@ -2,6 +2,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:request_live_riverpods/controllers/auth_controller.dart';
+import 'package:request_live_riverpods/controllers/controllers.dart';
 import 'package:request_live_riverpods/firebase_options.dart';
 import 'package:request_live_riverpods/routes.dart';
 import 'package:request_live_riverpods/screens/screens.dart';
@@ -57,11 +58,27 @@ class HomeScreen extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final authControllerState = ref.watch(authControllerProvider);
-    // final userController = ref.watch(userControllerProvider);
+    final userController = ref.watch(userControllerProvider);
 
     return authControllerState?.uid == null
         ? const SignInScreen()
-        : const WelcomeScreen();
+        : userController.when(
+            data: (userData) {
+              return userData.isEntertainer
+                  ? const RequestsScreen()
+                  : const WelcomeScreen();
+            },
+            error: (error, stacktrace) => Center(
+              child: Text(
+                error.toString(),
+              ),
+            ),
+            loading: () => const Center(
+              child: CircularProgressIndicator(
+                color: Colors.white,
+              ),
+            ),
+          );
   }
 }
 

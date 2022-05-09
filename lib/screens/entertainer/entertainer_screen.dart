@@ -109,7 +109,7 @@ class EntertainerScreen extends HookConsumerWidget {
                                         MainAxisAlignment.spaceEvenly,
                                     children: [
                                       // TODO figure this out!
-                                      buildStatColumn(0, "posts"),
+                                      buildStatColumn(0, "requests played"),
                                       buildStatColumn(0, "followers"),
                                       buildStatColumn(0, "following"),
                                     ],
@@ -180,8 +180,9 @@ class EntertainerScreen extends HookConsumerWidget {
                             top: 1,
                           ),
                           child: Text(
-                            entertainerData.bio ??
-                                '${entertainerData.username} has not uploaded a bio yet...',
+                            entertainerData.bio == ''
+                                ? '${entertainerData.username} has not uploaded a bio yet...'
+                                : entertainerData.bio,
                           ),
                         ),
                       ],

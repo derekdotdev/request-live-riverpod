@@ -61,6 +61,7 @@ class EntertainerRepository implements BaseEntertainerRepository {
       final snaps = _read(firebaseFirestoreProvider)
           .collection('users')
           .where('isEntertainer', isEqualTo: true)
+          .where('isOnStage', isEqualTo: true)
           .snapshots();
       return snaps;
     } on FirebaseException catch (e) {

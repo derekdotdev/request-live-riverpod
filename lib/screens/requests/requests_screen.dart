@@ -9,6 +9,7 @@ import 'package:request_live_riverpods/models/models.dart';
 import 'package:request_live_riverpods/routes.dart';
 import 'package:request_live_riverpods/screens/requests/request_card.dart';
 import 'package:request_live_riverpods/screens/screens.dart';
+import 'package:request_live_riverpods/widgets/widgets.dart';
 
 class RequestsScreenArgs {
   final String entertainerUid;
@@ -153,6 +154,7 @@ class RequestsScreenHook extends HookConsumerWidget {
 
     return Scaffold(
       backgroundColor: Colors.black,
+      drawer: const AppDrawer(),
       appBar: AppBar(
         backgroundColor: Colors.indigo,
         centerTitle: true,

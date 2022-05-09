@@ -4,7 +4,9 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import 'package:request_live_riverpods/controllers/auth_controller.dart';
+import 'package:request_live_riverpods/controllers/controllers.dart';
 import 'package:request_live_riverpods/routes.dart';
+import 'package:request_live_riverpods/screens/requests/requests_screen.dart';
 
 class SignInScreen extends StatefulWidget {
   const SignInScreen({Key? key}) : super(key: key);
@@ -129,8 +131,28 @@ class SignInScreenHook extends HookConsumerWidget {
                           ),
                         );
                       } else {
-                        Navigator.of(context)
-                            .pushReplacementNamed(Routes.welcome);
+                        final user = ref.watch(userControllerProvider);
+                        user.when(
+                          loading: () => const Center(
+                            child: CircularProgressIndicator(
+                              color: Colors.white,
+                            ),
+                          ),
+                          error: (error, stacktrace) => Center(
+                            child: Text(error.toString()),
+                          ),
+                          data: (userData) {
+                            return userData.isEntertainer
+                                ? Navigator.pushReplacementNamed(
+                                    context,
+                                    Routes.requests,
+                                    arguments: RequestsScreenArgs(
+                                        userData.id, userData.username),
+                                  )
+                                : Navigator.of(context)
+                                    .pushReplacementNamed(Routes.welcome);
+                          },
+                        );
                       }
                     }
                   },
