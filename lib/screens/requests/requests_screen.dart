@@ -124,6 +124,12 @@ class RequestsScreenHook extends HookConsumerWidget {
           user: user, location: location);
     }
 
+    Future<void> _goOffline(User userData) async {
+      if (userData.isLive) {
+        await userControllerNotifier.setUserOffline(user: userData);
+      }
+    }
+
     Future<void> _goLiveOnStage(User userData) async {
       // await updateLiveStatus(user: userData);
 
@@ -188,7 +194,9 @@ class RequestsScreenHook extends HookConsumerWidget {
                 Padding(
                   padding: const EdgeInsets.only(top: 8.0),
                   child: Text(
-                    _isLive ? 'You\'re Live!' : 'Toggle Switch To Go Live!',
+                    _isLive
+                        ? 'You\'re Live at ${userData.location.venueName}!'
+                        : 'You\'re Offline!',
                     style: const TextStyle(
                       fontSize: 14,
                       fontWeight: FontWeight.w500,
@@ -196,53 +204,55 @@ class RequestsScreenHook extends HookConsumerWidget {
                     ),
                   ),
                 ),
-                Switch.adaptive(
-                  value: _isLive,
-                  activeColor: Colors.indigo,
-                  thumbColor: MaterialStateProperty.all(
-                      Theme.of(context).colorScheme.onPrimary),
-                  inactiveThumbColor: Colors.white,
-                  inactiveTrackColor: Colors.red,
-                  onChanged: (value) async {
-                    await updateLiveStatus(user: userData);
-                  },
-                ),
-                TextButton.icon(
-                    onPressed: () async {
-                      await _goLiveOnStage(userData);
-                    },
-                    icon: const Icon(Icons.speaker),
-                    label: Text(_isLive ? 'Go Offline' : 'Go Live!')),
-                SizedBox(
-                  width: double.infinity,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      // Current Location
-                      TextButton.icon(
-                        onPressed: () async {
-                          _goLiveOnStage(userData);
-                        },
-                        icon: const Icon(Icons.location_on),
-                        label: const Text(
-                          'Go Live on Stage',
-                          textAlign: TextAlign.center,
+                // Switch.adaptive(
+                //   value: _isLive,
+                //   activeColor: Colors.indigo,
+                //   thumbColor: MaterialStateProperty.all(
+                //       Theme.of(context).colorScheme.onPrimary),
+                //   inactiveThumbColor: Colors.white,
+                //   inactiveTrackColor: Colors.red,
+                //   onChanged: (value) async {
+                //     await updateLiveStatus(user: userData);
+                //   },
+                // ),
+                if (_isLive)
+                  TextButton.icon(
+                      onPressed: () async {
+                        await _goOffline(userData);
+                      },
+                      icon: const Icon(Icons.speaker),
+                      label: const Text('Go Offline')),
+                if (!_isLive)
+                  SizedBox(
+                    width: double.infinity,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        // Current Location
+                        TextButton.icon(
+                          onPressed: () async {
+                            _goLiveOnStage(userData);
+                          },
+                          icon: const Icon(Icons.location_on),
+                          label: const Text(
+                            'Go Live on Stage',
+                            textAlign: TextAlign.center,
+                          ),
                         ),
-                      ),
-                      // Select Location
-                      TextButton.icon(
-                        onPressed: () async {
-                          _goLiveOnAir(userData);
-                        },
-                        icon: const Icon(Icons.radio),
-                        label: const Text(
-                          'Go Live on Air',
-                          textAlign: TextAlign.center,
+                        // Select Location
+                        TextButton.icon(
+                          onPressed: () async {
+                            _goLiveOnAir(userData);
+                          },
+                          icon: const Icon(Icons.radio),
+                          label: const Text(
+                            'Go Live on Air',
+                            textAlign: TextAlign.center,
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
-                ),
                 requestsStream.when(
                   loading: (() => const CircularProgressIndicator(
                         color: Colors.white,

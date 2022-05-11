@@ -167,7 +167,7 @@ class RegisterScreenHook extends HookConsumerWidget {
                             userId: userId,
                             email: email,
                             username: username,
-                            isEntertainer: true,
+                            isEntertainer: false,
                           );
                     }
 

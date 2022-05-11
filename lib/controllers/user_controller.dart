@@ -58,7 +58,7 @@ class UserController extends StateNotifier<AsyncValue<User>> {
 
   Future<void> setUserOffline({required User user}) async {
     try {
-      final updatedUser = user.copyWith(isLive: false);
+      final updatedUser = user.copyWith(isLive: false, isOnStage: false);
 
       await _read(userRepositoryProvider)
           .updateUserProfile(localUser: updatedUser);
