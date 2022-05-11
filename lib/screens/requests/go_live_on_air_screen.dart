@@ -173,7 +173,7 @@ class _GoLiveOnAirScreenState extends ConsumerState<GoLiveOnAirScreen> {
                             hintStyle:
                                 TextStyle(fontSize: 14, color: Colors.grey),
                             prefixIcon: Icon(
-                              Icons.speaker,
+                              Icons.radio_outlined,
                               color: Colors.white,
                             ),
                             labelText: 'Podcast Title or Station Call Sign',
@@ -204,7 +204,7 @@ class _GoLiveOnAirScreenState extends ConsumerState<GoLiveOnAirScreen> {
                                 hintStyle:
                                     TextStyle(fontSize: 14, color: Colors.grey),
                                 prefixIcon: Icon(
-                                  Icons.speaker,
+                                  Icons.link_outlined,
                                   color: Colors.white,
                                 ),
                                 labelText: 'Web Address',

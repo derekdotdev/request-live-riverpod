@@ -41,6 +41,8 @@ class EntertainerCard extends HookConsumerWidget {
                               width: 16,
                             ),
                             Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
                                   snap['username'].toString(),
@@ -50,9 +52,9 @@ class EntertainerCard extends HookConsumerWidget {
                                     color: Colors.white,
                                   ),
                                 ),
-                                const Text(
-                                  'Location',
-                                  style: TextStyle(
+                                Text(
+                                  'Live now at ${snap['location']['venueName'].toString()}',
+                                  style: const TextStyle(
                                     fontSize: 12,
                                     color: Colors.white,
                                   ),
