@@ -114,15 +114,15 @@ class RequestsScreenHook extends HookConsumerWidget {
     final requestListController =
         ref.watch(requestListControllerProvider.notifier);
 
-    Future<void> updateLiveStatus({required User user}) async {
-      await userControllerNotifier.updateUser(user: user);
-    }
+    // Future<void> updateLiveStatus({required User user}) async {
+    //   await userControllerNotifier.updateUser(user: user);
+    // }
 
-    Future<void> updateUserLocation(
-        {required User user, required UserLocation location}) async {
-      await userControllerNotifier.updateUserLocation(
-          user: user, location: location);
-    }
+    // Future<void> updateUserLocation(
+    //     {required User user, required UserLocation location}) async {
+    //   await userControllerNotifier.updateUserLocation(
+    //       user: user, location: location);
+    // }
 
     Future<void> _goOffline(User userData) async {
       if (userData.isLive) {
@@ -131,8 +131,6 @@ class RequestsScreenHook extends HookConsumerWidget {
     }
 
     Future<void> _goLiveOnStage(User userData) async {
-      // await updateLiveStatus(user: userData);
-
       final userLocation = await Navigator.pushNamed(
         context,
         Routes.goLiveOnStage,
@@ -140,7 +138,7 @@ class RequestsScreenHook extends HookConsumerWidget {
             entertainerId: userData.id, entertainerUsername: userData.username),
       ) as UserLocation;
 
-      if (userLocation.venueName.isNotEmpty) {
+      if (userLocation.venueName != '') {
         await userControllerNotifier.setUserLiveAtLocation(
             user: userData, location: userLocation, isOnStage: true);
       }
@@ -156,8 +154,10 @@ class RequestsScreenHook extends HookConsumerWidget {
             entertainerId: userData.id, entertainerUsername: userData.username),
       ) as UserLocation;
 
-      await userControllerNotifier.setUserLiveAtLocation(
-          user: userData, location: userLocation, isOnStage: false);
+      if (userLocation.venueName != '') {
+        await userControllerNotifier.setUserLiveAtLocation(
+            user: userData, location: userLocation, isOnStage: false);
+      }
     }
 
     return Scaffold(
@@ -220,7 +220,22 @@ class RequestsScreenHook extends HookConsumerWidget {
                       onPressed: () async {
                         await _goOffline(userData);
                       },
-                      icon: const Icon(Icons.speaker),
+                      icon: const Icon(Icons.pause_circle_outline_rounded),
+                      // pause circle_outline_rounded
+                      // audiotrack_sharp
+                      //music_note?
+                      // bedtime/ outlined
+                      // nightlight_outlined
+                      // close_rounded
+                      // mic_off_outlined
+
+                      // (for edit profile page)
+                      // local_see_outlined
+                      // camera_alt_outlined (for edit profile page)
+
+                      // For entertainer page Icon
+                      // playlist_add_circle
+                      // Playlist_add_outlined / runded
                       label: const Text('Go Offline')),
                 if (!_isLive)
                   SizedBox(
@@ -233,7 +248,7 @@ class RequestsScreenHook extends HookConsumerWidget {
                           onPressed: () async {
                             _goLiveOnStage(userData);
                           },
-                          icon: const Icon(Icons.location_on),
+                          icon: const Icon(Icons.speaker),
                           label: const Text(
                             'Go Live on Stage',
                             textAlign: TextAlign.center,
@@ -244,7 +259,7 @@ class RequestsScreenHook extends HookConsumerWidget {
                           onPressed: () async {
                             _goLiveOnAir(userData);
                           },
-                          icon: const Icon(Icons.radio),
+                          icon: const Icon(Icons.podcasts),
                           label: const Text(
                             'Go Live on Air',
                             textAlign: TextAlign.center,

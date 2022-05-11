@@ -245,7 +245,7 @@ class _GoLiveOnAirScreenState extends ConsumerState<GoLiveOnAirScreen> {
                           }
                         }
                       },
-                      icon: const Icon(Icons.cell_tower),
+                      icon: const Icon(Icons.podcasts),
                       label: const Text(
                         'Go Live On The Air!',
                         textAlign: TextAlign.center,
