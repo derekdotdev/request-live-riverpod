@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 
 import 'package:request_live_riverpods/models/models.dart';
 import 'package:request_live_riverpods/resources/conversions.dart';
-import 'package:request_live_riverpods/routes.dart';
-import 'package:request_live_riverpods/screens/requests/request_detail_screen.dart';
 
 class UserRequestCard extends StatefulWidget {
   final String requestId;
@@ -36,73 +34,61 @@ class _UserRequestCardState extends State<UserRequestCard> {
 
   @override
   Widget build(BuildContext context) {
-    // Do not display current user's EntertainerCard
-    return GestureDetector(
-      child: Container(
-        width: double.infinity,
-        margin: const EdgeInsets.all(8),
-        child: Padding(
-          padding: const EdgeInsets.only(left: 4.0, right: 4.0),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.start,
-            // mainAxisSize: MainAxisSize.min,
-            children: [
-              CircleAvatar(
-                radius: 32,
-                backgroundImage: NetworkImage(
-                  widget.snap['requesterPhotoUrl'],
-                ),
+    return Container(
+      width: double.infinity,
+      margin: const EdgeInsets.all(8),
+      child: Padding(
+        padding: const EdgeInsets.only(left: 4.0, right: 4.0),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.start,
+          // mainAxisSize: MainAxisSize.min,
+          children: [
+            CircleAvatar(
+              radius: 32,
+              backgroundImage: NetworkImage(
+                widget.snap['requesterPhotoUrl'],
               ),
-              const SizedBox(
-                width: 16,
-              ),
-              Flexible(
-                fit: FlexFit.loose,
-                child: Padding(
-                  padding: const EdgeInsets.all(2.0),
-                  child: SizedBox(
-                    width: double.infinity,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      // mainAxisSize: MainAxisSize.min,
-                      children: [
-                        RequestRowOld(
-                            section: 'User:   ',
-                            details:
-                                widget.snap['requesterUsername'].toString()),
-                        RequestRowOld(
-                            section: 'Artist: ',
-                            details: widget.snap['artist'].toString()),
-                        RequestRowOld(
-                            section: 'Title:   ',
-                            details: widget.snap['title'].toString()),
-                        RequestRowOld(
-                            section: 'Notes: ',
-                            details: widget.snap['notes'].toString()),
-                        RequestRowOld(
-                            section: 'Time:  ',
-                            details: Conversions.convertTimestamp(
-                                widget.snap['timestamp'].toDate())),
-                      ],
-                    ),
+            ),
+            const SizedBox(
+              width: 16,
+            ),
+            Flexible(
+              fit: FlexFit.loose,
+              child: Padding(
+                padding: const EdgeInsets.all(2.0),
+                child: SizedBox(
+                  width: double.infinity,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    mainAxisSize: MainAxisSize.max,
+                    children: [
+                      RequestRowOld(
+                          section: 'Entertainer:   ',
+                          details:
+                              widget.snap['entertainerUsername'].toString()),
+                      RequestRowOld(
+                          section: 'Artist: ',
+                          details: widget.snap['artist'].toString()),
+                      RequestRowOld(
+                          section: 'Title:   ',
+                          details: widget.snap['title'].toString()),
+                      RequestRowOld(
+                          section: 'Notes: ',
+                          details: widget.snap['notes'].toString()),
+                      RequestRowOld(
+                          section: 'Time:  ',
+                          details: Conversions.convertTimestamp(
+                              widget.snap['timestamp'].toDate())),
+                    ],
                   ),
                 ),
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
-      onTap: () {
-        Navigator.pushNamed(
-          context,
-          Routes.requestDetail,
-          arguments: RequestDetailScreenArgs(
-            request,
-          ),
-        );
-      },
     );
   }
 }
@@ -120,7 +106,7 @@ class RequestRowOld extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Row(
-      mainAxisAlignment: MainAxisAlignment.start,
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisSize: MainAxisSize.max,
       children: [
@@ -129,6 +115,7 @@ class RequestRowOld extends StatelessWidget {
             padding: const EdgeInsets.only(right: 2),
             child: Text(
               section,
+              textAlign: TextAlign.left,
               style: const TextStyle(
                 fontSize: 12,
                 fontWeight: FontWeight.bold,
@@ -138,13 +125,14 @@ class RequestRowOld extends StatelessWidget {
           ),
         ),
         Flexible(
-          flex: 5,
+          flex: 2,
           child: Padding(
             padding: const EdgeInsets.only(right: 2),
             child: Text(
               details,
               overflow: TextOverflow.ellipsis,
               maxLines: 1,
+              textAlign: TextAlign.end,
               style: const TextStyle(
                 fontSize: 12,
                 color: Colors.black,

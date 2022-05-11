@@ -53,7 +53,7 @@ class EntertainerCard extends HookConsumerWidget {
                                   ),
                                 ),
                                 Text(
-                                  'Live now at ${snap['location']['venueName'].toString()}',
+                                  'Live at ${snap['location']['venueName'].toString()}',
                                   style: const TextStyle(
                                     fontSize: 12,
                                     color: Colors.white,

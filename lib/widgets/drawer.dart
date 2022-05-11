@@ -65,13 +65,12 @@ class AppDrawer extends HookConsumerWidget {
                       height: 0,
                       width: 0,
                     ),
-              const Divider(),
-              const Divider(),
+              if (userData.isEntertainer) const Divider(),
+              if (userData.isEntertainer) const Divider(),
               ListTile(
                 leading: const Icon(Icons.search),
                 title: const Text('Search'),
                 onTap: () {
-                  // Navigator.of(context).pop();
                   Navigator.of(context).pop();
                   Navigator.of(context).pushNamed(Routes.search);
                 },
