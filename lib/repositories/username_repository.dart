@@ -1,4 +1,4 @@
-import 'package:firebase_core/firebase_core.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import 'package:request_live_riverpods/general_providers.dart';
@@ -21,19 +21,45 @@ class UsernameRepository implements BaseUsernameRepository {
 
   const UsernameRepository(this._read);
 
+  // @override
+  // Future<bool> checkUsernameAvailable({required String username}) async {
+  //   try {
+  //     final snap = await _read(firebaseFirestoreProvider)
+  //         .collection('users')
+  //         // .doc(username)
+  //         // .get();
+
+  //     print('Running checkUsernameAvailabile for: ');
+  //     print(username);
+
+  //     print(snap.data());
+
+  //     if (snap.data() == null || !snap.exists) {
+  //       return true;
+  //     } else {
+  //       print(snap.data());
+  //       return false;
+  //     }
+  //   } on FirebaseException catch (e) {
+  //     throw CustomException(message: e.message);
+  //   }
+  // }
+
+  // @override
+  // Stream<QuerySnapshot<Map<String, dynamic>>> checkUsernameAvailable(
   @override
   Future<bool> checkUsernameAvailable({required String username}) async {
     try {
-      final snap = await _read(firebaseFirestoreProvider)
+      final QuerySnapshot result = await _read(firebaseFirestoreProvider)
           .collection('users')
-          .doc(username)
+          .where('username', isEqualTo: username)
+          .limit(1)
           .get();
 
-      if (snap.data() == null || !snap.exists) {
-        return true;
-      } else {
-        return false;
-      }
+      final List<DocumentSnapshot> documents = result.docs;
+      print('Documents.length == ');
+      print(documents.length);
+      return !(documents.length == 1);
     } on FirebaseException catch (e) {
       throw CustomException(message: e.message);
     }
