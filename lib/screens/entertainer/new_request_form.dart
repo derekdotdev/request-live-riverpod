@@ -94,7 +94,10 @@ class NewRequestForm extends HookConsumerWidget {
                           error: (error, stacktrace) => Text(error.toString()),
                           data: (user) {
                             requestMap['requesterId'] = user.id;
-                            requestMap['requesterUsername'] = user.username;
+                            requestMap['requesterUsername'] =
+                                user.username == ""
+                                    ? user.email
+                                    : user.username;
                             requestMap['requesterPhotoUrl'] = user.photoUrl;
                             requestMap['entertainerId'] = entertainerId;
                             requestMap['entertainerUsername'] =
@@ -154,6 +157,7 @@ class NewRequestForm extends HookConsumerWidget {
                     key: const ValueKey('notes'),
                     focusNode: _notesFocusNode,
                     keyboardType: TextInputType.multiline,
+                    autocorrect: false,
                     maxLines: 2,
                     decoration: const InputDecoration(
                       hintText: 'It\'s my birthday!',
