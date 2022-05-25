@@ -31,6 +31,18 @@ target 'Runner' do
   # This line is added to use a pre-compiled version of Firestore SDK
   pod 'FirebaseFirestore', :git => 'https://github.com/invertase/firestore-ios-sdk-frameworks.git', :tag => '8.15.0'
   
+  def google_utilites
+    pod 'GoogleUtilities/AppDelegateSwizzler'
+    pod 'GoogleUtilities/Environment'
+    pod 'GoogleUtilities/ISASwizzler'
+    pod 'GoogleUtilities/Logger'
+    pod 'GoogleUtilities/MethodSwizzler'
+    pod 'GoogleUtilities/NSData+zlib'
+    pod 'GoogleUtilities/Network'
+    pod 'GoogleUtilities/Reachability'
+    pod 'GoogleUtilities/UserDefaults'
+  end
+
   use_frameworks!
   use_modular_headers!
 
