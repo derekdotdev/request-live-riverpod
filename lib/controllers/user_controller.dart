@@ -108,7 +108,6 @@ class UserController extends StateNotifier<AsyncValue<User>> {
       }
     } on CustomException catch (e) {
       _read(userExceptionProvider.notifier).state = e;
-      print(e);
     }
   }
 
@@ -129,7 +128,6 @@ class UserController extends StateNotifier<AsyncValue<User>> {
       }
     } on CustomException catch (e) {
       _read(userExceptionProvider.notifier).state = e;
-      print(e);
     }
   }
 
@@ -145,8 +143,6 @@ class UserController extends StateNotifier<AsyncValue<User>> {
       }
     } on CustomException catch (e) {
       _read(userExceptionProvider.notifier).state = e;
-      print('Error uploading new profile image!');
-      print(e);
     }
   }
 
@@ -171,91 +167,8 @@ class UserController extends StateNotifier<AsyncValue<User>> {
         userId: userId,
         localUser: newUser,
       );
-
-      // Persist username to firestore repo usernames/username/
-      // final newUsername = Username(id: userId, username: username);
-      // await _read(usernameRepositoryProvider)
-      //     .reserveUsername(username: newUsername);
     } on CustomException catch (e) {
       _read(userExceptionProvider.notifier).state = e;
     }
   }
-
-  // Future<void> createRequest({
-  //   required String artist,
-  //   required String title,
-  //   required String notes,
-  //   required String requesterId,
-  //   required String requesterUsername,
-  //   required String requesterPhotoUrl,
-  // }) async {
-  //   try {
-  //     final request = Request(
-  //       artist: artist,
-  //       title: title,
-  //       notes: notes,
-  //       requesterId: requesterId,
-  //       requesterUsername: requesterUsername,
-  //       requesterPhotoUrl: requesterPhotoUrl,
-  //       entertainerId: _entertainerId!,
-  //       timestamp: Conversions.convertTimeStamp(Timestamp.now()),
-  //     );
-  //     final requestId = await _read(requestRepositoryProvider).createRequest(
-  //       entertainerId: _entertainerId!,
-  //       request: request,
-  //     );
-
-  //     state.whenData((requests) => state =
-  //         AsyncValue.data(requests..add(request.copyWith(id: requestId))));
-  //   } on CustomException catch (e) {
-  //     // print(e.message);
-  //     _read(requestListExceptionProvider.notifier).state = e;
-  //   }
-  // }
-
-  // Future<void> retrieveRequests({bool isRefreshing = false}) async {
-  //   if (isRefreshing) {
-  //     state = const AsyncValue.loading();
-  //   }
-  //   try {
-  //     final requests = await _read(requestRepositoryProvider)
-  //         .retrieveRequests(entertainerId: _entertainerId!);
-
-  //     if (mounted) {
-  //       state = AsyncValue.data(requests);
-  //     }
-  //   } on CustomException catch (e, st) {
-  //     state = AsyncValue.error(e, stackTrace: st);
-  //   }
-  // }
-
-  // Future<void> updateRequestPlayed({required Request updateRequest}) async {
-  //   try {
-  //     await _read(requestRepositoryProvider).updateRequestPlayed(
-  //         entertainerId: _entertainerId!, request: updateRequest);
-  //     state.whenData((requests) {
-  //       state = AsyncValue.data([
-  //         for (final request in requests)
-  //           if (request.id == updateRequest.id) updateRequest else request
-  //       ]);
-  //     });
-  //   } on CustomException catch (e) {
-  //     // print(e.message);
-  //     _read(requestListExceptionProvider.notifier).state = e;
-  //   }
-  // }
-
-  // Future<void> deleteRequest({required String requestId}) async {
-  //   try {
-  //     await _read(requestRepositoryProvider).deleteRequest(
-  //       entertainerId: _entertainerId!,
-  //       requestId: requestId,
-  //     );
-  //     state.whenData((requests) => state = AsyncValue.data(
-  //         requests..removeWhere((request) => request.id == requestId)));
-  //   } on CustomException catch (e) {
-  //     // print(e.message);
-  //     _read(requestListExceptionProvider.notifier).state = e;
-  //   }
-  // }
 }

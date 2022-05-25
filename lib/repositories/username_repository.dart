@@ -57,8 +57,6 @@ class UsernameRepository implements BaseUsernameRepository {
           .get();
 
       final List<DocumentSnapshot> documents = result.docs;
-      print('Documents.length == ');
-      print(documents.length);
       return !(documents.length == 1);
     } on FirebaseException catch (e) {
       throw CustomException(message: e.message);

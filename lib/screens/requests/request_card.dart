@@ -22,16 +22,19 @@ class RequestCard extends StatefulWidget {
 class _RequestCardState extends State<RequestCard> {
   late Request request = Request(
     id: widget.requestId,
-    artist: widget.snap["artist"],
-    title: widget.snap["title"],
-    notes: widget.snap["notes"],
-    requesterId: widget.snap["requesterId"],
+    artist: widget.snap['artist'],
+    title: widget.snap['title'],
+    notes: widget.snap['notes'],
+    requesterId: widget.snap['requesterId'],
     requesterUsername: widget.snap['requesterUsername'],
     requesterPhotoUrl: widget.snap['requesterPhotoUrl'],
-    entertainerId: widget.snap["entertainerId"],
-    entertainerUsername: widget.snap["entertainerUsername"],
-    played: widget.snap["played"],
-    timestamp: widget.snap["timestamp"].toDate(),
+    entertainerId: widget.snap['entertainerId'],
+    entertainerUsername: widget.snap['entertainerUsername'],
+    entertainerPhotoUrl: widget.snap['entertainerPhotoUrl'],
+    requesterDeleted: widget.snap['requesterDeleted'],
+    entertainerDeleted: widget.snap['entertainerDeleted'],
+    played: widget.snap['played'],
+    timestamp: widget.snap['timestamp'].toDate(),
   );
 
   @override

@@ -15,6 +15,8 @@ abstract class BaseRequestRepository {
   Future<Request> retrieveRequest(
       {required String entertainerId, required String requestId});
 
+  Future<String> createNewRequest({required Request request});
+
   Future<String> createRequest(
       {required String entertainerId, required Request request});
 
@@ -43,6 +45,18 @@ class RequestRepository implements BaseRequestRepository {
   final Reader _read;
 
   const RequestRepository(this._read);
+
+  @override
+  Future<String> createNewRequest({required Request request}) async {
+    try {
+      final docRef = await _read(firebaseFirestoreProvider)
+          .collection('requests')
+          .add(request.toDocument());
+      return docRef.id;
+    } on FirebaseException catch (e) {
+      throw CustomException(message: e.message);
+    }
+  }
 
   @override
   Future<String> createRequest(
