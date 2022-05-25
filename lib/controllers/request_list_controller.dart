@@ -45,6 +45,10 @@ class RequestListController extends StateNotifier<AsyncValue<List<Request>>> {
         requesterPhotoUrl: requesterPhotoUrl,
         entertainerId: _entertainerId!,
         entertainerUsername: entertainerUsername,
+        entertainerPhotoUrl:
+            'from old create request method in request list controller',
+        requesterDeleted: false,
+        entertainerDeleted: false,
         timestamp: DateTime.now(),
       );
       final requestId = await _read(requestRepositoryProvider).createRequest(

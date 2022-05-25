@@ -40,6 +40,10 @@ class NewRequestController extends StateNotifier<AsyncValue<Request>> {
         requesterPhotoUrl: requesterPhotoUrl,
         entertainerId: entertainerId,
         entertainerUsername: entertainerUsername,
+        entertainerPhotoUrl:
+            'from old create request method in new request controller',
+        requesterDeleted: false,
+        entertainerDeleted: false,
         timestamp: DateTime.now(),
       );
 
