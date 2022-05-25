@@ -5,7 +5,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 // @JS('google.tag_manager')
 // import 'package:google_tag_manager/google_tag_manager.dart' as gtm;
-
+import 'package:request_live_riverpods/general_providers.dart';
 import 'package:request_live_riverpods/controllers/controllers.dart';
 import 'package:request_live_riverpods/routes.dart';
 import 'package:request_live_riverpods/screens/requests/requests_screen.dart';
@@ -46,6 +46,7 @@ class SignInScreenHook extends HookConsumerWidget {
     final _emailController = useTextEditingController();
     final _passwordController = useTextEditingController();
     final _passwordFocusNode = useFocusNode();
+    final _analytics = ref.watch(firebaseAnalyticsProvider);
 
     return Form(
       key: _formKey,
@@ -143,8 +144,9 @@ class SignInScreenHook extends HookConsumerWidget {
                           error: (error, stacktrace) => Center(
                             child: Text(error.toString()),
                           ),
-                          data: (userData) {
+                          data: (userData) async {
                             // gtm.pushEvent('login');
+                            await _analytics.logLogin();
                             return userData.isEntertainer
                                 ? Navigator.pushReplacementNamed(
                                     context,

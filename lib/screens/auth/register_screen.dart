@@ -9,6 +9,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:request_live_riverpods/controllers/auth_controller.dart';
 import 'package:request_live_riverpods/controllers/user_controller.dart';
 import 'package:request_live_riverpods/controllers/username_controller.dart';
+import 'package:request_live_riverpods/general_providers.dart';
 import 'package:request_live_riverpods/routes.dart';
 
 class RegisterScreen extends StatefulWidget {
@@ -60,6 +61,7 @@ class RegisterScreenHook extends HookConsumerWidget {
     final _usernameFocusNode = useFocusNode();
     final _passwordController = useTextEditingController();
     final _passwordFocusNode = useFocusNode();
+    final _analytics = ref.watch(firebaseAnalyticsProvider);
 
     return Form(
       key: _formKey,
@@ -190,6 +192,7 @@ class RegisterScreenHook extends HookConsumerWidget {
                       );
                     } else {
                       // gtm.pushEvent('sign_up');
+                      await _analytics.logSignUp(signUpMethod: email);
                       Navigator.of(context)
                           .pushReplacementNamed(Routes.welcome);
                     }
