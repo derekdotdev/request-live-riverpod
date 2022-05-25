@@ -128,9 +128,10 @@ class _$RequestCopyWithImpl<$Res> implements $RequestCopyWith<$Res> {
 }
 
 /// @nodoc
-abstract class _$RequestCopyWith<$Res> implements $RequestCopyWith<$Res> {
-  factory _$RequestCopyWith(_Request value, $Res Function(_Request) then) =
-      __$RequestCopyWithImpl<$Res>;
+abstract class _$$_RequestCopyWith<$Res> implements $RequestCopyWith<$Res> {
+  factory _$$_RequestCopyWith(
+          _$_Request value, $Res Function(_$_Request) then) =
+      __$$_RequestCopyWithImpl<$Res>;
   @override
   $Res call(
       {String? id,
@@ -147,13 +148,13 @@ abstract class _$RequestCopyWith<$Res> implements $RequestCopyWith<$Res> {
 }
 
 /// @nodoc
-class __$RequestCopyWithImpl<$Res> extends _$RequestCopyWithImpl<$Res>
-    implements _$RequestCopyWith<$Res> {
-  __$RequestCopyWithImpl(_Request _value, $Res Function(_Request) _then)
-      : super(_value, (v) => _then(v as _Request));
+class __$$_RequestCopyWithImpl<$Res> extends _$RequestCopyWithImpl<$Res>
+    implements _$$_RequestCopyWith<$Res> {
+  __$$_RequestCopyWithImpl(_$_Request _value, $Res Function(_$_Request) _then)
+      : super(_value, (v) => _then(v as _$_Request));
 
   @override
-  _Request get _value => super._value as _Request;
+  _$_Request get _value => super._value as _$_Request;
 
   @override
   $Res call({
@@ -169,7 +170,7 @@ class __$RequestCopyWithImpl<$Res> extends _$RequestCopyWithImpl<$Res>
     Object? played = freezed,
     Object? timestamp = freezed,
   }) {
-    return _then(_Request(
+    return _then(_$_Request(
       id: id == freezed
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
@@ -272,7 +273,7 @@ class _$_Request extends _Request {
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _Request &&
+            other is _$_Request &&
             const DeepCollectionEquality().equals(other.id, id) &&
             const DeepCollectionEquality().equals(other.artist, artist) &&
             const DeepCollectionEquality().equals(other.title, title) &&
@@ -309,8 +310,8 @@ class _$_Request extends _Request {
 
   @JsonKey(ignore: true)
   @override
-  _$RequestCopyWith<_Request> get copyWith =>
-      __$RequestCopyWithImpl<_Request>(this, _$identity);
+  _$$_RequestCopyWith<_$_Request> get copyWith =>
+      __$$_RequestCopyWithImpl<_$_Request>(this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
@@ -360,6 +361,6 @@ abstract class _Request extends Request {
   DateTime get timestamp => throw _privateConstructorUsedError;
   @override
   @JsonKey(ignore: true)
-  _$RequestCopyWith<_Request> get copyWith =>
+  _$$_RequestCopyWith<_$_Request> get copyWith =>
       throw _privateConstructorUsedError;
 }

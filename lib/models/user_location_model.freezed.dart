@@ -132,11 +132,11 @@ class _$UserLocationCopyWithImpl<$Res> implements $UserLocationCopyWith<$Res> {
 }
 
 /// @nodoc
-abstract class _$UserLocationCopyWith<$Res>
+abstract class _$$_UserLocationCopyWith<$Res>
     implements $UserLocationCopyWith<$Res> {
-  factory _$UserLocationCopyWith(
-          _UserLocation value, $Res Function(_UserLocation) then) =
-      __$UserLocationCopyWithImpl<$Res>;
+  factory _$$_UserLocationCopyWith(
+          _$_UserLocation value, $Res Function(_$_UserLocation) then) =
+      __$$_UserLocationCopyWithImpl<$Res>;
   @override
   $Res call(
       {String? id,
@@ -153,14 +153,15 @@ abstract class _$UserLocationCopyWith<$Res>
 }
 
 /// @nodoc
-class __$UserLocationCopyWithImpl<$Res> extends _$UserLocationCopyWithImpl<$Res>
-    implements _$UserLocationCopyWith<$Res> {
-  __$UserLocationCopyWithImpl(
-      _UserLocation _value, $Res Function(_UserLocation) _then)
-      : super(_value, (v) => _then(v as _UserLocation));
+class __$$_UserLocationCopyWithImpl<$Res>
+    extends _$UserLocationCopyWithImpl<$Res>
+    implements _$$_UserLocationCopyWith<$Res> {
+  __$$_UserLocationCopyWithImpl(
+      _$_UserLocation _value, $Res Function(_$_UserLocation) _then)
+      : super(_value, (v) => _then(v as _$_UserLocation));
 
   @override
-  _UserLocation get _value => super._value as _UserLocation;
+  _$_UserLocation get _value => super._value as _$_UserLocation;
 
   @override
   $Res call({
@@ -176,7 +177,7 @@ class __$UserLocationCopyWithImpl<$Res> extends _$UserLocationCopyWithImpl<$Res>
     Object? latitude = freezed,
     Object? longitude = freezed,
   }) {
-    return _then(_UserLocation(
+    return _then(_$_UserLocation(
       id: id == freezed
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
@@ -280,7 +281,7 @@ class _$_UserLocation extends _UserLocation {
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _UserLocation &&
+            other is _$_UserLocation &&
             const DeepCollectionEquality().equals(other.id, id) &&
             const DeepCollectionEquality().equals(other.venueName, venueName) &&
             const DeepCollectionEquality()
@@ -315,8 +316,8 @@ class _$_UserLocation extends _UserLocation {
 
   @JsonKey(ignore: true)
   @override
-  _$UserLocationCopyWith<_UserLocation> get copyWith =>
-      __$UserLocationCopyWithImpl<_UserLocation>(this, _$identity);
+  _$$_UserLocationCopyWith<_$_UserLocation> get copyWith =>
+      __$$_UserLocationCopyWithImpl<_$_UserLocation>(this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
@@ -369,6 +370,6 @@ abstract class _UserLocation extends UserLocation {
   double get longitude => throw _privateConstructorUsedError;
   @override
   @JsonKey(ignore: true)
-  _$UserLocationCopyWith<_UserLocation> get copyWith =>
+  _$$_UserLocationCopyWith<_$_UserLocation> get copyWith =>
       throw _privateConstructorUsedError;
 }

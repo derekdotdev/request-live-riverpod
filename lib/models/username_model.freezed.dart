@@ -63,28 +63,30 @@ class _$UsernameCopyWithImpl<$Res> implements $UsernameCopyWith<$Res> {
 }
 
 /// @nodoc
-abstract class _$UsernameCopyWith<$Res> implements $UsernameCopyWith<$Res> {
-  factory _$UsernameCopyWith(_Username value, $Res Function(_Username) then) =
-      __$UsernameCopyWithImpl<$Res>;
+abstract class _$$_UsernameCopyWith<$Res> implements $UsernameCopyWith<$Res> {
+  factory _$$_UsernameCopyWith(
+          _$_Username value, $Res Function(_$_Username) then) =
+      __$$_UsernameCopyWithImpl<$Res>;
   @override
   $Res call({String id, String username});
 }
 
 /// @nodoc
-class __$UsernameCopyWithImpl<$Res> extends _$UsernameCopyWithImpl<$Res>
-    implements _$UsernameCopyWith<$Res> {
-  __$UsernameCopyWithImpl(_Username _value, $Res Function(_Username) _then)
-      : super(_value, (v) => _then(v as _Username));
+class __$$_UsernameCopyWithImpl<$Res> extends _$UsernameCopyWithImpl<$Res>
+    implements _$$_UsernameCopyWith<$Res> {
+  __$$_UsernameCopyWithImpl(
+      _$_Username _value, $Res Function(_$_Username) _then)
+      : super(_value, (v) => _then(v as _$_Username));
 
   @override
-  _Username get _value => super._value as _Username;
+  _$_Username get _value => super._value as _$_Username;
 
   @override
   $Res call({
     Object? id = freezed,
     Object? username = freezed,
   }) {
-    return _then(_Username(
+    return _then(_$_Username(
       id: id == freezed
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
@@ -119,7 +121,7 @@ class _$_Username extends _Username {
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _Username &&
+            other is _$_Username &&
             const DeepCollectionEquality().equals(other.id, id) &&
             const DeepCollectionEquality().equals(other.username, username));
   }
@@ -133,8 +135,8 @@ class _$_Username extends _Username {
 
   @JsonKey(ignore: true)
   @override
-  _$UsernameCopyWith<_Username> get copyWith =>
-      __$UsernameCopyWithImpl<_Username>(this, _$identity);
+  _$$_UsernameCopyWith<_$_Username> get copyWith =>
+      __$$_UsernameCopyWithImpl<_$_Username>(this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
@@ -155,6 +157,6 @@ abstract class _Username extends Username {
   String get username => throw _privateConstructorUsedError;
   @override
   @JsonKey(ignore: true)
-  _$UsernameCopyWith<_Username> get copyWith =>
+  _$$_UsernameCopyWith<_$_Username> get copyWith =>
       throw _privateConstructorUsedError;
 }

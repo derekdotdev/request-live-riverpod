@@ -76,7 +76,7 @@ class _GoLiveOnAirScreenState extends ConsumerState<GoLiveOnAirScreen> {
         // Create userLocation from GeoData (Can this be optimized with a fromMap function?)
         UserLocation userLocation = UserLocation(
           venueName: venueName.trim(),
-          street_number: data.street_number,
+          street_number: double.parse(data.street_number),
           address: data.address,
           city: data.city,
           state: data.state,

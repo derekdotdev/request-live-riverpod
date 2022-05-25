@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+// import 'package:js/js.dart';
 
-import 'package:request_live_riverpods/controllers/auth_controller.dart';
+// @JS('google.tag_manager')
+// import 'package:google_tag_manager/google_tag_manager.dart' as gtm;
+
 import 'package:request_live_riverpods/controllers/controllers.dart';
 import 'package:request_live_riverpods/routes.dart';
 import 'package:request_live_riverpods/screens/requests/requests_screen.dart';
@@ -142,6 +144,7 @@ class SignInScreenHook extends HookConsumerWidget {
                             child: Text(error.toString()),
                           ),
                           data: (userData) {
+                            // gtm.pushEvent('login');
                             return userData.isEntertainer
                                 ? Navigator.pushReplacementNamed(
                                     context,

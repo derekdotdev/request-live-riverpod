@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+// import 'package:js/js.dart';
+
+// @JS('google.tag_manager')
+// import 'package:google_tag_manager/google_tag_manager.dart' as gtm;
+
 import 'package:request_live_riverpods/controllers/auth_controller.dart';
 import 'package:request_live_riverpods/controllers/user_controller.dart';
 import 'package:request_live_riverpods/controllers/username_controller.dart';
@@ -184,6 +189,7 @@ class RegisterScreenHook extends HookConsumerWidget {
                         ),
                       );
                     } else {
+                      // gtm.pushEvent('sign_up');
                       Navigator.of(context)
                           .pushReplacementNamed(Routes.welcome);
                     }
