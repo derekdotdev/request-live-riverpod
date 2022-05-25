@@ -28,15 +28,15 @@ abstract class User implements _$User {
   }) = _User;
 
   factory User.empty() => User(
-        id: 'null',
-        email: 'null',
-        username: 'null',
-        bio: '',
-        photoUrl: 'https://i.stack.imgur.com/l60Hf.png',
-        isEntertainer: false,
-        isOnStage: false,
-        location: UserLocation.empty(),
-      );
+      id: 'null',
+      email: 'null',
+      username: 'null',
+      bio: '',
+      photoUrl: 'https://i.stack.imgur.com/l60Hf.png',
+      isEntertainer: false,
+      isOnStage: false,
+      location: UserLocation.empty(),
+      website: '');
 
   factory User.fromJson(Map<String, dynamic> json) => _$UserFromJson(json);
 

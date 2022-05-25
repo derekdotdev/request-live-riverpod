@@ -2,17 +2,29 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:request_live_riverpods/controllers/user_controller.dart';
-// import 'package:request_live_riverpods/controllers/username_controller.dart';
-import 'package:request_live_riverpods/models/user_model.dart';
 
+import 'package:request_live_riverpods/controllers/controllers.dart';
+import 'package:request_live_riverpods/models/user_model.dart';
 import 'package:request_live_riverpods/widgets/scaffold_snackbar.dart';
 
 class EditProfileScreen extends HookConsumerWidget {
   final String userId;
   final String username;
-  const EditProfileScreen(this.userId, this.username, {Key? key})
-      : super(key: key);
+  EditProfileScreen(this.userId, this.username, {Key? key}) : super(key: key);
+
+  var _usernameAvailable = false;
+
+  Future<void> checkUsernameInUse(
+      String username, String currentUsername, WidgetRef ref) async {
+    if (username != currentUsername) {
+      _usernameAvailable = await ref
+          .read(usernameControllerProvider.notifier)
+          .checkUsernameAvailable(username: username);
+    } else {
+      _usernameAvailable = true;
+    }
+  }
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final _formKey = GlobalKey<FormState>();
@@ -39,10 +51,11 @@ class EditProfileScreen extends HookConsumerWidget {
 
     Future<void> _updateUserProfile(
         {required User user,
+        required String username,
         required String website,
         required String bio}) async {
       await userControllerNotifier.updateUserProfile(
-          user: user, website: website, bio: bio);
+          user: user, username: username, website: website, bio: bio);
     }
 
     Future<void> _updateIsEntertainer(
@@ -67,6 +80,8 @@ class EditProfileScreen extends HookConsumerWidget {
           final _websiteController =
               useTextEditingController(text: userData.website);
           final _bioController = useTextEditingController(text: userData.bio);
+          final _usernameController =
+              useTextEditingController(text: userData.username);
 
           return SingleChildScrollView(
             child: Padding(
@@ -102,18 +117,25 @@ class EditProfileScreen extends HookConsumerWidget {
                         // Can use same functionality as update user live and request played
                         // Not important right now!
                         // Will take a lot of work to update info on any prior requests
-                        // TextFormField(
-                        //   controller: _usernameController,
-                        //   decoration:
-                        //       const InputDecoration(labelText: 'Username'),
-                        //   autocorrect: false,
-                        //   enableSuggestions: false,
-                        //   textCapitalization: TextCapitalization.none,
-                        //   style: Theme.of(context).textTheme.bodyText2,
-                        //   textInputAction: TextInputAction.done,
-                        //   onFieldSubmitted: (_) =>
-                        //       FocusScope.of(context).unfocus(),
-                        // ),
+                        TextFormField(
+                          controller: _usernameController,
+                          decoration:
+                              const InputDecoration(labelText: 'Username'),
+                          autocorrect: false,
+                          enableSuggestions: false,
+                          textCapitalization: TextCapitalization.none,
+                          style: Theme.of(context).textTheme.bodyText2,
+                          textInputAction: TextInputAction.done,
+                          onChanged: (txt) =>
+                              checkUsernameInUse(txt, userData.username, ref),
+                          validator: (value) => (value == null || value.isEmpty
+                              ? 'Username is required'
+                              : (!_usernameAvailable
+                                  ? 'Username already in use'
+                                  : null)),
+                          onFieldSubmitted: (_) =>
+                              FocusScope.of(context).unfocus(),
+                        ),
                         // Website
                         TextFormField(
                           controller: _websiteController,
@@ -141,34 +163,41 @@ class EditProfileScreen extends HookConsumerWidget {
                         TextButton(
                           child: const Text('Save Changes'),
                           onPressed: () async {
-                            // Hide keyboard
-                            FocusScope.of(context).unfocus();
+                            // Validate username choice
+                            if (_formKey.currentState!.validate()) {
+                              // Hide keyboard
+                              FocusScope.of(context).unfocus();
 
-                            final newBio = _bioController.text.trim();
-                            final newSite = _websiteController.text.trim();
+                              final newUsername =
+                                  _usernameController.text.trim();
+                              final newSite = _websiteController.text.trim();
+                              final newBio = _bioController.text.trim();
 
-                            // Check if any changes were made
-                            if ((newBio != userData.bio) ||
-                                (newSite != userData.website)) {
-                              try {
-                                await _updateUserProfile(
-                                  user: userData,
-                                  website: newSite,
-                                  bio: newBio,
-                                );
+                              // Check if any changes were made
+                              if ((newBio != userData.bio) ||
+                                  (newSite != userData.website) ||
+                                  newUsername != userData.username) {
+                                try {
+                                  await _updateUserProfile(
+                                    user: userData,
+                                    username: newUsername,
+                                    website: newSite,
+                                    bio: newBio,
+                                  );
 
-                                showCustomSnackbar(
-                                  ctx: context,
-                                  message: 'Profile successfuly updated!',
-                                  success: true,
-                                );
-                              } catch (e) {
-                                showCustomSnackbar(
-                                  ctx: context,
-                                  message:
-                                      'There was a problem updating your profile. Please try again later.',
-                                  success: false,
-                                );
+                                  showCustomSnackbar(
+                                    ctx: context,
+                                    message: 'Profile successfuly updated!',
+                                    success: true,
+                                  );
+                                } catch (e) {
+                                  showCustomSnackbar(
+                                    ctx: context,
+                                    message:
+                                        'There was a problem updating your profile. Please try again later.',
+                                    success: false,
+                                  );
+                                }
                               }
                             }
                           },

@@ -6,7 +6,6 @@ import 'package:request_live_riverpods/models/models.dart';
 
 import 'package:request_live_riverpods/repositories/custom_exception.dart';
 import 'package:request_live_riverpods/repositories/user_repository.dart';
-import 'package:request_live_riverpods/repositories/username_repository.dart';
 
 final userExceptionProvider = StateProvider<CustomException?>((_) => null);
 
@@ -115,12 +114,15 @@ class UserController extends StateNotifier<AsyncValue<User>> {
 
   Future<void> updateUserProfile(
       {required User user,
-      required String bio,
-      required String website}) async {
+      required String username,
+      required String website,
+      required String bio}) async {
     try {
-      final userWithUpdatedProfile = user.copyWith(bio: bio, website: website);
+      final userWithUpdatedProfile =
+          user.copyWith(username: username, bio: bio, website: website);
 
-      await _read(userRepositoryProvider).updateUserProfile(localUser: user);
+      await _read(userRepositoryProvider)
+          .updateUserProfile(localUser: userWithUpdatedProfile);
 
       if (mounted) {
         state = AsyncValue.data(userWithUpdatedProfile);
@@ -151,19 +153,18 @@ class UserController extends StateNotifier<AsyncValue<User>> {
   Future<void> createNewUser(
       {required String userId,
       required String email,
-      required String username,
       required bool isEntertainer}) async {
     try {
       // Create User from fields
       final newUser = User(
-        id: userId,
-        email: email,
-        username: username,
-        bio: '',
-        photoUrl: 'https://i.stack.imgur.com/l60Hf.png',
-        isEntertainer: isEntertainer,
-        location: UserLocation.empty(),
-      );
+          id: userId,
+          email: email,
+          username: '',
+          bio: '',
+          photoUrl: 'https://i.stack.imgur.com/l60Hf.png',
+          isEntertainer: isEntertainer,
+          location: UserLocation.empty(),
+          website: '');
 
       // Persist newUser to firestore repo users/userId/
       await _read(userRepositoryProvider).createUser(
@@ -172,9 +173,9 @@ class UserController extends StateNotifier<AsyncValue<User>> {
       );
 
       // Persist username to firestore repo usernames/username/
-      final newUsername = Username(id: userId, username: username);
-      await _read(usernameRepositoryProvider)
-          .reserveUsername(username: newUsername);
+      // final newUsername = Username(id: userId, username: username);
+      // await _read(usernameRepositoryProvider)
+      //     .reserveUsername(username: newUsername);
     } on CustomException catch (e) {
       _read(userExceptionProvider.notifier).state = e;
     }

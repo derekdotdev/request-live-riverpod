@@ -23,7 +23,7 @@ class Routes {
     login: (BuildContext context) => const SignInScreen(),
     goLiveOnStage: (BuildContext context) => const GoLiveOnStageScreen('', ''),
     goLiveOnAir: (BuildContext context) => const GoLiveOnAirScreen('', ''),
-    editProfile: (BuildContext context) => const EditProfileScreen('', ''),
+    editProfile: (BuildContext context) => EditProfileScreen('', ''),
     profile: (BuildContext context) => const ProfileScreen('', ''),
     register: (BuildContext context) => const RegisterScreen(),
     requestDetail: (BuildContext context) => const RequestDetailScreen(),

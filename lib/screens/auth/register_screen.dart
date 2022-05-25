@@ -8,7 +8,6 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import 'package:request_live_riverpods/controllers/auth_controller.dart';
 import 'package:request_live_riverpods/controllers/user_controller.dart';
-import 'package:request_live_riverpods/controllers/username_controller.dart';
 import 'package:request_live_riverpods/general_providers.dart';
 import 'package:request_live_riverpods/routes.dart';
 
@@ -44,21 +43,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
 // ignore: must_be_immutable
 class RegisterScreenHook extends HookConsumerWidget {
   final _formKey = GlobalKey<FormState>();
-  var _usernameAvailable = false;
 
   RegisterScreenHook({Key? key}) : super(key: key);
-
-  Future<void> checkUsernameInUse(String username, WidgetRef ref) async {
-    _usernameAvailable = await ref
-        .read(usernameControllerProvider.notifier)
-        .checkUsernameAvailable(username: username);
-  }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final _emailController = useTextEditingController();
-    final _usernameController = useTextEditingController();
-    final _usernameFocusNode = useFocusNode();
     final _passwordController = useTextEditingController();
     final _passwordFocusNode = useFocusNode();
     final _analytics = ref.watch(firebaseAnalyticsProvider);
@@ -86,7 +76,7 @@ class RegisterScreenHook extends HookConsumerWidget {
                 style: Theme.of(context).textTheme.bodyText2,
                 textInputAction: TextInputAction.next,
                 onFieldSubmitted: (_) {
-                  FocusScope.of(context).requestFocus(_usernameFocusNode);
+                  FocusScope.of(context).requestFocus(_passwordFocusNode);
                 },
                 validator: (value) => (value == null || value.isEmpty
                     ? 'Please enter an email address'
@@ -98,34 +88,6 @@ class RegisterScreenHook extends HookConsumerWidget {
                   ),
                   labelText: 'Email',
                   border: const OutlineInputBorder(),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(top: 16.0),
-                child: TextFormField(
-                  controller: _usernameController,
-                  autocorrect: false,
-                  enableSuggestions: false,
-                  textCapitalization: TextCapitalization.none,
-                  style: Theme.of(context).textTheme.bodyText2,
-                  focusNode: _usernameFocusNode,
-                  textInputAction: TextInputAction.next,
-                  onFieldSubmitted: (_) {
-                    FocusScope.of(context).requestFocus(_passwordFocusNode);
-                  },
-                  onChanged: (txt) => checkUsernameInUse(txt, ref),
-                  validator: (value) => (value == null || value.isEmpty
-                      ? 'Username is required'
-                      : (!_usernameAvailable
-                          ? 'Username already in use'
-                          : null)),
-                  decoration: InputDecoration(
-                      prefixIcon: Icon(
-                        Icons.account_circle_rounded,
-                        color: Theme.of(context).iconTheme.color,
-                      ),
-                      labelText: 'Username',
-                      border: const OutlineInputBorder()),
                 ),
               ),
               Padding(
@@ -157,7 +119,6 @@ class RegisterScreenHook extends HookConsumerWidget {
                     FocusScope.of(context).unfocus();
 
                     final email = _emailController.text.trim();
-                    final username = _usernameController.text.trim();
                     // Create new FirebaseAuth User
                     final userId = await ref
                         .read(authControllerProvider.notifier)
@@ -173,7 +134,6 @@ class RegisterScreenHook extends HookConsumerWidget {
                           .createNewUser(
                             userId: userId,
                             email: email,
-                            username: username,
                             isEntertainer: false,
                           );
                     }
@@ -192,7 +152,10 @@ class RegisterScreenHook extends HookConsumerWidget {
                       );
                     } else {
                       // gtm.pushEvent('sign_up');
-                      await _analytics.logSignUp(signUpMethod: email);
+                      await _analytics.logSignUp(
+                          signUpMethod: email); // default
+                      await _analytics.logEvent(name: 'sign_up'); // custom
+
                       Navigator.of(context)
                           .pushReplacementNamed(Routes.welcome);
                     }

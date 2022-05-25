@@ -25,7 +25,7 @@ class UsernameRepository implements BaseUsernameRepository {
   Future<bool> checkUsernameAvailable({required String username}) async {
     try {
       final snap = await _read(firebaseFirestoreProvider)
-          .collection('usernames')
+          .collection('users')
           .doc(username)
           .get();
 
