@@ -53,6 +53,7 @@ dependencies:
   google_maps_flutter: ^2.1.4
   google_tag_manager: ^0.1.0
   js: ^0.6.3
+  firebase_analytics: ^9.1.8
 
 
 
