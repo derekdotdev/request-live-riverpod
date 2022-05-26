@@ -154,7 +154,7 @@ class RegisterScreenHook extends HookConsumerWidget {
                       // gtm.pushEvent('sign_up');
                       await _analytics.logSignUp(
                           signUpMethod: email); // default
-                      await _analytics.logEvent(name: 'sign_up'); // custom
+                      await _analytics.logEvent(name: 'register'); // custom
 
                       Navigator.of(context)
                           .pushReplacementNamed(Routes.welcome);

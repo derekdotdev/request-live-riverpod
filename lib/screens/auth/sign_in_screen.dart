@@ -147,7 +147,8 @@ class SignInScreenHook extends HookConsumerWidget {
                           data: (userData) async {
                             // gtm.pushEvent('login');
                             await _analytics.logLogin(); // default
-                            await _analytics.logEvent(name: 'login'); // custom
+                            await _analytics.logEvent(
+                                name: 'sign_in'); // custom
                             return userData.isEntertainer
                                 ? Navigator.pushReplacementNamed(
                                     context,

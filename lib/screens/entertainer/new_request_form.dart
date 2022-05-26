@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:request_live_riverpods/controllers/user_controller.dart';
+import 'package:request_live_riverpods/general_providers.dart';
 
 class NewRequestForm extends HookConsumerWidget {
   NewRequestForm(this.entertainerId, this.entertainerUsername, this.isLoading,
@@ -42,6 +43,13 @@ class NewRequestForm extends HookConsumerWidget {
     if (isValid) {
       // Save Form Data
       _formKey.currentState!.save();
+
+      // Notify Analytics with custom event log
+      final _analytics = ref.watch(firebaseAnalyticsProvider);
+      await _analytics.logEvent(name: 'request', parameters: {
+        "artist": requestMap['artist'],
+        "title": requestMap['title'],
+      });
 
       // Call parent function
       submitRequestFn(
